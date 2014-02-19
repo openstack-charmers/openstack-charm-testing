@@ -1,0 +1,40 @@
+OpenStack on OpenStack testing
+
+
+deploy
+======
+
+
+juju-deployer -c default.yaml -d precise-havana
+
+targets exist for most combinations, e.g.:
+
+   precise-icehouse-trunk
+   saucy-havana
+
+
+configure
+=========
+
+./configure
+
+This script does
+
+a) Add's an extra port to the neutron-gateway service for floating ip use
+
+b) Configures appropriate external networking
+
+c) Uploads some images - this need to be in ~/images
+
+d) Creates some demo tenants
+
+e) writes a tempest configuration file and clones the tempest repository from upstream
+
+test
+====
+
+cd tempest
+git checkout stable/havana (or stable/grizzly)
+./run_tests.sh -N --smoke
+
+NOTE: this is not working so well right now
