@@ -49,6 +49,7 @@ openstack-services:
       branch: lp:charms/cinder
       options:
         block-device: "None"
+        glance-api-version: 2
       constraints": mem=1G
     glance:
       branch: lp:charms/glance

@@ -13,13 +13,15 @@ source novarc
 # Load an image for testing
 glance image-create --name="precise" --is-public=true \
     --container-format=bare --disk-format=qcow2 < ~/images/precise-server-cloudimg-amd64-disk1.img
-glance image-create --name="cirros" --is-public=trus \
+glance image-create --name="cirros" --is-public=true \
     --container-format=bare --disk-format=qcow2 < ~/images/cirros-0.3.1-x86_64-disk.img
 
 keystone tenant-create --name demo
 keystone user-create --name demo --tenant demo --pass pass --enabled true --email demo@dev.null
+keystone user-role-add --user demo --role Member --tenant demo
 keystone tenant-create --name alt_demo
 keystone user-create --name alt_demo --tenant alt_demo --pass secret --enabled true --email alt_demo@dev.null
+keystone user-role-add --user alt_demo --role Member --tenant alt_demo
 
 image_id=$(glance image-list | grep cirros | awk '{ print $2 }')
 image_alt_id=$(glance image-list | grep precise | awk '{ print $2 }')
