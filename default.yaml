@@ -43,7 +43,7 @@ openstack-services:
         network-manager: Quantum
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:charms/neutron-gateway
+      branch: lp:charms/quantum-gateway
       constraints: mem=1G
     cinder:
       branch: lp:charms/cinder
@@ -60,6 +60,7 @@ openstack-services:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+        use-https: 'no'
     swift-storage-z1:
       branch: lp:charms/swift-storage
       constraints: mem=1G
