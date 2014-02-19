@@ -1,0 +1,49 @@
+[DEFAULT]
+[baremetal]
+[boto]
+[cli]
+[compute]
+image_ref=__IMAGE_ID__
+image_ref_alt=__IMAGE_ALT_ID__
+flavor_ref=2
+[compute-admin]
+[compute-feature-enabled]
+[dashboard]
+dashboard_url=http://__DASHBOARD__/horizon
+login_url=http://__DASHBOARD__/horizon/auth/login/
+[data_processing]
+[debug]
+[identity]
+uri=http://__KEYSTONE__:5000/v2.0
+admin_username=admin
+admin_tenant_name=admin
+admin_password=openstack
+username = demo
+password = pass
+tenant_name = demo
+alt_username = alt_demo
+alt_password = secret
+alt_tenant_name = alt_demo
+admin_role = admin
+[identity-feature-enabled]
+[image]
+http_image=http://10.98.191.34:8080/v1/AUTH_79699f6f71e245b186720f1e2bc03cf0/images/0.3.1/cirros-0.3.1-x86_64-uec.tar.gz
+[image-feature-enabled]
+[input-scenario]
+[network]
+tenant_network_cidr=192.168.2.0/24
+public_network_id=__EXT_NET__
+public_router_id=__ROUTER__
+[network-feature-enabled]
+[object-storage]
+[object-storage-feature-enabled]
+[orchestration]
+[scenario]
+img_dir=/home/ubuntu/images
+[service_available]
+neutron=true
+[stress]
+[telemetry]
+[volume]
+catalog_type = volume
+[volume-feature-enabled]

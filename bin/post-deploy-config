@@ -1,0 +1,16 @@
+#!/usr/bin/python
+
+import subprocess
+import yaml
+
+
+gateway_config = yaml.load(subprocess.check_output(['juju', 'status', 'neutron-gateway']))
+
+uuid = None
+for machine in gateway_config['machines']:
+    uuid = gateway_config['machines'][machine]['instance-id']
+
+if uuid is not None:
+    subprocess.check_call(['nova', 'interface-attach', '--net-id=bab112ff-46c3-4034-8d27-936d7bb1ecd5',
+                           uuid])
+    subprocess.check_call(['juju', 'set', 'neutron-gateway', 'ext-port=eth1'])
