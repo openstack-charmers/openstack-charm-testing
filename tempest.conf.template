@@ -1,6 +1,8 @@
 [DEFAULT]
 [baremetal]
 [boto]
+ec2_url = http://__CONTROLLER__:8775/
+s3_url = http://__CONTROLLER:3333
 [cli]
 [compute]
 image_ref=__IMAGE_ID__
@@ -38,6 +40,8 @@ public_network_id=__EXT_NET__
 public_router_id=__ROUTER__
 [network-feature-enabled]
 [object-storage]
+accounts_quotas_available = False
+container_quotas_available = False
 [object-storage-feature-enabled]
 [orchestration]
 [scenario]
