@@ -5,7 +5,7 @@ deploy
 ======
 
 
-juju-deployer -c default.yaml -d precise-havana
+juju-deployer --bootstrap -c default.yaml -d precise-havana
 
 targets exist for most combinations, e.g.:
 
@@ -38,3 +38,10 @@ git checkout stable/havana (or stable/grizzly)
 ./run_tests.sh -N --smoke
 
 NOTE: this is not working so well right now
+
+13 test failures - VPN, LoadBalancer, ec2, Object Container Versioning.
+
+destroy
+=======
+
+juju destroy-environment
