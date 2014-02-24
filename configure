@@ -10,6 +10,18 @@ source ~/novarc
 source novarc
 ./bin/quantum-ext-net -g 10.5.0.1 -c 10.5.0.0/16 -f 10.5.100.0:10.5.200.25 ext_net
 
+mkdir ~/images
+[ -f ~/images/precise-server-cloudimg-amd64-disk1.img ] || {
+    wget -O ~/images/precise-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
+}
+[ -f ~/images/cirros-0.3.1-x86_64-disk.img ] || {
+    wget -O ~/images/cirros-0.3.1-x86_64-disk.img http://10.98.191.34:8080/v1/AUTH_79699f6f71e245b186720f1e2bc03cf0/images/0.3.1/cirros-0.3.1-x86_64-disk.img
+}
+[ -f ~/images/cirros-0.3.1-x86_64-uec.tar.gz ] || {
+    wget -O ~/images/cirros-0.3.1-x86_64-uec.tar.gz http://10.98.191.34:8080/v1/AUTH_79699f6f71e245b186720f1e2bc03cf0/images/0.3.1/cirros-0.3.1-x86_64-uec.tar.gz
+    (cd ~/images && tar -xzf cirros-0.3.1-x86_64-uec.tar.gz)
+}
+
 # Load an image for testing
 glance image-create --name="precise" --is-public=true \
     --container-format=bare --disk-format=qcow2 < ~/images/precise-server-cloudimg-amd64-disk1.img
