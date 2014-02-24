@@ -170,8 +170,8 @@ precise-icehouse-proposed:
 precise-icehouse-staging:
   inherits: precise-icehouse
   overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive-staging
-    source: ppa:ubuntu-cloud-archive-staging
+    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
+    source: ppa:ubuntu-cloud-archive/icehouse-staging
 precise-icehouse-trunk:
   inherits: precise-icehouse
   overrides:
