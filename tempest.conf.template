@@ -19,6 +19,7 @@ login_url=http://__DASHBOARD__/horizon/auth/login/
 [debug]
 [identity]
 uri=http://__KEYSTONE__:5000/v2.0
+uri_v3=http://__KEYSTONE__:5000/v3.0
 admin_username=admin
 admin_tenant_name=admin
 admin_password=openstack
