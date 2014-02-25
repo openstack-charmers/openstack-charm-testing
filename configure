@@ -10,7 +10,7 @@ source ~/novarc
 source novarc
 ./bin/quantum-ext-net -g 10.5.0.1 -c 10.5.0.0/16 -f 10.5.100.0:10.5.200.25 ext_net
 
-mkdir ~/images
+mkdir -p ~/images
 [ -f ~/images/precise-server-cloudimg-amd64-disk1.img ] || {
     wget -O ~/images/precise-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
 }
