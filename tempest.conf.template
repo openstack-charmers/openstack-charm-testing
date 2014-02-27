@@ -1,8 +1,10 @@
 [DEFAULT]
 [baremetal]
 [boto]
-ec2_url = http://__CONTROLLER__:8775/
-s3_url = http://__CONTROLLER:3333
+ec2_url = http://__NCC__:8773/services/Cloud
+s3_url = http://__NCC__:3333
+aws_access = __ACCESS__
+aws_secret = __SECRET__
 [cli]
 [compute]
 image_ref=__IMAGE_ID__

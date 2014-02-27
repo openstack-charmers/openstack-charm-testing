@@ -35,16 +35,21 @@ keystone tenant-create --name alt_demo
 keystone user-create --name alt_demo --tenant alt_demo --pass secret --enabled true --email alt_demo@dev.null
 keystone user-role-add --user alt_demo --role Member --tenant alt_demo
 
+access=$(keystone --os-username demo --os-password pass --os-tenant-name demo ec2-credentials-create | grep access | awk '{ print $4 }')
+secret=$(keystone ec2-credentials-get --access $access | grep secret | awk '{ print $4 }')
 image_id=$(glance image-list | grep cirros | awk '{ print $2 }')
 image_alt_id=$(glance image-list | grep precise | awk '{ print $2 }')
 ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
 router=$(neutron router-list | grep provider-router | awk '{ print $2}')
 keystone=$(juju-deployer -f keystone)
 dashboard=$(juju-deployer -f openstack-dashboard)
+ncc=$(juju-deployer -f nova-cloud-controller)
 
 sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     -e "s/__DASHBOARD__/$dashboard/g" -e "s/__KEYSTONE__/$keystone/g" \
-    -e "s/__EXT_NET__/$ext_net/g" -e "s/__ROUTER__/$router/g" tempest.conf.template > tempest.conf
+    -e "s/__EXT_NET__/$ext_net/g" -e "s/__ROUTER__/$router/g" \
+    -e "s/__NCC__/$ncc/g" -e "s/__SECRET__/$secret/g" -e "s/__ACCESS__/$access/g" \
+    tempest.conf.template > tempest.conf
 
 sudo apt-get install git testrepository subunit python-nose python-lxml
 [ -d tempest ] || git clone https://github.com/openstack/tempest
