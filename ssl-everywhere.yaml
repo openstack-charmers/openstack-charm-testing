@@ -22,14 +22,15 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: lp:~openstack-charmers/charms/precise/keystone/ssl-everywhere
+      branch: lp:~james-page/charms/precise/keystone/redux-ivoks
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
         https-service-endpoints: "True"
+        use-https: True
     openstack-dashboard:
-      branch: lp:charms/openstack-dashboard
+      branch: lp:~openstack-charmers/charms/precise/openstack-dashboard/ssl-everywhere
       constraints: mem=1G
     nova-compute:
       branch: lp:~openstack-charmers/charms/precise/nova-compute/ssl-everywhere
@@ -57,7 +58,7 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/precise/glance/ssl-everywhere
       constraints: mem=1G
     swift-proxy:
-      branch: lp:charms/swift-proxy
+      branch: lp:~openstack-charmers/charms/precise/swift-proxy/ssl-everywhere
       constraints: mem=1G
       options:
         zone-assignment: manual
@@ -89,7 +90,7 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/precise/ceilometer/ssl-everywhere
       constraints: mem=1G
     ceilometer-agent:
-      branch: lp:charms/ceilometer-agent
+      branch: lp:~openstack-charmers/charms/precise/ceilometer-agent/ssl-everywhere
     mongodb:
       branch: lp:charms/mongodb
       constraints: mem=1G
