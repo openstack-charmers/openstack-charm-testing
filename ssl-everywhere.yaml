@@ -2,13 +2,13 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:~hazmat/charms/precise/mysql/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/mysql/ssl-everywhere
       constraints: mem=1G
       options:
         dataset-size: 50%
         ssl: "on"
     rabbitmq-server:
-      branch: lp:~hazmat/charms/precise/rabbitmq-server/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/rabbitmq-server/ssl-everywhere
       constraints: mem=1G
     ceph:
       branch: lp:charms/ceph
@@ -22,7 +22,7 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: lp:~hazmat/charms/precise/keystone/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/keystone/ssl-everywhere
       constraints: mem=1G
       options:
         admin-password: openstack
@@ -32,29 +32,29 @@ openstack-services:
       branch: lp:charms/openstack-dashboard
       constraints: mem=1G
     nova-compute:
-      branch: lp:~hazmat/charms/precise/nova-compute/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/nova-compute/ssl-everywhere
       num_units: 3
       constraints: mem=4G
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: "False"
     nova-cloud-controller:
-      branch: lp:~hazmat/charms/precise/nova-cloud-controller/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/nova-cloud-controller/ssl-everywhere
       constraints: mem=1G
       options:
         network-manager: Quantum
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:~hazmat/charms/precise/quantum-gateway/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/quantum-gateway/ssl-everywhere
       constraints: mem=1G
     cinder:
-      branch: lp:~hazmat/charms/precise/cinder/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/cinder/ssl-everywhere
       options:
         block-device: "None"
         glance-api-version: 2
       constraints": mem=1G
     glance:
-      branch: lp:~hazmat/charms/precise/glance/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/glance/ssl-everywhere
       constraints: mem=1G
     swift-proxy:
       branch: lp:charms/swift-proxy
@@ -86,7 +86,7 @@ openstack-services:
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: lp:~hazmat/charms/precise/ceilometer/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/ceilometer/ssl-everywhere
       constraints: mem=1G
     ceilometer-agent:
       branch: lp:charms/ceilometer-agent
