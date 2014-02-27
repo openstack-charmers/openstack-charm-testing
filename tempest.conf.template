@@ -1,8 +1,8 @@
 [DEFAULT]
 [baremetal]
 [boto]
-ec2_url = http://__NCC__:8773/services/Cloud
-s3_url = http://__NCC__:3333
+ec2_url = __PROTO__://__NCC__:8773/services/Cloud
+s3_url = __PROTO__://__NCC__:3333
 aws_access = __ACCESS__
 aws_secret = __SECRET__
 [cli]
@@ -20,8 +20,8 @@ login_url=http://__DASHBOARD__/horizon/auth/login/
 [data_processing]
 [debug]
 [identity]
-uri=http://__KEYSTONE__:5000/v2.0
-uri_v3=http://__KEYSTONE__:5000/v3.0
+uri=__PROTO__://__KEYSTONE__:5000/v2.0
+uri_v3=__PROTO__://__KEYSTONE__:5000/v3.0
 admin_username=admin
 admin_tenant_name=admin
 admin_password=openstack

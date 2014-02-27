@@ -6,10 +6,12 @@ openstack-services:
       constraints: mem=1G
       options:
         dataset-size: 50%
-        ssl: "on"
+        ssl: "only"
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/precise/rabbitmq-server/ssl-everywhere
       constraints: mem=1G
+      options:
+        ssl: "only"
     ceph:
       branch: lp:charms/ceph
       num_units: 3
