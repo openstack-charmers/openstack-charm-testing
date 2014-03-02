@@ -7,6 +7,8 @@ aws_access = __ACCESS__
 aws_secret = __SECRET__
 [cli]
 [compute]
+image_ssh_user=cirros
+image_alt_ssh_user=ubuntu
 image_ref=__IMAGE_ID__
 image_ref_alt=__IMAGE_ALT_ID__
 flavor_ref=2
