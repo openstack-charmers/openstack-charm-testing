@@ -24,7 +24,7 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: lp:~james-page/charms/precise/keystone/redux-ivoks
+      branch: lp:~openstack-charmers/charms/precise/keystone/ssl-everywhere
       constraints: mem=1G
       options:
         admin-password: openstack
