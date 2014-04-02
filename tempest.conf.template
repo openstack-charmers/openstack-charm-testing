@@ -1,4 +1,5 @@
 [DEFAULT]
+lock_path=/tmp
 [baremetal]
 [boto]
 ec2_url = __PROTO__://__NCC__:8773/services/Cloud
@@ -6,16 +7,18 @@ s3_url = __PROTO__://__NCC__:3333
 aws_access = __ACCESS__
 aws_secret = __SECRET__
 [cli]
+cli_dir=/usr/bin
 [compute]
-image_ssh_user=cirros
+image_ssh_user=ubuntu
 image_alt_ssh_user=ubuntu
-image_ref=__IMAGE_ID__
+image_ref=__IMAGE_ALT_ID__
 image_ref_alt=__IMAGE_ALT_ID__
 flavor_ref=2
 allow_tenant_isolation = true
 allow_tenant_reuse = true
 [compute-admin]
 [compute-feature-enabled]
+api_v3=false
 [dashboard]
 dashboard_url=http://__DASHBOARD__/horizon
 login_url=http://__DASHBOARD__/horizon/auth/login/
@@ -40,9 +43,9 @@ http_image=http://10.98.191.34:8080/v1/AUTH_79699f6f71e245b186720f1e2bc03cf0/ima
 [image-feature-enabled]
 [input-scenario]
 [network]
-tenant_network_cidr=192.168.2.0/24
+tenant_network_cidr=192.168.0.0/16
 public_network_id=__EXT_NET__
-public_router_id=__ROUTER__
+#public_router_id=__ROUTER__
 [network-feature-enabled]
 [object-storage]
 accounts_quotas_available = False
@@ -51,6 +54,7 @@ container_quotas_available = False
 [orchestration]
 [scenario]
 img_dir=/home/ubuntu/images
+ssh_user=ubuntu
 [service_available]
 neutron=true
 [stress]
@@ -58,3 +62,4 @@ neutron=true
 [volume]
 catalog_type = volume
 [volume-feature-enabled]
+backup=false

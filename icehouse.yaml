@@ -2,13 +2,15 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/mysql
+      branch: lp:charms/mysql #lp:~openstack-charmers/charms/precise/percona-cluster/trunk
       constraints: mem=1G
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: lp:charms/rabbitmq-server
+      branch: lp:~openstack-charmers/charms/precise/rabbitmq-server/active-active
       constraints: mem=1G
+      options:
+        ssl: only
     ceph:
       branch: lp:~openstack-charmers/charms/precise/ceph/icehouse
       num_units: 3
@@ -35,7 +37,8 @@ openstack-services:
       constraints: mem=4G
       options:
         config-flags: "auto_assign_floating_ip=False"
-        enable-live-migration: "False"
+        enable-live-migration: False
+        enable-resize: False
     nova-cloud-controller:
       branch: lp:~openstack-charmers/charms/precise/nova-cloud-controller/icehouse
       constraints: mem=1G
@@ -45,12 +48,16 @@ openstack-services:
     neutron-gateway:
       branch: lp:~openstack-charmers/charms/precise/quantum-gateway/icehouse
       constraints: mem=1G
+      options:
+        instance-mtu: 1400
     cinder:
       branch: lp:~openstack-charmers/charms/precise/cinder/icehouse
       options:
         block-device: "None"
         glance-api-version: 2
       constraints": mem=1G
+    cinder-ceph:
+      branch: lp:~openstack-charmers/charms/precise/cinder-ceph/multi-backend
     glance:
       branch: lp:~openstack-charmers/charms/precise/glance/icehouse
       constraints: mem=1G
@@ -107,11 +114,13 @@ openstack-services:
     - [ glance, keystone ]
     - [ glance, ceph ]
     - [ glance, cinder ]
+    - [ glance, rabbitmq-server ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
-    - [ cinder, ceph ]
+    - [ cinder, cinder-ceph ]
+    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, mysql ]
     - [ neutron-gateway, rabbitmq-server ]
     - [ neutron-gateway, nova-cloud-controller ]
@@ -191,6 +200,9 @@ raring-grizzly-trunk:
 saucy-havana:
   inherits: openstack-services
   series: saucy
+  overrides:
+    openstack-origin: distro
+    source: distro
 # trusty configurations
 trusty-icehouse:
   inherits: openstack-services
