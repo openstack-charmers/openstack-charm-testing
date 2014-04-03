@@ -26,7 +26,7 @@ login_url=http://__DASHBOARD__/horizon/auth/login/
 [debug]
 [identity]
 uri=__PROTO__://__KEYSTONE__:5000/v2.0
-uri_v3=__PROTO__://__KEYSTONE__:5000/v3.0
+uri_v3=__PROTO__://__KEYSTONE__:5000/v3
 admin_username=admin
 admin_tenant_name=admin
 admin_password=openstack
@@ -45,11 +45,10 @@ http_image=http://10.98.191.34:8080/v1/AUTH_79699f6f71e245b186720f1e2bc03cf0/ima
 [network]
 tenant_network_cidr=192.168.0.0/16
 public_network_id=__EXT_NET__
-#public_router_id=__ROUTER__
 [network-feature-enabled]
 [object-storage]
-accounts_quotas_available = False
-container_quotas_available = False
+accounts_quotas_available = True
+container_quotas_available = True
 [object-storage-feature-enabled]
 [orchestration]
 [scenario]
