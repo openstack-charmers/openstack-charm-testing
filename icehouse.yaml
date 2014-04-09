@@ -203,6 +203,11 @@ saucy-havana:
   overrides:
     openstack-origin: distro
     source: distro
+saucy-havana-proposed:
+  inherits: saucy-havana
+  overrides:
+    openstack-origin: distro-proposed
+    source: distro-proposed
 # trusty configurations
 trusty-icehouse:
   inherits: openstack-services
