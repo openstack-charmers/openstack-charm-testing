@@ -12,7 +12,7 @@ openstack-services:
       options:
         ssl: only
     ceph:
-      branch: lp:~openstack-charmers/charms/precise/ceph/icehouse
+      branch: lp:charms/ceph
       num_units: 3
       constraints: mem=1G
       options:
@@ -119,8 +119,9 @@ openstack-services:
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
-    - [ cinder, cinder-ceph ]
-    - [ cinder-ceph, ceph ]
+    - [ cinder, ceph ]
+#    - [ cinder, cinder-ceph ]
+#    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, mysql ]
     - [ neutron-gateway, rabbitmq-server ]
     - [ neutron-gateway, nova-cloud-controller ]
@@ -207,7 +208,7 @@ saucy-havana-proposed:
   inherits: saucy-havana
   overrides:
     openstack-origin: distro-proposed
-    source: distro-proposed
+    source: proposed
 # trusty configurations
 trusty-icehouse:
   inherits: openstack-services
