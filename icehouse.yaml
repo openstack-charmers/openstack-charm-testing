@@ -2,10 +2,17 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/mysql #lp:~openstack-charmers/charms/precise/percona-cluster/trunk
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/trunk
       constraints: mem=1G
       options:
-        dataset-size: 50%
+        root-password: crapper
+        sst-password: crapper
+        vip: 10.5.100.1
+        vip_cidr: 16
+    mysql-hacluster:
+      branch: lp:~openstack-charmers/charms/trusty/hacluster/trunk
+      options:
+        monitor_host: 10.5.0.2
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/precise/rabbitmq-server/active-active
       constraints: mem=1G
@@ -98,6 +105,9 @@ openstack-services:
     mongodb:
       branch: lp:charms/mongodb
       constraints: mem=1G
+    heat:
+      branch: lp:~openstack-charmers/charms/precise/heat/icehouse
+      constraints: mem=1G
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -135,6 +145,9 @@ openstack-services:
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
 # precise configurations
 precise-grizzly:
   inherits: openstack-services
