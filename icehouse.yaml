@@ -2,24 +2,15 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/trunk
+      branch: lp:charms/mysql
       constraints: mem=1G
-      options:
-        root-password: crapper
-        sst-password: crapper
-        vip: 10.5.100.1
-        vip_cidr: 16
-    mysql-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/trunk
-      options:
-        monitor_host: 10.5.0.2
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/precise/rabbitmq-server/active-active
       constraints: mem=1G
       options:
         ssl: only
     ceph:
-      branch: lp:charms/ceph
+      branch: lp:~openstack-charmers/charms/precise/ceph/icehouse
       num_units: 3
       constraints: mem=1G
       options:
@@ -56,7 +47,7 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/precise/quantum-gateway/icehouse
       constraints: mem=1G
       options:
-        instance-mtu: 1400
+        instance-mtu: 1350
     cinder:
       branch: lp:~openstack-charmers/charms/precise/cinder/icehouse
       options:
@@ -105,9 +96,6 @@ openstack-services:
     mongodb:
       branch: lp:charms/mongodb
       constraints: mem=1G
-    heat:
-      branch: lp:~openstack-charmers/charms/precise/heat/icehouse
-      constraints: mem=1G
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -129,7 +117,6 @@ openstack-services:
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
-#    - [ cinder, ceph ]
     - [ cinder, cinder-ceph ]
     - [ cinder-ceph, ceph ]
     - [ neutron-gateway, mysql ]
@@ -145,6 +132,13 @@ openstack-services:
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
+openstack-havana:
+  inherits: openstack-services
+  services:
+    heat:
+      branch: lp:~openstack-charmers/charms/precise/heat/icehouse
+      constraints: mem=1G
+  relations:
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
@@ -168,7 +162,7 @@ precise-grizzly-trunk:
     offline-compression: no
 # precise configurations
 precise-havana:
-  inherits: openstack-services
+  inherits: openstack-havana
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
@@ -180,7 +174,7 @@ precise-havana-proposed:
     source: cloud:precise-proposed/havana
 # icehouse
 precise-icehouse:
-  inherits: openstack-services
+  inherits: openstack-havana
   series: precise
   overrides:
     openstack-origin: cloud:precise-icehouse
@@ -212,7 +206,7 @@ raring-grizzly-trunk:
     offline-compression: no
 # saucy configurations
 saucy-havana:
-  inherits: openstack-services
+  inherits: openstack-havana
   series: saucy
   overrides:
     openstack-origin: distro
@@ -224,7 +218,7 @@ saucy-havana-proposed:
     source: proposed
 # trusty configurations
 trusty-icehouse:
-  inherits: openstack-services
+  inherits: openstack-havana
   series: trusty
   overrides:
     openstack-origin: distro
