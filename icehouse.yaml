@@ -7,8 +7,6 @@ openstack-services:
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/precise/rabbitmq-server/active-active
       constraints: mem=1G
-      options:
-        ssl: only
     ceph:
       branch: lp:~openstack-charmers/charms/precise/ceph/icehouse
       num_units: 3
