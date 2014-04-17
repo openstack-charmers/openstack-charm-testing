@@ -2,13 +2,23 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/mysql
+      #branch: lp:charms/trusty/mysql
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/trunk
       constraints: mem=1G
+      num_units: 2
+      options:
+        vip: 10.5.100.10
+        vip_cidr: 16
+        root-password: crapper
+        sst-password: crapper
+    mysql-hacluster:
+      branch: lp:charms/trusty/hacluster
     rabbitmq-server:
-      branch: lp:charms/rabbitmq-server
+      branch: lp:charms/trusty/rabbitmq-server
       constraints: mem=1G
+      num_units: 2
     ceph:
-      branch: lp:charms/ceph
+      branch: lp:charms/trusty/ceph
       num_units: 3
       constraints: mem=1G
       options:
@@ -19,16 +29,27 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: lp:charms/keystone
+      branch: lp:charms/trusty/keystone
       constraints: mem=1G
+      num_units: 2
       options:
         admin-password: openstack
         admin-token: ubuntutesting
+        vip: 10.5.100.1
+        vip_cidr: 16
+    keystone-hacluster:
+      branch: lp:charms/trusty/hacluster
     openstack-dashboard:
-      branch: lp:charms/openstack-dashboard
+      branch: lp:charms/trusty/openstack-dashboard
       constraints: mem=1G
+      num_units: 2
+      options:
+        vip: 10.5.100.2
+        vip_cidr: 16
+    dashboard-hacluster:
+      branch: lp:charms/trusty/hacluster
     nova-compute:
-      branch: lp:charms/nova-compute
+      branch: lp:charms/trusty/nova-compute
       num_units: 3
       constraints: mem=4G
       options:
@@ -36,66 +57,91 @@ openstack-services:
         enable-live-migration: False
         enable-resize: False
     nova-cloud-controller:
-      branch: lp:charms/nova-cloud-controller
+      branch: lp:charms/trusty/nova-cloud-controller
       constraints: mem=1G
+      num_units: 2
       options:
         network-manager: Quantum
         quantum-security-groups: "yes"
+        vip: 10.5.100.3
+        vip_cidr: 16
+    ncc-hacluster:
+      branch: lp:charms/trusty/hacluster
     neutron-gateway:
-      branch: lp:charms/quantum-gateway
+      branch: lp:charms/trusty/quantum-gateway
       constraints: mem=1G
+      num_units: 2
       options:
         instance-mtu: 1350
     cinder:
-      branch: lp:charms/cinder
+      branch: lp:charms/trusty/cinder
+      num_units: 2
       options:
         block-device: "None"
         glance-api-version: 2
+        vip: 10.5.100.4
+        vip_cidr: 16
       constraints": mem=1G
+    cinder-hacluster:
+      branch: lp:charms/trusty/hacluster
     cinder-ceph:
-      branch: lp:charms/cinder-ceph
+      branch: lp:charms/trusty/cinder-ceph
     glance:
-      branch: lp:charms/glance
+      branch: lp:charms/trusty/glance
       constraints: mem=1G
+      num_units: 2
+      options:
+        vip: 10.5.100.5
+        vip_cidr: 16
+    glance-hacluster:
+      branch: lp:charms/trusty/hacluster
     swift-proxy:
-      branch: lp:charms/swift-proxy
+      branch: lp:charms/trusty/swift-proxy
       constraints: mem=1G
+      num_units: 2
       options:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
         use-https: 'no'
+        vip: 10.5.100.6
+        vip_cidr: 16
+    swift-proxy-hacluster:
+      branch: lp:charms/trusty/hacluster
     swift-storage-z1:
-      branch: lp:charms/swift-storage
+      branch: lp:charms/trusty/swift-storage
       constraints: mem=1G
       options:
         zone: 1
         block-device: vdb
         overwrite: "true"
     swift-storage-z2:
-      branch: lp:charms/swift-storage
+      branch: lp:charms/trusty/swift-storage
       constraints: mem=1G
       options:
         zone: 2
         block-device: vdb
         overwrite: "true"
     swift-storage-z3:
-      branch: lp:charms/swift-storage
+      branch: lp:charms/trusty/swift-storage
       constraints: mem=1G
       options:
         zone: 3
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: lp:charms/ceilometer
+      branch: lp:charms/trusty/ceilometer
       constraints: mem=1G
     ceilometer-agent:
-      branch: lp:charms/ceilometer-agent
+      branch: lp:charms/trusty/ceilometer-agent
     mongodb:
       branch: lp:charms/mongodb
       constraints: mem=1G
   relations:
+    - [ mysql, mysql-hacluster ]
     - [ keystone, mysql ]
+    - [ keystone, keystone-hacluster ]
+    - [ nova-cloud-controller, ncc-hacluster ]
     - [ nova-cloud-controller, mysql ]
     - [ nova-cloud-controller, rabbitmq-server ]
     - [ nova-cloud-controller, glance ]
@@ -106,11 +152,13 @@ openstack-services:
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
     - [ nova-compute, ceph ]
+    - [ glance, glance-hacluster ]
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
     - [ glance, cinder ]
     - [ glance, rabbitmq-server ]
+    - [ cinder, cinder-hacluster ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
@@ -121,7 +169,9 @@ openstack-services:
     - [ neutron-gateway, rabbitmq-server ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
+    - [ openstack-dashboard, dashboard-hacluster ]
     - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-proxy-hacluster ]
     - [ swift-proxy, swift-storage-z1 ]
     - [ swift-proxy, swift-storage-z2 ]
     - [ swift-proxy, swift-storage-z3 ]
@@ -134,7 +184,7 @@ openstack-havana:
   inherits: openstack-services
   services:
     heat:
-      branch: lp:charms/heat
+      branch: lp:charms/trusty/heat
       constraints: mem=1G
   relations:
     - [ heat, mysql ]

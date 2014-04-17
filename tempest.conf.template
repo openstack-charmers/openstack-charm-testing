@@ -9,11 +9,10 @@ aws_secret = __SECRET__
 [cli]
 cli_dir=/usr/bin
 [compute]
-image_ssh_user=ubuntu
+image_ssh_user=cirros
 image_alt_ssh_user=ubuntu
-image_ref=__IMAGE_ALT_ID__
+image_ref=__IMAGE_ID__
 image_ref_alt=__IMAGE_ALT_ID__
-flavor_ref=2
 allow_tenant_isolation = true
 allow_tenant_reuse = true
 [compute-admin]
@@ -53,7 +52,7 @@ container_quotas_available = True
 [orchestration]
 [scenario]
 img_dir=/home/ubuntu/images
-ssh_user=ubuntu
+ssh_user=cirros
 [service_available]
 neutron=true
 [stress]

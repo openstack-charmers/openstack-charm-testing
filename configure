@@ -8,7 +8,7 @@ source ~/novarc
 
 # Configure neutron networking on serverstack
 source novarc
-./bin/quantum-ext-net -g 10.5.0.1 -c 10.5.0.0/16 -f 10.5.100.0:10.5.200.25 ext_net
+./bin/quantum-ext-net -g 10.5.0.1 -c 10.5.0.0/16 -f 10.5.150.0:10.5.200.254 ext_net
 ./bin/quantum-tenant-net -t admin -r provider-router -N 10.98.191.11 private 192.168.21.0/24
 
 mkdir -p ~/images
