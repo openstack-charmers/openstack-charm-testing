@@ -6,7 +6,10 @@ openstack-services:
       constraints: mem=1G
       options:
         dataset-size: 50%
-    rabbitmq-server:
+    rabbitmq-server-nova:
+      branch: lp:charms/rabbitmq-server
+      constraints: mem=1G
+    rabbitmq-server-neutron:
       branch: lp:charms/rabbitmq-server
       constraints: mem=1G
     ceph:
@@ -103,18 +106,21 @@ openstack-services:
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
-    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, rabbitmq-server-nova ]
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
     - [ nova-cloud-controller, neutron-api ]
     - [ neutron-api, mysql ]
-    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, rabbitmq-server-neutron ]
     - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-openvswitch ]
     - [ nova-compute, neutron-openvswitch ]
     - [ nova-compute, nova-cloud-controller ]
     - [ nova-compute, mysql ]
-    - - nova-compute
-      - rabbitmq-server:amqp
+    - - nova-compute:amqp
+      - rabbitmq-server-nova
+    - - nova-compute:amqp-neutron
+      - rabbitmq-server-neutron
     - [ nova-compute, glance ]
     - [ nova-compute, ceph ]
     - [ glance, mysql ]
@@ -122,20 +128,24 @@ openstack-services:
     - [ glance, ceph ]
     - [ glance, cinder ]
     - [ cinder, mysql ]
-    - [ cinder, rabbitmq-server ]
+    - [ cinder, rabbitmq-server-nova ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, ceph ]
     - [ neutron-gateway, mysql ]
-    - [ neutron-gateway, rabbitmq-server ]
+    - - rabbitmq-server-nova
+      - neutron-gateway:amqp-nova
+    - - rabbitmq-server-neutron
+      - neutron-gateway:amqp
     - [ neutron-gateway, nova-cloud-controller ]
+    - [ neutron-gateway, neutron-openvswitch ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
     - [ swift-proxy, swift-storage-z1 ]
     - [ swift-proxy, swift-storage-z2 ]
     - [ swift-proxy, swift-storage-z3 ]
     - [ ceilometer, keystone ]
-    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, rabbitmq-server-nova ]
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
