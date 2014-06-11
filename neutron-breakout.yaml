@@ -53,7 +53,7 @@ openstack-services:
     neutron-openvswitch:
       branch: lp:~gnuoy/charms/trusty/neutron-openvswitch/neutron-refactor
     neutron-gateway:
-      branch: lp:charms/quantum-gateway
+      branch: lp:~gnuoy/charms/trusty/neutron-gateway/neutron-refactor
       constraints: mem=1G
       options:
         instance-mtu: 1300
