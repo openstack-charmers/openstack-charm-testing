@@ -113,16 +113,14 @@ openstack-services:
     - [ neutron-api, mysql ]
     - [ neutron-api, rabbitmq-server-neutron ]
     - [ neutron-api, keystone ]
-    - [ neutron-api, neutron-openvswitch ]
     - [ nova-compute, neutron-openvswitch ]
     - [ nova-compute, nova-cloud-controller ]
     - [ nova-compute, mysql ]
     - - nova-compute:amqp
       - rabbitmq-server-nova
-    - - nova-compute:amqp-neutron
-      - rabbitmq-server-neutron
     - [ nova-compute, glance ]
     - [ nova-compute, ceph ]
+    - [ neutron-openvswitch, rabbitmq-server-neutron ]
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
@@ -138,7 +136,6 @@ openstack-services:
     - - rabbitmq-server-neutron
       - neutron-gateway:amqp
     - [ neutron-gateway, nova-cloud-controller ]
-    - [ neutron-gateway, neutron-openvswitch ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
     - [ swift-proxy, swift-storage-z1 ]
