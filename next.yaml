@@ -1,0 +1,232 @@
+# vim: set ts=2 et:
+openstack-services:
+  services:
+    mysql:
+      branch: lp:charms/mysql
+      constraints: mem=1G
+      options:
+        dataset-size: 50%
+    rabbitmq-server:
+      branch: lp:charms/rabbitmq-server
+      constraints: mem=1G
+    ceph:
+      branch: lp:~openstack-charmers/charms/trusty/ceph/next
+      num_units: 3
+      constraints: mem=1G
+      options:
+        monitor-count: 3
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-devices: /dev/vdb
+        osd-reformat: "yes"
+        ephemeral-unmount: /mnt
+    keystone:
+      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      constraints: mem=1G
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+    openstack-dashboard:
+      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      constraints: mem=1G
+    nova-compute:
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      num_units: 3
+      constraints: mem=4G
+      options:
+        enable-live-migration: True
+        enable-resize: True
+    nova-cloud-controller:
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      constraints: mem=1G
+      options:
+        network-manager: Quantum
+        quantum-security-groups: "yes"
+    neutron-gateway:
+      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      constraints: mem=1G
+      options:
+        instance-mtu: 1300
+    cinder:
+      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      options:
+        block-device: "None"
+        glance-api-version: 2
+      constraints": mem=1G
+    glance:
+      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      constraints: mem=1G
+    swift-proxy:
+      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      constraints: mem=1G
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+        use-https: 'no'
+    swift-storage-z1:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 1
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 2
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 3
+        block-device: vdb
+        overwrite: "true"
+    ceilometer:
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+      constraints: mem=1G
+    ceilometer-agent:
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+    mongodb:
+      branch: lp:charms/mongodb
+      constraints: mem=1G
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ nova-compute, ceph ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, ceph ]
+    - [ glance, cinder ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
+    - [ cinder, ceph ]
+    - [ neutron-gateway, mysql ]
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+    - [ ceilometer, keystone ]
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
+openstack-icehouse:
+  inherits: openstack-services
+  services:
+    neutron-api:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+  relations:
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-openvswitch, rabbitmq-server ]
+# precise configurations
+precise-grizzly:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-grizzly
+    source: cloud:precise-updates/grizzly
+precise-grizzly-proposed:
+  inherits: precise-grizzly
+  overrides:
+    openstack-origin: cloud:precise-grizzly/proposed
+    source: cloud:precise-proposed/grizzly
+precise-grizzly-trunk:
+  inherits: precise-grizzly
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    offline-compression: no
+# precise configurations
+precise-havana:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-havana
+    source: cloud:precise-updates/havana
+precise-havana-proposed:
+  inherits: precise-havana
+  overrides:
+    openstack-origin: cloud:precise-havana/proposed
+    source: cloud:precise-proposed/havana
+# icehouse
+precise-icehouse:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-updates/icehouse
+precise-icehouse-proposed:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: cloud:precise-icehouse/proposed
+    source: cloud:precise-updates/icehouse
+precise-icehouse-staging:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
+    source: ppa:ubuntu-cloud-archive/icehouse-staging
+precise-icehouse-trunk:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+# raring configurations
+raring-grizzly:
+  inherits: openstack-services
+  series: raring
+raring-grizzly-trunk:
+  inherits: raring-grizzly
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    offline-compression: no
+# saucy configurations
+saucy-havana:
+  inherits: openstack-services
+  series: saucy
+# trusty configurations
+trusty-icehouse:
+  inherits: openstack-icehouse
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"
+# utopic configuration
+utopic-juno:
+  inherits: openstack-icehouse
+  series: utopic
