@@ -12,5 +12,5 @@ for machine in gateway_config['machines']:
 
 if len(uuids) > 0:
     for uuid in uuids:
-        subprocess.check_call(['nova', 'interface-attach', uuid , '--net-id', "e10a0521-c8ed-4f63-b359-9cc54ee009fd"])
+        subprocess.check_call(['nova', 'interface-attach', uuid])
     subprocess.check_call(['juju', 'set', 'neutron-gateway', 'ext-port=eth1'])
