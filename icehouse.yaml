@@ -38,14 +38,14 @@ openstack-services:
     nova-cloud-controller:
       branch: lp:charms/nova-cloud-controller
       constraints: mem=1G
-#      options:
-#        network-manager: Quantum
-#        quantum-security-groups: "yes"
-#    neutron-gateway:
-#      branch: lp:charms/quantum-gateway
-#      constraints: mem=1G
-#      options:
-#        instance-mtu: 1350
+      options:
+        network-manager: Quantum
+        quantum-security-groups: "yes"
+    neutron-gateway:
+      branch: lp:charms/quantum-gateway
+      constraints: mem=1G
+      options:
+        instance-mtu: 1350
     cinder:
       branch: lp:charms/cinder
       options:
@@ -57,43 +57,43 @@ openstack-services:
     glance:
       branch: lp:charms/glance
       constraints: mem=1G
-#    swift-proxy:
-#      branch: lp:charms/swift-proxy
-#      constraints: mem=1G
-#      options:
-#        zone-assignment: manual
-#        replicas: 3
-#        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
-#        use-https: 'no'
-#    swift-storage-z1:
-#      branch: lp:charms/swift-storage
-#      constraints: mem=1G
-#      options:
-#        zone: 1
-#        block-device: vdb
-#        overwrite: "true"
-#    swift-storage-z2:
-#      branch: lp:charms/swift-storage
-#      constraints: mem=1G
-#      options:
-#        zone: 2
-#        block-device: vdb
-#        overwrite: "true"
-#    swift-storage-z3:
-#      branch: lp:charms/swift-storage
-#      constraints: mem=1G
-#      options:
-#        zone: 3
-#        block-device: vdb
-#        overwrite: "true"
-#    ceilometer:
-#      branch: lp:charms/ceilometer
-#      constraints: mem=1G
-#    ceilometer-agent:
-#      branch: lp:charms/ceilometer-agent
-#    mongodb:
-#      branch: lp:charms/mongodb
-#      constraints: mem=1G
+    swift-proxy:
+      branch: lp:charms/swift-proxy
+      constraints: mem=1G
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+        use-https: 'no'
+    swift-storage-z1:
+      branch: lp:charms/swift-storage
+      constraints: mem=1G
+      options:
+        zone: 1
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: lp:charms/swift-storage
+      constraints: mem=1G
+      options:
+        zone: 2
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: lp:charms/swift-storage
+      constraints: mem=1G
+      options:
+        zone: 3
+        block-device: vdb
+        overwrite: "true"
+    ceilometer:
+      branch: lp:charms/ceilometer
+      constraints: mem=1G
+    ceilometer-agent:
+      branch: lp:charms/ceilometer-agent
+    mongodb:
+      branch: lp:charms/mongodb
+      constraints: mem=1G
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -108,7 +108,7 @@ openstack-services:
     - [ nova-compute, ceph ]
     - [ glance, mysql ]
     - [ glance, keystone ]
-#    - [ glance, ceph ]
+    - [ glance, ceph ]
     - [ glance, cinder ]
     - [ glance, rabbitmq-server ]
     - [ cinder, mysql ]
@@ -116,20 +116,20 @@ openstack-services:
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, cinder-ceph ]
-#    - [ cinder-ceph, ceph ]
-#    - [ neutron-gateway, mysql ]
-#    - [ neutron-gateway, rabbitmq-server ]
-#    - [ neutron-gateway, nova-cloud-controller ]
+    - [ cinder-ceph, ceph ]
+    - [ neutron-gateway, mysql ]
+    - [ neutron-gateway, rabbitmq-server ]
+    - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
-#    - [ swift-proxy, keystone ]
-#    - [ swift-proxy, swift-storage-z1 ]
-#    - [ swift-proxy, swift-storage-z2 ]
-#    - [ swift-proxy, swift-storage-z3 ]
-#    - [ ceilometer, keystone ]
-#    - [ ceilometer, rabbitmq-server ]
-#    - [ ceilometer, mongodb ]
-#    - [ ceilometer-agent, nova-compute ]
-#    - [ ceilometer-agent, ceilometer ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+    - [ ceilometer, keystone ]
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
 openstack-havana:
   inherits: openstack-services
   services:
