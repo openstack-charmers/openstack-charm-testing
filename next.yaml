@@ -115,7 +115,6 @@ openstack-services:
     - [ cinder, keystone ]
     - [ cinder, ceph ]
     - [ neutron-gateway, mysql ]
-    - [ "neutron-gateway:amqp", rabbitmq-server ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -127,8 +126,12 @@ openstack-services:
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
-openstack-icehouse:
+openstack-singlerabbit:
   inherits: openstack-services
+  relations:
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+openstack-icehouse:
+  inherits: openstack-singlerabbit
   services:
     neutron-api:
       branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
@@ -145,9 +148,32 @@ openstack-icehouse:
   - [ neutron-api, keystone ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
+openstack-icehouse-msg-split:
+  inherits: openstack-services
+  services:
+    neutron-api:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+    rabbitmq-server-neutron:
+      branch: lp:charms/rabbitmq-server
+      constraints: mem=1G
+  relations:
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server-neutron ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-openvswitch, rabbitmq-server-neutron ]
+  - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
+  - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # precise configurations
 precise-grizzly:
-  inherits: openstack-services
+  inherits: openstack-singlerabbit
   series: precise
   overrides:
     openstack-origin: cloud:precise-grizzly
@@ -165,7 +191,7 @@ precise-grizzly-trunk:
     offline-compression: no
 # precise configurations
 precise-havana:
-  inherits: openstack-services
+  inherits: openstack-singlerabbit
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
@@ -177,7 +203,7 @@ precise-havana-proposed:
     source: cloud:precise-proposed/havana
 # icehouse
 precise-icehouse:
-  inherits: openstack-services
+  inherits: openstack-singlerabbit
   series: precise
   overrides:
     openstack-origin: cloud:precise-icehouse
@@ -199,7 +225,7 @@ precise-icehouse-trunk:
     source: ppa:openstack-ubuntu-testing/icehouse
 # raring configurations
 raring-grizzly:
-  inherits: openstack-services
+  inherits: openstack-singlerabbit
   series: raring
 raring-grizzly-trunk:
   inherits: raring-grizzly
@@ -209,11 +235,14 @@ raring-grizzly-trunk:
     offline-compression: no
 # saucy configurations
 saucy-havana:
-  inherits: openstack-services
+  inherits: openstack-singlerabbit
   series: saucy
 # trusty configurations
 trusty-icehouse:
   inherits: openstack-icehouse
+  series: trusty
+trusty-icehouse-msg-split:
+  inherits: openstack-icehouse-msg-split
   series: trusty
 trusty-icehouse-proposed:
   inherits: trusty-icehouse
