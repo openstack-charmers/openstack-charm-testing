@@ -1,0 +1,184 @@
+# vim: set ts=2 et:
+openstack-services:
+  services:
+    nova-cell-api:
+      branch: lp:~gnuoy/charms/precise/nova-cell/trunk/
+      options:
+        cell_name: api
+        cell_type: api
+        verbose: True
+        debug: True
+    nova-cloud-controller-api:
+      branch: lp:~gnuoy/charms/precise/nova-cloud-controller/cell-support/
+      constraints: mem=1G
+      options:
+        network-manager: Quantum
+        quantum-security-groups: "yes"
+        verbose: True
+        debug: True
+    neutron-api:
+      branch: lp:~gnuoy/charms/trusty/neutron-api/cell-support
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+        verbose: True
+        debug: True
+    neutron-openvswitch:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+    mysql-api:
+      branch: lp:charms/mysql
+      constraints: mem=1G
+      options:
+        dataset-size: 50%
+    mysql-neutron:
+      branch: lp:charms/mysql
+      constraints: mem=1G
+      options:
+        dataset-size: 50%
+    rabbitmq-server-api:
+      branch: lp:charms/rabbitmq-server
+      constraints: mem=1G
+    rabbitmq-server-neutron:
+      branch: lp:charms/rabbitmq-server
+      constraints: mem=1G
+    neutron-gateway:
+      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      constraints: mem=1G
+      options:
+        database: neutron
+        database-user: neutron
+        instance-mtu: 1300
+        verbose: True
+        debug: True
+    keystone:
+      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      constraints: mem=1G
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+    openstack-dashboard:
+      branch: lp:charms/openstack-dashboard
+      constraints: mem=1G
+    cinder:
+      branch: lp:charms/cinder
+      options:
+        block-device: "None"
+        glance-api-version: 2
+      constraints": mem=1G
+    glance:
+      branch: lp:charms/glance
+      constraints: mem=1G
+    cinder:
+      branch: lp:charms/cinder
+      options:
+        block-device: "None"
+        glance-api-version: 2
+      constraints": mem=1G
+    mongodb:
+      branch: lp:charms/mongodb
+      constraints: mem=1G
+  relations:
+    - [ keystone, mysql-api ]
+    - [ nova-cloud-controller-api, mysql-api ]
+    - [ nova-cloud-controller-api, rabbitmq-server-api ]
+    - [ nova-cloud-controller-api, glance ]
+    - [ nova-cloud-controller-api, keystone ]
+    - [ nova-cloud-controller-api, nova-cell-api ]
+    - - nova-cloud-controller-api:juju-info
+      - nova-cell-api:nova-api
+    - [ nova-cell-api, rabbitmq-server-api ]
+    - [ nova-cell-api, mysql-api ]
+    - [ neutron-api, mysql-neutron ]
+    - [ neutron-api, rabbitmq-server-neutron ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-openvswitch ]
+    - [ neutron-api, nova-cloud-controller-api ]
+    - [ rabbitmq-server-neutron, neutron-openvswitch ]
+    - [ glance, mysql-api ]
+    - [ glance, keystone ]
+    - [ glance, cinder ]
+    - [ cinder, mysql-api ]
+    - [ cinder, rabbitmq-server-api ]
+    - [ cinder, keystone ]
+    - [ neutron-gateway, mysql-neutron ]
+    - - rabbitmq-server-api
+      - neutron-gateway:amqp-nova
+    - - rabbitmq-server-neutron
+      - neutron-gateway:amqp
+    - [ neutron-gateway, nova-cloud-controller-api ]
+# precise configurations
+precise-grizzly:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-grizzly
+    source: cloud:precise-updates/grizzly
+precise-grizzly-proposed:
+  inherits: precise-grizzly
+  overrides:
+    openstack-origin: cloud:precise-grizzly/proposed
+    source: cloud:precise-proposed/grizzly
+precise-grizzly-trunk:
+  inherits: precise-grizzly
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    offline-compression: no
+# precise configurations
+precise-havana:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-havana
+    source: cloud:precise-updates/havana
+precise-havana-proposed:
+  inherits: precise-havana
+  overrides:
+    openstack-origin: cloud:precise-havana/proposed
+    source: cloud:precise-proposed/havana
+# icehouse
+precise-icehouse:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-updates/icehouse
+precise-icehouse-proposed:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: cloud:precise-icehouse/proposed
+    source: cloud:precise-updates/icehouse
+precise-icehouse-staging:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
+    source: ppa:ubuntu-cloud-archive/icehouse-staging
+precise-icehouse-trunk:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+# raring configurations
+raring-grizzly:
+  inherits: openstack-services
+  series: raring
+raring-grizzly-trunk:
+  inherits: raring-grizzly
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
+    offline-compression: no
+# saucy configurations
+saucy-havana:
+  inherits: openstack-services
+  series: saucy
+# trusty configurations
+trusty-icehouse:
+  inherits: openstack-services
+  series: trusty
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"

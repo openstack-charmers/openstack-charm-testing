@@ -1,0 +1,54 @@
+# vim: set ts=2 et:
+openstack-services:
+  services:
+    nova-cloud-controller-cell1:
+      branch: lp:~gnuoy/charms/precise/nova-cloud-controller/cell-support
+      constraints: mem=1G
+      options:
+        network-manager: Quantum
+        quantum-security-groups: "yes"
+        region: cell1
+        verbose: True                                                                                                                                                         
+        debug: True   
+    mysql-cell1:
+      branch: lp:charms/mysql
+      constraints: mem=1G
+      options:
+        dataset-size: 50%
+    rabbitmq-server-cell1:
+      branch: lp:charms/rabbitmq-server
+      constraints: mem=1G
+    nova-compute-cell1:
+      branch: lp:~gnuoy/charms/trusty/nova-compute/cell-support
+      num_units: 2
+      constraints: mem=4G
+      options:
+        config-flags: "auto_assign_floating_ip=False"
+        enable-live-migration: "False"
+        vif_plugging_timeout: 2
+    nova-cell-cell1:
+      branch: lp:~gnuoy/charms/precise/nova-cell/trunk
+      options:
+        cell_name: cell1
+        cell_type: compute
+        verbose: True
+        debug: True
+  relations:
+    - [ nova-cloud-controller-cell1, mysql-cell1 ]
+    - [ nova-cloud-controller-cell1, rabbitmq-server-cell1 ]
+    - [ nova-cloud-controller-cell1, glance ]
+    - [ nova-cloud-controller-cell1, keystone ]
+    - [ nova-cloud-controller-cell1, nova-cell-cell1 ]
+    - [ nova-cloud-controller-cell1, neutron-api ]
+    - - nova-cloud-controller-api:juju-info
+      - nova-cell-cell1:nova-api
+    - - nova-cell-api:nova-cell-parent
+      - nova-cell-cell1:nova-cell-child
+    - [ nova-cell-cell1, rabbitmq-server-cell1 ]
+    - [ nova-cell-cell1, mysql-cell1 ]
+    - [ nova-compute-cell1, nova-cloud-controller-cell1 ]
+    - [ nova-compute-cell1, mysql-cell1 ]
+    - - nova-compute-cell1
+      - rabbitmq-server-cell1:amqp
+    - [ nova-compute-cell1, glance ]
+    - [ nova-compute-cell1, neutron-openvswitch ]
