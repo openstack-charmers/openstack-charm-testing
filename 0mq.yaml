@@ -118,8 +118,8 @@ openstack-icehouse-msg-split:
   - [ neutron-api, keystone ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, openstack-zeromq ]
-  - [ "neutron-gateway:amqp-nova", openstack-zeromq ]
-  - [ "neutron-gateway:amqp", openstack-zeromq ]
+  - [ "neutron-gateway", openstack-zeromq ]
+  - [ "neutron-gateway", openstack-zeromq ]
 # precise configurations
 precise-grizzly:
   inherits: openstack-singlerabbit
