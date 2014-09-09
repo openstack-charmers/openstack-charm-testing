@@ -52,7 +52,7 @@ openstack-services:
         glance-api-version: 2
       constraints": mem=1G
     openstack-zeromq:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-0mq/trunk
+      branch: lp:~openstack-charmers/charms/trusty/openstack-zeromq/trunk
     glance:
       branch: lp:~openstack-charmers/charms/trusty/glance/next
       constraints: mem=1G
