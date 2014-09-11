@@ -31,10 +31,12 @@ glance image-create --name="cirros" --is-public=true \
 
 keystone tenant-create --name demo
 keystone user-create --name demo --tenant demo --pass pass --enabled true --email demo@dev.null
-keystone user-role-add --user demo --role Member --tenant demo
+keystone user-role-add --user demo --role Member --tenant demo || :
 keystone tenant-create --name alt_demo
 keystone user-create --name alt_demo --tenant alt_demo --pass secret --enabled true --email alt_demo@dev.null
-keystone user-role-add --user alt_demo --role Member --tenant alt_demo
+keystone user-role-add --user alt_demo --role Member --tenant alt_demo || :
+
+nova flavor-create m1.cirros 6 64 1 1
 
 access=$(keystone --os-username demo --os-password pass --os-tenant-name demo ec2-credentials-create | grep access | awk '{ print $4 }')
 secret=$(keystone ec2-credentials-get --access $access | grep secret | awk '{ print $4 }')

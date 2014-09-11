@@ -6,8 +6,6 @@ openstack-services:
       constraints: mem=1G
       options:
         dataset-size: 50%
-    openstack-zeromq:
-      branch: lp:charms/openstack-zeromq
     ceph:
       branch: lp:~openstack-charmers/charms/trusty/ceph/next
       num_units: 3
@@ -28,7 +26,7 @@ openstack-services:
     nova-compute:
       branch: lp:~openstack-charmers/charms/trusty/nova-compute/0mq
       num_units: 3
-      constraints: mem=4G
+      constraints: mem=8G
       options:
         enable-live-migration: True
         enable-resize: True
@@ -53,34 +51,36 @@ openstack-services:
     glance:
       branch: lp:~openstack-charmers/charms/trusty/glance/next
       constraints: mem=1G
+    ganglia:
+      branch: lp:charms/ganglia
+    ganglia-node:
+      branch: lp:charms/ganglia-node
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
-    - [ nova-cloud-controller, openstack-zeromq ]
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
+    - [ nova-cloud-controller, ganglia-node ]
     - [ nova-compute, nova-cloud-controller ]
     - [ nova-compute, mysql ]
-    - [ nova-compute, openstack-zeromq ]
     - [ nova-compute, glance ]
     - [ nova-compute, ceph ]
+    - [ nova-compute, ganglia-node ]
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
     - [ glance, cinder ]
     - [ cinder, mysql ]
-    - [ cinder, openstack-zeromq ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, ceph ]
+    - [ cinder, ganglia-node ]
     - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
-openstack-singlerabbit:
-  inherits: openstack-services
-  relations:
-    - [ neutron-gateway, openstack-zeromq ]
+    - [ neutron-gateway, ganglia-node ]
+    - [ "ganglia:master", ganglia-node ]
 openstack-icehouse:
-  inherits: openstack-singlerabbit
+  inherits: openstack-services
   services:
     neutron-api:
       branch: lp:~openstack-charmers/charms/trusty/neutron-api/0mq
@@ -91,120 +91,52 @@ openstack-icehouse:
       branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/0mq
   relations:
   - [ neutron-api, mysql ]
-  - [ neutron-api, openstack-zeromq ]
   - [ neutron-api, nova-cloud-controller ]
   - [ neutron-api, neutron-openvswitch ]
   - [ neutron-api, keystone ]
+  - [ neutron-api, ganglia-node ]
   - [ neutron-openvswitch, nova-compute ]
-  - [ neutron-openvswitch, openstack-zeromq ]
-openstack-icehouse-msg-split:
-  inherits: openstack-services
+openstack-icehouse-rmq:
+  inherits: openstack-icehouse
   services:
-    neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
-      constraints: mem=1G
-      options:
-        neutron-security-groups: True
-    neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
-    openstack-zeromq:
-      branch: lp:charms/openstack-zeromq
-      constraints: mem=1G
+    rabbitmq-server:
+      branch: lp:charms/trusty/rabbitmq-server
   relations:
-  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server ]
+  - [ "neutron-gateway:amqp", rabbitmq-server ]
+  - [ neutron-openvswitch, rabbitmq-server ]
+  - [ nova-cloud-controller, rabbitmq-server ]
+  - [ nova-compute, rabbitmq-server ]
+openstack-icehouse-zmq:
+  inherits: openstack-icehouse
+  services:
+    openstack-zeromq:
+      branch: lp:~openstack-charmers/charms/trusty/openstack-zeromq/trunk
+  relations:
   - [ neutron-api, openstack-zeromq ]
-  - [ neutron-api, nova-cloud-controller ]
-  - [ neutron-api, neutron-openvswitch ]
-  - [ neutron-api, keystone ]
-  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-gateway, openstack-zeromq ]
   - [ neutron-openvswitch, openstack-zeromq ]
-  - [ "neutron-gateway", openstack-zeromq ]
-  - [ "neutron-gateway", openstack-zeromq ]
-# precise configurations
-precise-grizzly:
-  inherits: openstack-singlerabbit
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-grizzly
-    source: cloud:precise-updates/grizzly
-precise-grizzly-proposed:
-  inherits: precise-grizzly
-  overrides:
-    openstack-origin: cloud:precise-grizzly/proposed
-    source: cloud:precise-proposed/grizzly
-precise-grizzly-trunk:
-  inherits: precise-grizzly
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    offline-compression: no
-# precise configurations
-precise-havana:
-  inherits: openstack-singlerabbit
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-havana
-    source: cloud:precise-updates/havana
-precise-havana-proposed:
-  inherits: precise-havana
-  overrides:
-    openstack-origin: cloud:precise-havana/proposed
-    source: cloud:precise-proposed/havana
-# icehouse
-precise-icehouse:
-  inherits: openstack-singlerabbit
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-updates/icehouse
-precise-icehouse-proposed:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: cloud:precise-icehouse/proposed
-    source: cloud:precise-updates/icehouse
-precise-icehouse-staging:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
-    source: ppa:ubuntu-cloud-archive/icehouse-staging
-precise-icehouse-trunk:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
-# raring configurations
-raring-grizzly:
-  inherits: openstack-singlerabbit
-  series: raring
-raring-grizzly-trunk:
-  inherits: raring-grizzly
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    offline-compression: no
-# saucy configurations
-saucy-havana:
-  inherits: openstack-singlerabbit
-  series: saucy
+  - [ nova-cloud-controller, openstack-zeromq ]
+  - [ nova-compute, openstack-zeromq ]
+  - [ neutron-gateway, openstack-zeromq ]
 # trusty configurations
-trusty-icehouse:
-  inherits: openstack-icehouse
+trusty-icehouse-zmq:
+  inherits: openstack-icehouse-zmq
   series: trusty
-trusty-icehouse-msg-split:
-  inherits: openstack-icehouse-msg-split
+trusty-juno-zmq:
+  inherits: openstack-icehouse-zmq
   series: trusty
-trusty-icehouse-proposed:
-  inherits: trusty-icehouse
   overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-trusty-icehouse-trunk:
-  inherits: trusty-icehouse
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+trusty-juno-rmq:
+  inherits: openstack-icehouse-rmq
+  series: trusty
   overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
-    offline-compression: "no"
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
 # utopic configuration
-utopic-juno:
-  inherits: openstack-icehouse
+utopic-juno-zmq:
+  inherits: openstack-icehouse-zmq
+  series: utopic
+utopic-juno-rmq:
+  inherits: openstack-icehouse-rmq
   series: utopic
