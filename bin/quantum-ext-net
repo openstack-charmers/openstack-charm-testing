@@ -38,6 +38,9 @@ if __name__ == '__main__':
     parser.add_option("-f", "--floating-range",
                       help="Range of floating IP's to use (separated by :).",
                       dest="floating_range", action="store", default=None)
+    parser.add_option("--network-type",
+                      help="Network type.",
+                      dest="network_type", action="store", default='gre')
     (opts, args) = parser.parse_args()
 
     if len(args) != 1:
@@ -87,8 +90,12 @@ if __name__ == '__main__':
         network_msg = {
             'name': net_name,
             'router:external': True,
-            'tenant_id': tenant_id
+            'tenant_id': tenant_id,
+            'provider:network_type': opts.network_type,
         }
+        if opts.network_type == 'vxlan':
+            network_msg['provider:segmentation_id'] = 1234
+
         logging.info('Creating new external network definition: %s',
                      net_name)
         network = quantum.create_network({'network': network_msg})['network']
