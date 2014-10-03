@@ -2,15 +2,15 @@
 
 set -ex
 
+net_type=${1:-"gre"}
 # Add extra port to quantum-gateway and configure charm to use it
 source ~/novarc
 ./bin/post-deploy-config
 
 # Configure neutron networking on serverstack
 source novarc
-./bin/quantum-ext-net -g 10.5.0.1 -c 10.5.0.0/16 -f 10.5.150.0:10.5.200.254 ext_net
-./bin/quantum-tenant-net -t admin -r provider-router -N 10.98.191.11 private 192.168.21.0/24
-
+./bin/quantum-ext-net --network-type $net_type -g 10.5.0.1 -c 10.5.0.0/16 -f 10.5.150.0:10.5.200.254 ext_net
+./bin/quantum-tenant-net --network-type $net_type -t admin -r provider-router -N 10.98.191.11 private 192.168.21.0/24
 mkdir -p ~/images
 [ -f ~/images/precise-server-cloudimg-amd64-disk1.img ] || {
     wget -O ~/images/precise-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
