@@ -93,11 +93,11 @@ if __name__ == '__main__':
                 'name': net_name,
                 'shared': opts.shared,
                 'tenant_id': tenant_id,
-                'provider:network_type': opts.network_type,
             }
         }
         if opts.network_type == 'vxlan':
             network_msg['network']['provider:segmentation_id'] = 1233
+            network_msg['network']['provider:network_type'] = opts.network_type
         network = quantum.create_network(network_msg)['network']
     else:
         logging.warning('Network %s already exists.', net_name)
