@@ -51,5 +51,4 @@ openstack-services:
     - - nova-compute-cell2
       - rabbitmq-server-cell2:amqp
     - [ nova-compute-cell2, glance ]
-    - [ nova-compute-cell2, ceph ]
     - [ nova-compute-cell2, neutron-openvswitch ]

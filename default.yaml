@@ -195,6 +195,13 @@ saucy-havana:
 trusty-icehouse:
   inherits: openstack-services
   series: trusty
+trusty-icehouse-secure:
+  inherits: trusty-icehouse
+  services:
+    keystone:
+      options:
+        https-service-endpoints: "True"
+        use-https: "yes"
 trusty-icehouse-trunk:
   inherits: trusty-icehouse
   overrides:

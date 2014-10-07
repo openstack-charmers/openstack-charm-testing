@@ -63,7 +63,6 @@ openstack-services:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
-        use-https: 'no'
     swift-storage-z1:
       branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
       constraints: mem=1G
@@ -172,36 +171,6 @@ openstack-icehouse-msg-split:
   - [ neutron-openvswitch, rabbitmq-server-neutron ]
   - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
-# precise configurations
-precise-grizzly:
-  inherits: openstack-singlerabbit
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-grizzly
-    source: cloud:precise-updates/grizzly
-precise-grizzly-proposed:
-  inherits: precise-grizzly
-  overrides:
-    openstack-origin: cloud:precise-grizzly/proposed
-    source: cloud:precise-proposed/grizzly
-precise-grizzly-trunk:
-  inherits: precise-grizzly
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    offline-compression: no
-# precise configurations
-precise-havana:
-  inherits: openstack-singlerabbit
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-havana
-    source: cloud:precise-updates/havana
-precise-havana-proposed:
-  inherits: precise-havana
-  overrides:
-    openstack-origin: cloud:precise-havana/proposed
-    source: cloud:precise-proposed/havana
 # icehouse
 precise-icehouse:
   inherits: openstack-singlerabbit
@@ -224,21 +193,6 @@ precise-icehouse-trunk:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
-# raring configurations
-raring-grizzly:
-  inherits: openstack-singlerabbit
-  series: raring
-raring-grizzly-trunk:
-  inherits: raring-grizzly
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    source: ppa:openstack-ubuntu-testing/grizzly-trunk-testing
-    offline-compression: no
-# saucy configurations
-saucy-havana:
-  inherits: openstack-singlerabbit
-  series: saucy
-# trusty configurations
 trusty-icehouse:
   inherits: openstack-icehouse
   series: trusty
@@ -256,7 +210,28 @@ trusty-icehouse-trunk:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
     offline-compression: "no"
-# utopic configuration
+# juno
+trusty-juno:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-updates/juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-proposed/juno
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
 utopic-juno:
   inherits: openstack-icehouse
   series: utopic
+utopic-juno-proposed:
+  inherits: utopic-juno
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed

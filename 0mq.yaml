@@ -49,8 +49,12 @@ openstack-services:
         glance-api-version: 2
       constraints": mem=1G
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: lp:~openstack-charmers/charms/trusty/glance/0mq
       constraints: mem=1G
+    ceilometer:
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer/0mq
+    mongodb:
+      branch: lp:charms/mongodb
     ganglia:
       branch: lp:charms/ganglia
     ganglia-node:
@@ -79,6 +83,8 @@ openstack-services:
     - [ neutron-gateway, nova-cloud-controller ]
     - [ neutron-gateway, ganglia-node ]
     - [ "ganglia:master", ganglia-node ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer, keystone ]
 openstack-icehouse:
   inherits: openstack-services
   services:
@@ -107,6 +113,8 @@ openstack-icehouse-rmq:
   - [ neutron-openvswitch, rabbitmq-server ]
   - [ nova-cloud-controller, rabbitmq-server ]
   - [ nova-compute, rabbitmq-server ]
+  - [ glance, rabbitmq-server ]
+  - [ ceilometer, rabbitmq-server ]
 openstack-icehouse-zmq:
   inherits: openstack-icehouse
   services:
@@ -119,6 +127,8 @@ openstack-icehouse-zmq:
   - [ nova-cloud-controller, openstack-zeromq ]
   - [ nova-compute, openstack-zeromq ]
   - [ neutron-gateway, openstack-zeromq ]
+  - [ glance, openstack-zeromq ]
+  - [ ceilometer, openstack-zeromq ]
 # trusty configurations
 trusty-icehouse-zmq:
   inherits: openstack-icehouse-zmq
