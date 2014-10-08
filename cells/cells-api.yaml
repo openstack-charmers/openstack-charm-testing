@@ -2,9 +2,8 @@
 openstack-services:
   services:
     nova-cell-api:
-      branch: lp:~gnuoy/charms/precise/nova-cell/trunk/
+      branch: lp:~openstack-charmers/charms/trusty/nova-cell/next
       options:
-        cell_name: api
         cell_type: api
         verbose: True
         debug: True
@@ -84,8 +83,6 @@ openstack-services:
     - [ nova-cloud-controller-api, glance ]
     - [ nova-cloud-controller-api, keystone ]
     - [ nova-cloud-controller-api, nova-cell-api ]
-    - - nova-cloud-controller-api:juju-info
-      - nova-cell-api:nova-api
     - [ nova-cell-api, rabbitmq-server-api ]
     - [ nova-cell-api, mysql-api ]
     - [ neutron-api, mysql-neutron ]

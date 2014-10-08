@@ -27,9 +27,8 @@ openstack-services:
         enable-live-migration: "False"
         vif_plugging_timeout: 2
     nova-cell-cell2:
-      branch: lp:~gnuoy/charms/precise/nova-cell/trunk
+      branch: lp:~openstack-charmers/charms/trusty/nova-cell/next
       options:
-        cell_name: cell2
         cell_type: compute
         verbose: True
         debug: True
@@ -40,8 +39,6 @@ openstack-services:
     - [ nova-cloud-controller-cell2, keystone ]
     - [ nova-cloud-controller-cell2, nova-cell-cell2 ]
     - [ nova-cloud-controller-cell2, neutron-api ]
-    - - nova-cloud-controller-api:juju-info
-      - nova-cell-cell2:nova-api
     - - nova-cell-api:nova-cell-parent
       - nova-cell-cell2:nova-cell-child
     - [ nova-cell-cell2, rabbitmq-server-cell2 ]

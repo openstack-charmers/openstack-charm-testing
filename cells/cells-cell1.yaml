@@ -8,8 +8,8 @@ openstack-services:
         network-manager: Quantum
         quantum-security-groups: "yes"
         region: cell1
-        verbose: True                                                                                                                                                         
-        debug: True   
+        verbose: True
+        debug: True
     mysql-cell1:
       branch: lp:charms/mysql
       constraints: mem=1G
@@ -27,9 +27,8 @@ openstack-services:
         enable-live-migration: "False"
         vif_plugging_timeout: 2
     nova-cell-cell1:
-      branch: lp:~gnuoy/charms/precise/nova-cell/trunk
+      branch: lp:~openstack-charmers/charms/trusty/nova-cell/next
       options:
-        cell_name: cell1
         cell_type: compute
         verbose: True
         debug: True
@@ -40,8 +39,6 @@ openstack-services:
     - [ nova-cloud-controller-cell1, keystone ]
     - [ nova-cloud-controller-cell1, nova-cell-cell1 ]
     - [ nova-cloud-controller-cell1, neutron-api ]
-    - - nova-cloud-controller-api:juju-info
-      - nova-cell-cell1:nova-api
     - - nova-cell-api:nova-cell-parent
       - nova-cell-cell1:nova-cell-child
     - [ nova-cell-cell1, rabbitmq-server-cell1 ]
