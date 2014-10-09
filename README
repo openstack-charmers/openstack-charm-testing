@@ -35,7 +35,7 @@ test
 
 cd tempest
 git checkout stable/havana (or stable/grizzly)
-./run_tests.sh -N --smoke
+./run_tempest.sh -N --smoke
 
 NOTE: this is not working so well right now
 
