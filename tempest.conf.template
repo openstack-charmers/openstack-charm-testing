@@ -38,7 +38,7 @@ alt_tenant_name = alt_demo
 admin_role = Admin
 [identity-feature-enabled]
 [image]
-http_image=http://10.98.191.34:8080/v1/AUTH_79699f6f71e245b186720f1e2bc03cf0/images/0.3.1/cirros-0.3.1-x86_64-uec.tar.gz
+http_image = http://10.98.191.34:80/swift/v1/images/cirros-0.3.3-x86_64-uec.tar.gz
 [image-feature-enabled]
 [input-scenario]
 [network]
