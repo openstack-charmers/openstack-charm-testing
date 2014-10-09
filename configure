@@ -66,7 +66,7 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     tempest.conf.template > tempest.conf
 
 sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
-    python-junitxml python-subunit python-boto python-testresources python-oslotest python-stevedore \
+    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
     python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
     python-neutronclient python-novaclient python-swiftclient python-ceilometerclient -y
 
