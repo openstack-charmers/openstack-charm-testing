@@ -53,6 +53,8 @@ openstack-services:
         block-device: "None"
         glance-api-version: 2
       constraints": mem=1G
+    cinder-ceph:
+      branch: lp:charms/trusty/cinder-ceph
     glance:
       branch: lp:charms/trusty/glance
       constraints: mem=1G
@@ -114,7 +116,8 @@ openstack-services:
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
-    - [ cinder, ceph ]
+    - [ cinder, cinder-ceph ]
+    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
