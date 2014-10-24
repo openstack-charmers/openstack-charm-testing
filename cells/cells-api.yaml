@@ -2,14 +2,13 @@
 openstack-services:
   services:
     nova-cell-api:
-      branch: lp:~gnuoy/charms/precise/nova-cell/trunk/
+      branch: lp:charms/nova-cell
       options:
-        cell_name: api
         cell_type: api
         verbose: True
         debug: True
     nova-cloud-controller-api:
-      branch: lp:~gnuoy/charms/precise/nova-cloud-controller/cell-support/
+      branch: lp:charms/nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: Quantum
@@ -17,14 +16,14 @@ openstack-services:
         verbose: True
         debug: True
     neutron-api:
-      branch: lp:~gnuoy/charms/trusty/neutron-api/cell-support
+      branch: lp:charms/neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
         verbose: True
         debug: True
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: lp:charms/neutron-openvswitch
     mysql-api:
       branch: lp:charms/mysql
       constraints: mem=1G
@@ -42,7 +41,7 @@ openstack-services:
       branch: lp:charms/rabbitmq-server
       constraints: mem=1G
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      branch: lp:charms/quantum-gateway
       constraints: mem=1G
       options:
         database: neutron
@@ -51,7 +50,7 @@ openstack-services:
         verbose: True
         debug: True
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: lp:charms/keystone
       constraints: mem=1G
       options:
         admin-password: openstack
@@ -84,8 +83,6 @@ openstack-services:
     - [ nova-cloud-controller-api, glance ]
     - [ nova-cloud-controller-api, keystone ]
     - [ nova-cloud-controller-api, nova-cell-api ]
-    - - nova-cloud-controller-api:juju-info
-      - nova-cell-api:nova-api
     - [ nova-cell-api, rabbitmq-server-api ]
     - [ nova-cell-api, mysql-api ]
     - [ neutron-api, mysql-neutron ]
