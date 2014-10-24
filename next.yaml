@@ -2,12 +2,12 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/mysql
+      branch: lp:charms/trusty/mysql
       constraints: mem=1G
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: lp:charms/rabbitmq-server
+      branch: lp:charms/trusty/rabbitmq-server
       constraints: mem=1G
     ceph:
       branch: lp:~openstack-charmers/charms/trusty/ceph/next
@@ -89,6 +89,8 @@ openstack-services:
       constraints: mem=1G
     ceilometer-agent:
       branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+    heat:
+      branch: lp:~openstack-charmers/charms/trusty/heat/next
     mongodb:
       branch: lp:charms/mongodb
       constraints: mem=1G
@@ -125,6 +127,10 @@ openstack-services:
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
+openstack-singlerabbit:
 openstack-singlerabbit:
   inherits: openstack-services
   relations:
@@ -145,6 +151,7 @@ openstack-icehouse:
   - [ neutron-api, nova-cloud-controller ]
   - [ neutron-api, neutron-openvswitch ]
   - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
 openstack-icehouse-msg-split:
