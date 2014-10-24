@@ -8,8 +8,8 @@ openstack-services:
         network-manager: Quantum
         quantum-security-groups: "yes"
         region: cell11
-        verbose: True                                                                                                                                                         
-        debug: True   
+        verbose: True
+        debug: True
     mysql-cell11:
       branch: lp:charms/mysql
       constraints: mem=1G

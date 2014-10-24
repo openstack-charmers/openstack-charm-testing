@@ -2,7 +2,13 @@
 
 import subprocess
 import yaml
+import os
 
+cmd_out = subprocess.check_output(['neutron', 'net-list'])
+admin_net_name = os.environ['OS_USERNAME'] + '_admin_net'
+for line in cmd_out.split('\n'):
+    if admin_net_name in line:
+        admin_net_id = line.split('|')[1].replace(' ','')
 
 gateway_config = yaml.load(subprocess.check_output(['juju', 'status', 'neutron-gateway']))
 
@@ -12,5 +18,5 @@ for machine in gateway_config['machines']:
 
 if len(uuids) > 0:
     for uuid in uuids:
-        subprocess.check_call(['nova', 'interface-attach', uuid])
+        subprocess.check_call(['nova', 'interface-attach', '--net-id', admin_net_id, uuid])
     subprocess.check_call(['juju', 'set', 'neutron-gateway', 'ext-port=eth1'])
