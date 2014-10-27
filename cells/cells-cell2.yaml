@@ -2,14 +2,14 @@
 openstack-services:
   services:
     nova-cloud-controller-cell2:
-      branch: lp:~gnuoy/charms/precise/nova-cloud-controller/cell-support
+      branch: lp:charms/nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: Quantum
         quantum-security-groups: "yes"
         region: cell2
-        verbose: True                                                                                                                                                         
-        debug: True   
+        verbose: True
+        debug: True
     mysql-cell2:
       branch: lp:charms/mysql
       constraints: mem=1G
@@ -20,14 +20,14 @@ openstack-services:
       constraints: mem=1G
     nova-compute-cell2:
       branch: lp:~gnuoy/charms/trusty/nova-compute/cell-support
-      num_units: 3
+      num_units: 2
       constraints: mem=4G
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: "False"
-        vif_plugging_timeout: 2
+        vif-plugging-timeout: 2
     nova-cell-cell2:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cell/next
+      branch: lp:charms/nova-cell
       options:
         cell_type: compute
         verbose: True

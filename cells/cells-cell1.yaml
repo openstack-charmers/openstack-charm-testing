@@ -2,7 +2,7 @@
 openstack-services:
   services:
     nova-cloud-controller-cell1:
-      branch: lp:~gnuoy/charms/precise/nova-cloud-controller/cell-support
+      branch: lp:charms/nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: Quantum
@@ -25,9 +25,9 @@ openstack-services:
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: "False"
-        vif_plugging_timeout: 2
+        vif-plugging-timeout: 2
     nova-cell-cell1:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cell/next
+      branch: lp:charms/nova-cell
       options:
         cell_type: compute
         verbose: True

@@ -2,12 +2,12 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/mysql
+      branch: lp:charms/trusty/mysql
       constraints: mem=1G
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: lp:charms/rabbitmq-server
+      branch: lp:charms/trusty/rabbitmq-server
       constraints: mem=1G
     ceph:
       branch: lp:~openstack-charmers/charms/trusty/ceph/next
@@ -53,6 +53,8 @@ openstack-services:
         block-device: "None"
         glance-api-version: 2
       constraints": mem=1G
+    cinder-ceph:
+      branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
     glance:
       branch: lp:~openstack-charmers/charms/trusty/glance/next
       constraints: mem=1G
@@ -89,8 +91,10 @@ openstack-services:
       constraints: mem=1G
     ceilometer-agent:
       branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+    heat:
+      branch: lp:~openstack-charmers/charms/trusty/heat/next
     mongodb:
-      branch: lp:charms/mongodb
+      branch: lp:charms/trusty/mongodb
       constraints: mem=1G
   relations:
     - [ keystone, mysql ]
@@ -112,7 +116,8 @@ openstack-services:
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
-    - [ cinder, ceph ]
+    - [ cinder, cinder-ceph ]
+    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
@@ -125,6 +130,10 @@ openstack-services:
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
+openstack-singlerabbit:
 openstack-singlerabbit:
   inherits: openstack-services
   relations:
@@ -159,7 +168,7 @@ openstack-icehouse-msg-split:
     neutron-openvswitch:
       branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
     rabbitmq-server-neutron:
-      branch: lp:charms/rabbitmq-server
+      branch: lp:charms/trusty/rabbitmq-server
       constraints: mem=1G
   relations:
   - [ neutron-api, mysql ]
