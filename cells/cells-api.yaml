@@ -139,7 +139,7 @@ precise-icehouse:
   series: precise
   overrides:
     openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-updates/icehouse
+    source: cloud:precise-icehouse
 precise-icehouse-proposed:
   inherits: precise-icehouse
   overrides:

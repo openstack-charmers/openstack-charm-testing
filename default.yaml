@@ -1,4 +1,6 @@
 # vim: set ts=2 et:
+# deployer bundle for stable charms
+# UOSCI relies on this for OS-on-OS deployment testing
 openstack-services:
   services:
     mysql:
@@ -186,7 +188,7 @@ precise-icehouse:
   series: precise
   overrides:
     openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-updates/icehouse
+    source: cloud:precise-icehouse
 precise-icehouse-proposed:
   inherits: precise-icehouse
   overrides:
@@ -225,7 +227,7 @@ trusty-juno:
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-juno
-    source: cloud:trusty-updates/juno
+    source: cloud:trusty-juno
 trusty-juno-proposed:
   inherits: trusty-juno
   overrides:

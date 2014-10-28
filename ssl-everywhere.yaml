@@ -1,4 +1,8 @@
 # vim: set ts=2 et:
+# /!\ THIS BUNDLE HAS NOT BEEN MAINTAINED PAST ICEHOUSE PRE-RELEASE
+#     For non-SSL: see default.yaml for stable charm deployment examples, or
+#     next.yaml for development charm deployment examples.
+#
 openstack-services:
   services:
     mysql:
