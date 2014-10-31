@@ -4,13 +4,12 @@ OpenStack on OpenStack testing
 deploy
 ======
 
-
-juju-deployer --bootstrap -c default.yaml -d precise-havana
+juju-deployer --bootstrap -c default.yaml -d trusty-juno
 
 targets exist for most combinations, e.g.:
 
    precise-icehouse-trunk
-   saucy-havana
+   trusty-icehouse
 
 
 configure
@@ -18,9 +17,9 @@ configure
 
 ./configure
 
-This script does
+This script:
 
-a) Add's an extra port to the neutron-gateway service for floating ip use
+a) Adds an extra port to the neutron-gateway service for floating ip use
 
 b) Configures appropriate external networking
 
@@ -28,7 +27,8 @@ c) Uploads some images - this need to be in ~/images
 
 d) Creates some demo tenants
 
-e) writes a tempest configuration file and clones the tempest repository from upstream
+e) Writes a tempest configuration file and clones the tempest repository from upstream
+
 
 test
 ====
@@ -37,9 +37,12 @@ cd tempest
 git checkout stable/havana (or stable/grizzly)
 ./run_tempest.sh -N --smoke
 
-NOTE: this is not working so well right now
+NOTE: some failures are to be expected, depending on deployment environment.
 
-13 test failures - VPN, LoadBalancer, ec2, Object Container Versioning.
+NOTE(beisner):  As of 10/26/2014, tempest smoke failure norms on serverstack were:
+  * Current stable tempest smoke failure norms: P-I: 6, T-I: 5, T-J: 4, U-J: 3
+  * Current next tempest smoke failure norms: P-I: 5, T-I: 5, T-J: 4, U-J: 3
+
 
 destroy
 =======
