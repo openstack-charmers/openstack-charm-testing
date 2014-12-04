@@ -10,7 +10,7 @@ source ~/novarc
 # Configure neutron networking on serverstack
 source novarc
 ./bin/quantum-ext-net --network-type $net_type -g 10.5.0.1 -c 10.5.0.0/16 -f 10.5.150.0:10.5.200.254 ext_net
-./bin/quantum-tenant-net --network-type $net_type -t admin -r provider-router -N 10.98.191.11 private 192.168.21.0/24
+./bin/quantum-tenant-net --network-type $net_type -t admin -r provider-router -N 10.230.20.1 private 192.168.21.0/24
 mkdir -p ~/images
 [ -f ~/images/utopic-server-cloudimg-amd64-disk1.img ] || {
     wget -O ~/images/utopic-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/utopic/current/utopic-server-cloudimg-amd64-disk1.img
@@ -22,10 +22,10 @@ mkdir -p ~/images
     wget -O ~/images/precise-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
 }
 [ -f ~/images/cirros-0.3.3-x86_64-disk.img ] || {
-    wget -O ~/images/cirros-0.3.3-x86_64-disk.img http://10.98.191.34:80/swift/v1/images/cirros-0.3.3-x86_64-disk.img
+    wget -O ~/images/cirros-0.3.3-x86_64-disk.img http://10.230.19.60:80/swift/v1/images/cirros-0.3.3-x86_64-disk.img
 }
 [ -f ~/images/cirros-0.3.3-x86_64-uec.tar.gz ] || {
-    wget -O ~/images/cirros-0.3.3-x86_64-uec.tar.gz http://10.98.191.34:80/swift/v1/images/cirros-0.3.3-x86_64-uec.tar.gz
+    wget -O ~/images/cirros-0.3.3-x86_64-uec.tar.gz http://10.230.19.60:80/swift/v1/images/cirros-0.3.3-x86_64-uec.tar.gz
     (cd ~/images && tar -xzf cirros-0.3.3-x86_64-uec.tar.gz)
 }
 
