@@ -12,6 +12,7 @@ timeout=60
 cli_dir=/usr/local/bin
 [compute]
 flavor_ref=2
+flavor_ref_alt=3
 image_ssh_user=cirros
 image_alt_ssh_user=ubuntu
 image_ref=__IMAGE_ID__
