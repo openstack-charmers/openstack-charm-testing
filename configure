@@ -73,4 +73,3 @@ sudo apt-get install git testrepository subunit python-nose python-lxml python-b
 
 [ -d tempest ] || git clone https://github.com/openstack/tempest
 cp tempest.conf tempest/etc
-
