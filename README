@@ -39,11 +39,16 @@ git checkout stable/havana (or stable/grizzly)
 
 NOTE: some failures are to be expected, depending on deployment environment.
 
-NOTE(beisner):  As of 10/26/2014, tempest smoke failure norms on serverstack were:
-  * Current stable tempest smoke failure norms: P-I: 6, T-I: 5, T-J: 4, U-J: 3
-  * Current next tempest smoke failure norms: P-I: 5, T-I: 5, T-J: 4, U-J: 3
-
-
+NOTE(beisner):  As of 1/9/2014, tempest smoke failure norms on serverstack were:
+    p-i-next: 5
+    t-i-next: 5
+    t-j-next: 6
+    u-j-next: 6
+    p-i: 6
+    t-i: 5
+    t-j: 4
+    u-j: 8
+    
 destroy
 =======
 
