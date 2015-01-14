@@ -248,3 +248,28 @@ utopic-juno-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+# kilo
+trusty-kilo:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-proposed/kilo
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+vivid-kilo:
+  inherits: openstack-icehouse
+  series: vivid
+vivid-kilo-proposed:
+  inherits: vivid-kilo
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
