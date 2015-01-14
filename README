@@ -1,4 +1,25 @@
-OpenStack on OpenStack testing
+OpenStack-Charm-Testing
+
+about
+======
+
+This openstack-charm-testing (aka o-c-t) project contains reference
+juju deployer bundles, post-deployment configuration scripts, and 
+other templates for Ubuntu OpenStack charm testing.
+
+For automated testing, the Ubuntu OpenStack CI engine (aka osci / uosci)
+consumes the bundles and other templates provided herein.
+
+OpenStack package and charm developers also perform manual testing
+based on this collection of bundles and templates, as well as using
+the next.yaml and default.yaml bundles as a baseline for edge cases and
+special testing.
+
+Generally, these configurations are tuned for virtual deployments,
+ie. testing short-lived OpenStack overclouds on top of an OpenStack
+undercloud.  Some pieces may be specific to Canonical Server Team's
+internal dev cloud ('serverstack'), but can be easily modified for
+bare metal or other environments.
 
 
 deploy
@@ -8,8 +29,9 @@ juju-deployer --bootstrap -c default.yaml -d trusty-juno
 
 targets exist for most combinations, e.g.:
 
-   precise-icehouse-trunk
    trusty-icehouse
+   trusty-juno-proposed
+   vivid-kilo
 
 
 configure
@@ -30,16 +52,23 @@ d) Creates some demo tenants
 e) Writes a tempest configuration file and clones the tempest repository from upstream
 
 
-test
-====
+test - tempest smoke
+====================
 
 cd tempest
 git checkout stable/havana (or stable/grizzly)
+
 ./run_tempest.sh -N --smoke
 
-NOTE: some failures are to be expected, depending on deployment environment.
+NOTES: 
 
-NOTE(beisner):  As of 1/9/2014, tempest smoke failure norms on serverstack were:
+ * It may be necessary to use pip install -r requirements.txt from the tempest dir to
+   satisfy the latest dependencies of the tempest tests.
+
+ * Some failures are to be expected, depending on deployment environment (firewall, proxy
+   restrictions, capacity, etc.).
+
+ * As of 1/9/2014, tempest smoke failure norms on serverstack were:
     p-i-next: 5
     t-i-next: 5
     t-j-next: 6
