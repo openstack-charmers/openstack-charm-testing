@@ -9,7 +9,7 @@ openstack-services:
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: lp:~openstack-charmers/trusty/rabbitmq-server/next
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
     ceph:
       branch: lp:~openstack-charmers/charms/trusty/ceph/next
