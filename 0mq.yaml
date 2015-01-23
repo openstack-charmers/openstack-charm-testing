@@ -25,7 +25,7 @@ openstack-services:
         admin-token: ubuntutesting
     nova-compute:
       branch: lp:~openstack-charmers/charms/trusty/nova-compute/0mq
-      num_units: 3
+      num_units: 10
       constraints: mem=8G
       options:
         enable-live-migration: True
@@ -51,10 +51,6 @@ openstack-services:
     glance:
       branch: lp:~openstack-charmers/charms/trusty/glance/0mq
       constraints: mem=1G
-    ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/0mq
-    mongodb:
-      branch: lp:charms/mongodb
     ganglia:
       branch: lp:charms/ganglia
     ganglia-node:
@@ -83,8 +79,6 @@ openstack-services:
     - [ neutron-gateway, nova-cloud-controller ]
     - [ neutron-gateway, ganglia-node ]
     - [ "ganglia:master", ganglia-node ]
-    - [ ceilometer, mongodb ]
-    - [ ceilometer, keystone ]
 openstack-icehouse:
   inherits: openstack-services
   services:
@@ -114,10 +108,11 @@ openstack-icehouse-rmq:
   - [ nova-cloud-controller, rabbitmq-server ]
   - [ nova-compute, rabbitmq-server ]
   - [ glance, rabbitmq-server ]
-  - [ ceilometer, rabbitmq-server ]
 openstack-icehouse-zmq:
   inherits: openstack-icehouse
   services:
+    redis:
+      branch: lp:charms/redis-master
     openstack-zeromq:
       branch: lp:~openstack-charmers/charms/trusty/openstack-zeromq/trunk
   relations:
@@ -128,21 +123,19 @@ openstack-icehouse-zmq:
   - [ nova-compute, openstack-zeromq ]
   - [ neutron-gateway, openstack-zeromq ]
   - [ glance, openstack-zeromq ]
-  - [ ceilometer, openstack-zeromq ]
+  - [ cinder, openstack-zeromq ]
+  - [ "openstack-zeromq:redis", "redis:db" ]
 # trusty configurations
-trusty-icehouse-zmq:
-  inherits: openstack-icehouse-zmq
-  series: trusty
 trusty-juno-zmq:
   inherits: openstack-icehouse-zmq
   series: trusty
   overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    openstack-origin: cloud:trusty-juno
 trusty-juno-rmq:
   inherits: openstack-icehouse-rmq
   series: trusty
   overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    openstack-origin: cloud:trusty-juno
 # utopic configuration
 utopic-juno-zmq:
   inherits: openstack-icehouse-zmq
