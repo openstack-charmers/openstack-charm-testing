@@ -11,21 +11,15 @@ set -ex
 
 # Set dellstack defaults, if not already set.
 [[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
-[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.1"
-[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.175.0:10.230.175.254"
-[[ -z "$NAMESERVER" ]] && export DNS="10.245.168.2"
+[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
+[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.168.64:10.245.175.254"
+[[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.2"
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
 
-
-#net_type=${1:-"gre"}
-# Add extra port to quantum-gateway and configure charm to use it
-#source ~/novarc
-#./bin/post-deploy-config
-
-# Configure neutron networking on serverstack
 source novarc
-./bin/quantum-ext-net --network-type $net_type -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
-./bin/quantum-tenant-net --network-type $net_type -t admin -r provider-router -N $NAMESERVER private $CIDR_PRIV
+./bin/quantum-ext-net -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
+./bin/quantum-tenant-net -t admin -r provider-router -N $NAMESERVER private $CIDR_PRIV
+
 mkdir -p ~/images
 [ -f ~/images/vivid-server-cloudimg-amd64-disk1.img ] || {
     wget -O ~/images/vivid-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/vivid/current/vivid-server-cloudimg-amd64-disk1.img

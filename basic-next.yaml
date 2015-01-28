@@ -233,4 +233,3 @@ basic:
       - "neutron-gateway:juju-info"
     - - "ntp:juju-info"
       - "ceph-osd:juju-info"
-  series: trusty
