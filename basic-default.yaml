@@ -1,0 +1,235 @@
+# basic openstack deployment using released charms
+# based on charmstore bundle https://jujucharms.com/u/openstack-charmers/openstack/
+# UOSCI relies on this for OS-on-OS deployment testing
+# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/heat/next
+# fyi not used:  branch: lp:charms/trusty/mongodb
+basic: 
+  series: trusty
+  services: 
+    keystone: 
+      charm: "cs:trusty/keystone-9"
+      num_units: 1
+      options: 
+        "admin-password": openstack
+        "openstack-origin": "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "500"
+        "gui-y": "0"
+      to: 
+        - "lxc:nova-compute=0"
+    "neutron-gateway": 
+      charm: "cs:trusty/quantum-gateway-7"
+      num_units: 1
+      options: 
+        "ext-port": eth1
+        "openstack-origin": "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "0"
+        "gui-y": "0"
+      to: 
+        - "0"
+    "neutron-api": 
+      charm: "cs:trusty/neutron-api-5"
+      num_units: 1
+      options: 
+        "neutron-security-groups": true
+        "openstack-origin": "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "500"
+        "gui-y": "500"
+      to: 
+        - "lxc:nova-compute=0"
+    "neutron-openvswitch": 
+      charm: "cs:trusty/neutron-openvswitch-1"
+      num_units: 0
+      annotations: 
+        "gui-x": "250"
+        "gui-y": "500"
+    mysql: 
+      charm: "cs:trusty/mysql-14"
+      num_units: 1
+      options: 
+        "max-connections": 20000
+      annotations: 
+        "gui-x": "0"
+        "gui-y": "250"
+      to: 
+        - "lxc:0"
+    "nova-compute": 
+      charm: "cs:trusty/nova-compute-11"
+      num_units: 3
+      options: 
+        "enable-live-migration": true
+        "enable-resize": true
+        "migration-auth-type": ssh
+        "openstack-origin": "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "250"
+        "gui-y": "250"
+    glance: 
+      charm: "cs:trusty/glance-9"
+      num_units: 1
+      options: 
+        "openstack-origin": "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "250"
+        "gui-y": "0"
+      to: 
+        - "lxc:nova-compute=1"
+    "nova-cloud-controller": 
+      charm: "cs:trusty/nova-cloud-controller-50"
+      num_units: 1
+      options: 
+        "network-manager": Neutron
+        "openstack-origin": "cloud:trusty-juno"
+        "quantum-security-groups": "yes"
+      annotations: 
+        "gui-x": "0"
+        "gui-y": "500"
+      to: 
+        - "lxc:nova-compute=2"
+    "openstack-dashboard": 
+      charm: "cs:trusty/openstack-dashboard-8"
+      num_units: 1
+      options: 
+        "openstack-origin": "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "500"
+        "gui-y": "-250"
+      to: 
+        - "lxc:nova-compute=1"
+    "rabbitmq-server": 
+      charm: "cs:trusty/rabbitmq-server-22"
+      num_units: 1
+      annotations: 
+        "gui-x": "500"
+        "gui-y": "250"
+      to: 
+        - "lxc:0"
+    cinder: 
+      charm: "cs:trusty/cinder-10"
+      num_units: 1
+      options: 
+        "block-device": None
+        "glance-api-version": 2
+        "openstack-origin": "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "750"
+        "gui-y": "0"
+      to: 
+        - "lxc:nova-compute=2"
+    "cinder-ceph": 
+      charm: "cs:trusty/cinder-ceph-4"
+      num_units: 0
+      annotations: 
+        "gui-x": "750"
+        "gui-y": "250"
+    ceph: 
+      charm: "cs:trusty/ceph-31"
+      num_units: 3
+      options: 
+        fsid: "5a791d94-980b-11e4-b6f6-3c970e8b1cf7"
+        "monitor-secret": AQAi5a9UeJXUExAA+By9u+GPhl8/XiUQ4nwI3A==
+        "osd-devices": /dev/sdb
+        "osd-reformat": "yes"
+        source: "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "750"
+        "gui-y": "500"
+      to: 
+        - "nova-compute=0"
+        - "nova-compute=1"
+        - "nova-compute=2"
+    "ceph-osd": 
+      charm: "cs:trusty/ceph-osd-5"
+      num_units: 1
+      options: 
+        "osd-devices": /dev/sdb
+        "osd-reformat": "yes"
+        source: "cloud:trusty-juno"
+      annotations: 
+        "gui-x": "1000"
+        "gui-y": "500"
+      to: 
+        - "0"
+    ntp: 
+      charm: "cs:trusty/ntp-6"
+      num_units: 0
+      annotations: 
+        "gui-x": "1000"
+        "gui-y": "0"
+  relations: 
+    - - "nova-compute:amqp"
+      - "rabbitmq-server:amqp"
+    - - "neutron-gateway:amqp"
+      - "rabbitmq-server:amqp"
+    - - "keystone:shared-db"
+      - "mysql:shared-db"
+    - - "nova-cloud-controller:identity-service"
+      - "keystone:identity-service"
+    - - "glance:identity-service"
+      - "keystone:identity-service"
+    - - "neutron-api:identity-service"
+      - "keystone:identity-service"
+    - - "neutron-openvswitch:neutron-plugin-api"
+      - "neutron-api:neutron-plugin-api"
+    - - "neutron-api:shared-db"
+      - "mysql:shared-db"
+    - - "neutron-api:amqp"
+      - "rabbitmq-server:amqp"
+    - - "neutron-gateway:neutron-plugin-api"
+      - "neutron-api:neutron-plugin-api"
+    - - "glance:shared-db"
+      - "mysql:shared-db"
+    - - "glance:amqp"
+      - "rabbitmq-server:amqp"
+    - - "nova-cloud-controller:image-service"
+      - "glance:image-service"
+    - - "nova-compute:image-service"
+      - "glance:image-service"
+    - - "nova-cloud-controller:cloud-compute"
+      - "nova-compute:cloud-compute"
+    - - "nova-cloud-controller:amqp"
+      - "rabbitmq-server:amqp"
+    - - "nova-cloud-controller:quantum-network-service"
+      - "neutron-gateway:quantum-network-service"
+    - - "nova-compute:neutron-plugin"
+      - "neutron-openvswitch:neutron-plugin"
+    - - "neutron-openvswitch:amqp"
+      - "rabbitmq-server:amqp"
+    - - "openstack-dashboard:identity-service"
+      - "keystone:identity-service"
+    - - "nova-cloud-controller:shared-db"
+      - "mysql:shared-db"
+    - - "nova-cloud-controller:neutron-api"
+      - "neutron-api:neutron-api"
+    - - "cinder:image-service"
+      - "glance:image-service"
+    - - "cinder:amqp"
+      - "rabbitmq-server:amqp"
+    - - "cinder:identity-service"
+      - "keystone:identity-service"
+    - - "cinder:cinder-volume-service"
+      - "nova-cloud-controller:cinder-volume-service"
+    - - "cinder-ceph:storage-backend"
+      - "cinder:storage-backend"
+    - - "ceph:client"
+      - "nova-compute:ceph"
+    - - "cinder:shared-db"
+      - "mysql:shared-db"
+    - - "ceph:client"
+      - "cinder-ceph:ceph"
+    - - "ceph:client"
+      - "glance:ceph"
+    - - "ceph-osd:mon"
+      - "ceph:osd"
+    - - "ntp:juju-info"
+      - "nova-compute:juju-info"
+    - - "ntp:juju-info"
+      - "neutron-gateway:juju-info"
+    - - "ntp:juju-info"
+      - "ceph-osd:juju-info"
