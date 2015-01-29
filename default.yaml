@@ -127,7 +127,8 @@ openstack-services:
     - [ swift-proxy, swift-storage-z1 ]
     - [ swift-proxy, swift-storage-z2 ]
     - [ swift-proxy, swift-storage-z3 ]
-    - [ ceilometer, keystone ]
+    - - ceilometer
+      - keystone:identity-service
     - [ ceilometer, rabbitmq-server ]
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
