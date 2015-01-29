@@ -37,11 +37,16 @@ targets exist for most combinations, e.g.:
 configure
 =========
 
+# serverstack
 ./configure
 
-This script:
+# dellstack
+./configure-dellstack
 
-a) Adds an extra port to the neutron-gateway service for floating ip use
+These scripts:
+
+a) For virtual (serverstack), adds an extra port to the neutron-gateway
+   service for floating ip use
 
 b) Configures appropriate external networking
 
@@ -55,15 +60,14 @@ e) Writes a tempest configuration file and clones the tempest repository from up
 test - tempest smoke
 ====================
 
+ * Smoke tests include ~430 exercises, generally taking ~30 minutes to run.
+
 cd tempest
 git checkout stable/havana (or stable/grizzly)
-
+sudo pip install -r requirements.txt
 ./run_tempest.sh -N --smoke
 
 NOTES: 
-
- * It may be necessary to use pip install -r requirements.txt from the tempest dir to
-   satisfy the latest dependencies of the tempest tests.
 
  * Some failures are to be expected, depending on deployment environment (firewall, proxy
    restrictions, capacity, etc.).
@@ -77,8 +81,20 @@ NOTES:
     t-i: 5
     t-j: 4
     u-j: 8
+
+test - tempest full
+===================
+
+ * Full tests include over 2000 exercises and may take several
+   hours to execute.
+
+cd tempest
+git checkout stable/havana (or stable/grizzly)
+sudo pip install -r requirements.txt
+./run_tempest.sh -N -t
+
     
 destroy
 =======
 
-juju destroy-environment
+juju destroy-environment <your-enviro-name>
