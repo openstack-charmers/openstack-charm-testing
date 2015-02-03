@@ -4,8 +4,7 @@
 openstack-services:
   services:
     mysql:
-#      branch: lp:charms/trusty/mysql
-      branch: lp:~matsubara/charms/trusty/mysql/bug-1410847
+      branch: lp:charms/trusty/mysql
       constraints: mem=1G
       options:
         dataset-size: 50%
