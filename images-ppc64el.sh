@@ -21,3 +21,6 @@ glance image-create --name="utopic-ppc64el" --is-public=true --progress \
 glance image-create --name="trusty-ppc64el" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/trusty-server-cloudimg-ppc64el-disk1.img
 
+glance image-update --property architecture=ppc64 vivid-ppc64el
+glance image-update --property architecture=ppc64 utopic-ppc64el
+glance image-update --property architecture=ppc64 trusty-ppc64el
