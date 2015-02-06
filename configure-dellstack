@@ -7,7 +7,7 @@ set -ex
 [[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.168.64:10.245.175.254"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.2"
-[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
+[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/12"
 
 # Configure neutron networking on overcloud
 source novarc
