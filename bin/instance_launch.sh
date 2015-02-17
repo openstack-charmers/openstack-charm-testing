@@ -36,7 +36,7 @@ for m in $(seq 1 $p_qty); do
   server_name="${p_name}$(date +'%H%M%S')"
   echo ${server_name} ${net_id}
   nova boot --image ${p_name} --flavor ${flavor} --key_name testkey --nic net-id=${net_id} $server_name
-  sleep 5
+  sleep 60
 done
 
 echo " + Hint:  use ssh -i ~/testkey.pem ubuntu@<ip> to access new instances (may also need a floating IP)."
