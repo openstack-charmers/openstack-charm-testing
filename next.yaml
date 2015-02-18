@@ -137,7 +137,6 @@ openstack-services:
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
 openstack-singlerabbit:
-openstack-singlerabbit:
   inherits: openstack-services
   relations:
     - [ "neutron-gateway:amqp", rabbitmq-server ]
