@@ -272,4 +272,3 @@ vivid-kilo-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-
