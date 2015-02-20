@@ -8,6 +8,7 @@ set -ex
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.5.150.0:10.5.200.254"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.160.2"
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.160.50"
 
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}
@@ -36,10 +37,10 @@ mkdir -vp ~/images
     wget -O ~/images/precise-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
 }
 [ -f ~/images/cirros-0.3.3-x86_64-disk.img ] || {
-    wget -O ~/images/cirros-0.3.3-x86_64-disk.img http://10.245.160.50:80/swift/v1/images/cirros-0.3.3-x86_64-disk.img
+    wget -O ~/images/cirros-0.3.3-x86_64-disk.img http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.3-x86_64-disk.img
 }
 [ -f ~/images/cirros-0.3.3-x86_64-uec.tar.gz ] || {
-    wget -O ~/images/cirros-0.3.3-x86_64-uec.tar.gz http://10.245.160.50:80/swift/v1/images/cirros-0.3.3-x86_64-uec.tar.gz
+    wget -O ~/images/cirros-0.3.3-x86_64-uec.tar.gz http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.3-x86_64-uec.tar.gz
     (cd ~/images && tar -xzf cirros-0.3.3-x86_64-uec.tar.gz)
 }
 

@@ -1,19 +1,15 @@
 # vim: set ts=2 et:
-#
-# temporary bundle to exercise the kilo-support branches
-#
 # deployer bundle for development ('next') charms
+# UOSCI relies on this for OS-on-OS deployment testing
 openstack-services:
   services:
     mysql:
-#      branch: lp:charms/trusty/mysql
-      branch: lp:~james-page/charms/trusty/mysql/kilo-support
+      branch: lp:charms/trusty/mysql
       constraints: mem=1G
       options:
         dataset-size: 50%
     rabbitmq-server:
-#      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
-      branch: lp:~james-page/charms/trusty/rabbitmq-server/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
     ceph:
       branch: lp:~openstack-charmers/charms/trusty/ceph/next
@@ -27,8 +23,7 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-#      branch: lp:~openstack-charmers/charms/trusty/keystone/next
-      branch: lp:~1chb1n/charms/trusty/keystone/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/keystone/next
       constraints: mem=1G
       options:
         admin-password: openstack
@@ -37,23 +32,20 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
       constraints: mem=1G
     nova-compute:
-#      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
-      branch: lp:~james-page/charms/trusty/nova-compute/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: True
         enable-resize: True
     nova-cloud-controller:
-#      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
-      branch: lp:~james-page/charms/trusty/nova-cloud-controller/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
       constraints: mem=1G
       options:
-        network-manager: Quantum
+        network-manager: Neutron
         quantum-security-groups: "yes"
     neutron-gateway:
-#      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
-      branch: lp:~james-page/charms/trusty/quantum-gateway/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
       constraints: mem=1G
       options:
         instance-mtu: 1300
@@ -104,8 +96,7 @@ openstack-services:
     heat:
       branch: lp:~openstack-charmers/charms/trusty/heat/next
     mongodb:
-#      branch: lp:charms/trusty/mongodb
-      branch: lp:~james-page/charms/trusty/mongodb/kilo-support
+      branch: lp:charms/trusty/mongodb
       constraints: mem=1G
   relations:
     - [ keystone, mysql ]
@@ -153,8 +144,7 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-#      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
-      branch: lp:~james-page/charms/trusty/neutron-api/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
       constraints: mem=1G
       options:
         neutron-security-groups: True
@@ -243,7 +233,7 @@ trusty-juno-proposed:
   inherits: trusty-juno
   overrides:
     openstack-origin: cloud:trusty-juno/proposed
-    source: cloud:trusty-proposed/juno
+    source: cloud:trusty-juno/proposed
 trusty-juno-staging:
   inherits: trusty-juno
   overrides:
@@ -268,7 +258,7 @@ trusty-kilo-proposed:
   inherits: trusty-kilo
   overrides:
     openstack-origin: cloud:trusty-kilo/proposed
-    source: cloud:trusty-proposed/kilo
+    source: cloud:trusty-kilo/proposed
 trusty-kilo-staging:
   inherits: trusty-kilo
   overrides:
