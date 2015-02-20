@@ -1,0 +1,16 @@
+bundles/sparse
+==============
+
+These bundles generally do not use lxc or kvm smoosh tactics.
+
+The following bundles are consumed by UOSCI in automated charm
+deployment testing.  They are the working dev bundles, updated
+throughout each dev cycle.  Functionally identical, only the
+charm sources should differ.  New charm config options and new
+relations may be added to next.yaml during the charm dev cycle.
+
+Upon each OpenStack charm release, the default.yaml needs to be
+edited to reflect any new config options/relations/targets.
+
+default.yaml    stable charm branches
+next.yaml       development charms

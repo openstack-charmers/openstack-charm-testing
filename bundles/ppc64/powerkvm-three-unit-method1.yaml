@@ -1,0 +1,381 @@
+# /!\ Experimental WIP!
+#
+# PowerKVM "method 1":
+#     unit 0: amd64 bootstrap node w/ neutron-gateway + api services
+#     unit 1: amd64 nova-compute-power (proxy charm) w/ api services
+#     unit 2: powerkvm (power7) for compute
+#
+# A three-machine smoosh, with optional experimental "smash" for more services
+# Also, temporarily uses kilo-support branches for exercising those.
+#
+# NOTES(beisner):
+# /!\ Beware, YMMV. This is for testing, not for production use.
+#     Ceph is excluded, as it should have 3 like units for quorum.
+#     As of 2014 Feb 20, only Utopic-Juno is targeted due to IBM
+#     RPM versions.
+#
+# USAGE:
+#     juju bootstrap --constraints mem=8G arch=amd64
+#     juju deployer -B -v -c <thisfile>.yaml -d powerkvm
+#       -or-
+#     juju deployer -B -v -c <thisfile>.yaml -d powerkvm-smash
+#
+#=============================================================================
+powerkvm:
+  series: trusty
+  services:
+    juju-gui:
+      charm: "cs:trusty/juju-gui"
+      num_units: 1
+      annotations:
+        "gui-x": "500"
+        "gui-y": "1000"
+      to:
+        - "lxc:0"
+    keystone:
+#      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: lp:~1chb1n/charms/trusty/keystone/kilo-support
+      num_units: 1
+      options:
+        "admin-password": openstack
+      annotations:
+        "gui-x": "500"
+        "gui-y": "0"
+      to:
+        - "lxc:nova-compute-power=0"
+    neutron-gateway:
+#      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      branch: lp:~james-page/charms/trusty/quantum-gateway/kilo-support
+      num_units: 1
+      options:
+        "ext-port": eth1
+      annotations:
+        "gui-x": "0"
+        "gui-y": "0"
+      to:
+        - "0"
+    neutron-api:
+#      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: lp:~james-page/charms/trusty/neutron-api/kilo-support
+      num_units: 1
+      options:
+        "neutron-security-groups": true
+      annotations:
+        "gui-x": "500"
+        "gui-y": "500"
+      to:
+        - "lxc:nova-compute-power=0"
+    neutron-openvswitch:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      num_units: 0
+      annotations:
+        "gui-x": "250"
+        "gui-y": "500"
+    mysql:
+#      branch: lp:charms/trusty/mysql
+      branch: lp:~james-page/charms/trusty/mysql/kilo-support
+      num_units: 1
+      options:
+        "max-connections": 20000
+      annotations:
+        "gui-x": "0"
+        "gui-y": "250"
+      to:
+        - "lxc:0"
+#    nova-compute-power:
+#      branch: lp:~james-page/charms/trusty/nova-compute-power/redux
+#      constraints: arch=amd64 mem=8G
+#      options:
+#        power-user: shared
+#        power-repo: file:///tmp/openstack-iso/openstack
+#        power-key: id_rsa
+#        power-hosts: 10.245.168.3
+#
+# /!\ Temporary AMD64 substitute for bundle validation:
+    nova-compute-power:
+#    nova-compute:
+#      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: lp:~james-page/charms/trusty/nova-compute/kilo-support
+      num_units: 1
+      constraints: arch=amd64 mem=8G
+      options:
+        "enable-live-migration": true
+        "enable-resize": true
+        "migration-auth-type": ssh
+      annotations:
+        "gui-x": "250"
+        "gui-y": "250"
+    glance:
+      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      num_units: 1
+      options:
+      annotations:
+        "gui-x": "250"
+        "gui-y": "0"
+      to:
+        - "lxc:nova-compute-power=0"
+    nova-cloud-controller:
+#      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: lp:~james-page/charms/trusty/nova-cloud-controller/kilo-support
+      num_units: 1
+      options:
+        "network-manager": Neutron
+        "quantum-security-groups": "yes"
+      annotations:
+        "gui-x": "0"
+        "gui-y": "500"
+      to:
+        - "lxc:nova-compute-power=0"
+    openstack-dashboard:
+      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      num_units: 1
+      annotations:
+        "gui-x": "500"
+        "gui-y": "-250"
+      to:
+        - "lxc:0"
+    rabbitmq-server:
+#      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: lp:~james-page/charms/trusty/rabbitmq-server/kilo-support
+      num_units: 1
+      annotations:
+        "gui-x": "500"
+        "gui-y": "250"
+      to:
+        - "lxc:0"
+    cinder:
+      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      num_units: 1
+      options:
+        block-device: /dev/sdb /dev/vdb
+        glance-api-version: 2
+      annotations:
+        "gui-x": "750"
+        "gui-y": "0"
+      to:
+        - "lxc:0"
+    ntp:
+      charm: "cs:trusty/ntp-6"
+      num_units: 0
+      annotations:
+        "gui-x": "1000"
+        "gui-y": "0"
+  relations:
+  - - nova-compute-power:amqp
+    - rabbitmq-server:amqp
+  - - neutron-gateway:amqp
+    - rabbitmq-server:amqp
+  - - keystone:shared-db
+    - mysql:shared-db
+  - - nova-cloud-controller:identity-service
+    - keystone:identity-service
+  - - glance:identity-service
+    - keystone:identity-service
+  - - neutron-api:identity-service
+    - keystone:identity-service
+  - - neutron-openvswitch:neutron-plugin-api
+    - neutron-api:neutron-plugin-api
+  - - neutron-api:shared-db
+    - mysql:shared-db
+  - - neutron-api:amqp
+    - rabbitmq-server:amqp
+  - - neutron-gateway:neutron-plugin-api
+    - neutron-api:neutron-plugin-api
+  - - glance:shared-db
+    - mysql:shared-db
+  - - glance:amqp
+    - rabbitmq-server:amqp
+  - - nova-cloud-controller:image-service
+    - glance:image-service
+  - - nova-compute-power:image-service
+    - glance:image-service
+  - - nova-cloud-controller:cloud-compute
+    - nova-compute-power:cloud-compute
+  - - nova-cloud-controller:amqp
+    - rabbitmq-server:amqp
+  - - nova-cloud-controller:quantum-network-service
+    - neutron-gateway:quantum-network-service
+  - - nova-compute-power:neutron-plugin
+    - neutron-openvswitch:neutron-plugin
+  - - neutron-openvswitch:amqp
+    - rabbitmq-server:amqp
+  - - openstack-dashboard:identity-service
+    - keystone:identity-service
+  - - nova-cloud-controller:shared-db
+    - mysql:shared-db
+  - - nova-cloud-controller:neutron-api
+    - neutron-api:neutron-api
+  - - cinder:image-service
+    - glance:image-service
+  - - cinder:amqp
+    - rabbitmq-server:amqp
+  - - cinder:identity-service
+    - keystone:identity-service
+  - - cinder:cinder-volume-service
+    - nova-cloud-controller:cinder-volume-service
+  - - cinder:shared-db
+    - mysql:shared-db
+  - - ntp:juju-info
+    - nova-compute-power:juju-info
+  - - ntp:juju-info
+    - neutron-gateway:juju-info
+#================================================================================
+#  /!\  WIP!
+powerkvm-smash:
+  inherits: powerkvm
+  services:
+    swift-proxy:
+      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      options:
+        zone-assignment: manual
+        replicas: 1
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+      annotations:
+        "gui-x": "0"
+        "gui-y": "750"
+      to:
+        - "0"
+    swift-storage-z1:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      options:
+        zone: 1
+        block-device: /dev/sdb /dev/vdb
+        overwrite: "true"
+      annotations:
+        "gui-x": "250"
+        "gui-y": "750"
+      to:
+        - "lxc:nova-compute-power=0"
+    ceilometer:
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+      constraints: mem=1G
+      annotations:
+        "gui-x": "500"
+        "gui-y": "750"
+      to:
+        - "lxc:nova-compute-power=0"
+    ceilometer-agent:
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+      annotations:
+        "gui-x": "750"
+        "gui-y": "750"
+    heat:
+      branch: lp:~openstack-charmers/charms/trusty/heat/next
+      annotations:
+        "gui-x": "1250"
+        "gui-y": "750"
+      to:
+        - "lxc:0"
+    mongodb:
+#      branch: lp:charms/trusty/mongodb
+      branch: lp:~james-page/charms/trusty/mongodb/kilo-support
+      annotations:
+        "gui-x": "1000"
+        "gui-y": "750"
+      to:
+        - "lxc:nova-compute-power=0"
+  relations:
+  - - swift-proxy
+    - keystone
+  - - swift-proxy
+    - swift-storage-z1
+  - - ceilometer
+    - keystone:identity-service
+  - - ceilometer
+    - rabbitmq-server
+  - - ceilometer
+    - mongodb
+  - - ceilometer-agent
+    - nova-compute-power
+  - - ceilometer-agent
+    - ceilometer
+  - - heat
+    - mysql
+  - - heat
+    - keystone
+  - - heat
+    - rabbitmq-server
+# icehouse
+trusty-icehouse:
+  inherits: powerkvm
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"
+# juno
+trusty-juno:
+  inherits: powerkvm
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-proposed/juno
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
+utopic-juno:
+  inherits: powerkvm
+  series: utopic
+utopic-juno-proposed:
+  inherits: utopic-juno
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# kilo
+trusty-kilo:
+  inherits: powerkvm
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-smash:
+  inherits: two-smash
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed-smash:
+  inherits: trusty-kilo-smash
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+vivid-kilo:
+  inherits: powerkvm
+  series: vivid
+vivid-kilo-proposed:
+  inherits: vivid-kilo
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+vivid-kilo-smash:
+  inherits: two-smash
+  series: vivid
+vivid-kilo-proposed-smash:
+  inherits: vivid-kilo-smash
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed

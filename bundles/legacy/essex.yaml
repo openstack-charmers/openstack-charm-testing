@@ -1,0 +1,108 @@
+# precise-essex next
+#
+# NOTE(beisner) 2015 Feb 18: This is a bundle to deploy precise-essex for
+# testing purposes, using the current development ('next') charms.  It is
+# not intended for production deployment use.
+#
+# WIP re: essex revival:
+# https://bugs.launchpad.net/openstack-charm-testing/+bug/1423579
+# https://bugs.launchpad.net/charms/+source/keystone/+bug/1423513
+# lp:~hopem/charms/trusty/keystone/fix-legacy-import-error
+# lp:~hopem/charms/trusty/keystone/stable-fix-legacy-import-error
+# lp:~hopem/charms/precise/keystone/stable-fix-legacy-import-error
+#
+# ex.
+#   juju bootstrap --series=precise --upload-tools
+#   juju-deployer -v -c essex.yaml -d precise-essex
+#
+openstack-services:
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+      constraints: mem=1G
+      options:
+        dataset-size: 50%
+    rabbitmq-server:
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      constraints: mem=1G
+    keystone:
+#      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+# logging template fix for keystone/next
+      branch: lp:~1chb1n/charms/trusty/keystone/essex-revival
+      constraints: mem=1G
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+    openstack-dashboard:
+      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      constraints: mem=1G
+    nova-compute:
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      num_units: 3
+      constraints: mem=4G
+      options:
+        enable-live-migration: True
+        enable-resize: True
+    nova-cloud-controller:
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      constraints: mem=1G
+      options:
+        network-manager: FlatDHCPManager
+    glance:
+      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      constraints: mem=1G
+    swift-proxy:
+      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      constraints: mem=1G
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+    swift-storage-z1:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 1
+        block-device: /dev/vdb /dev/sdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 2
+        block-device: /dev/vdb /dev/sdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 3
+        block-device: /dev/vdb /dev/sdb
+        overwrite: "true"
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+# essex
+precise-essex:
+  inherits: openstack-services
+  series: precise
+precise-essex-proposed:
+  inherits: precise-essex
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed

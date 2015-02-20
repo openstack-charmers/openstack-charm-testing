@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -ex
+
+# Set dellstack overrides, if not already set.
+[[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
+[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
+[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.168.64:10.245.175.254"
+[[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.2"
+[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/12"
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.160.50"
+
+./configure $1 $2 $3 $4 $5

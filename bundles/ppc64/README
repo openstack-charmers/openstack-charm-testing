@@ -1,0 +1,12 @@
+bundles/ppc64
+=============
+
+These ppc64el/powerkvm bundles are mostly experimental proofs-of-concept,
+still in active development and testing.
+
+Differentiating bundle naming and purposes:
+  PowerKVM        Power7 or 8 box with IBM's fedora-based host operating system.
+                  ie. "cutting"
+
+  ppc64el         Power8 box with Ubuntu as the host operating system.
+                  ie. "gregory"
