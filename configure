@@ -13,9 +13,11 @@ set -ex
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}
 
-# Add extra port to overcloud neutron-gateway and configure charm to use it
-source ~/novarc
-./bin/post-deploy-config
+# If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
+if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
+    source ~/novarc
+    ./bin/post-deploy-config
+fi
 
 # Configure neutron networking on overcloud
 source novarc

@@ -10,4 +10,5 @@ set -ex
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/12"
 [[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.160.50"
 
+export BARE_METAL="True"
 ./configure $1 $2 $3 $4 $5
