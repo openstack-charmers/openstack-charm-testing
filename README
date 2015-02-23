@@ -1,7 +1,7 @@
 OpenStack-Charm-Testing
 
 about
-======
+=====
 
 This openstack-charm-testing (aka o-c-t) project contains reference
 juju deployer bundles, post-deployment configuration scripts, and 
@@ -37,24 +37,27 @@ targets exist for most combinations, e.g.:
 configure
 =========
 
-# serverstack
+# serverstack, or:
 ./configure
 
-# dellstack
+# dellstack, or:
 ./configure-dellstack
 
-These scripts:
+# cts stack, or:
+./configure-ctsstack
 
-a) For virtual (serverstack), adds an extra port to the neutron-gateway
-   service for floating ip use
+These "configure" scripts:
 
-b) Configures appropriate external networking
+a) Add an extra port to the neutron-gateway service for
+   OpenStack-on-OpenStack deployments (ie. serverstack, ctsstack).
 
-c) Uploads some images - this need to be in ~/images
+b) Configure appropriate external networking
 
-d) Creates some demo tenants
+c) Download and upload images from ~/images
 
-e) Writes a tempest configuration file and clones the tempest repository from upstream
+d) Create demo tenants
+
+e) Write a tempest configuration file and clone the tempest repository from upstream
 
 
 test - tempest smoke
@@ -62,10 +65,11 @@ test - tempest smoke
 
  * Smoke tests include ~430 exercises, generally taking ~30 minutes to run.
 
+```
 cd tempest
-git checkout stable/havana (or stable/grizzly)
 sudo pip install -r requirements.txt
 ./run_tempest.sh -N --smoke
+```
 
 NOTES: 
 
@@ -82,6 +86,7 @@ NOTES:
     t-j: 4
     u-j: 8
 
+
 test - tempest full
 ===================
 
@@ -89,12 +94,59 @@ test - tempest full
    hours to execute.
 
 cd tempest
-git checkout stable/havana (or stable/grizzly)
 sudo pip install -r requirements.txt
 ./run_tempest.sh -N -t
 
-    
+
 destroy
 =======
 
 juju destroy-environment <your-enviro-name>
+
+
+manual instance test example (tools usage)
+==========================================
+
+ * A common use for the bundles and tools might look like this.
+
+```
+# deploy a cloud
+juju-deployer --bootstrap -c default.yaml -d trusty-juno
+
+# configure the cloud and add images
+./configure    (or use configure-dellstack or configure-ctsstack)
+
+# get overcloud credentials
+. novarc
+
+# check basic cloud and CLI functionality
+nova hypervisor-list && glance image-list && keystone token-get
+
+# shrink flavors just for testing
+./tools/flavor_shrink.sh
+
+# bump up quotas to a ridiculous level
+./tools/quota_million.sh
+
+# add security groups
+./tools/sec_groups.sh
+
+# launch some amd64 instances
+./tools/instance_launch.sh 2 cirros
+./tools/instance_launch.sh 2 trusty
+./tools/instance_launch.sh 2 vivid
+
+# optionally add ppc64el images
+./tools/images_ppc64el.sh
+
+# optionally launch ppc64el instances
+./tools/instance_launch.sh 2 trusty-ppc64el
+./tools/instance_launch.sh 2 vivid-ppc64el
+
+# give floating IPs to all instances
+./tools/float_all.sh
+
+# ssh to any of the new instances
+nova list
+ssh -i ~/testkey.pem <floating-ip-address>
+```
