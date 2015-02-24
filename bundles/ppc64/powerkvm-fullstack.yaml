@@ -1,0 +1,223 @@
+# vim: set ts=2 et:
+openstack-services:
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+      options:
+        dataset-size: 75%
+      to:
+        - "lxc:0"
+    rabbitmq-server:
+      branch: lp:charms/trusty/rabbitmq-server
+      to:
+        - "lxc:0"
+    keystone:
+      branch: lp:charms/trusty/keystone
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+      to:
+        - "lxc:0"
+    openstack-dashboard:
+      branch: lp:charms/trusty/openstack-dashboard
+      constraints: mem=1G
+      to:
+        - "lxc:0"
+    nova-compute-power:
+      branch: lp:~james-page/charms/trusty/nova-compute-power/redux
+      options:
+        power-user: shared
+        power-repo: file:///tmp/openstack-iso/openstack
+        power-key: id_rsa
+        power-hosts: 10.245.168.3
+      to:
+        - "lxc:0"
+    nova-cloud-controller:
+      branch: lp:charms/trusty/nova-cloud-controller
+      options:
+        network-manager: Neutron
+        quantum-security-groups: "yes"
+      to:
+        - "lxc:0"
+    neutron-gateway:
+      branch: lp:~james-page/charms/trusty/quantum-gateway/vlan-flat-support
+      constraints: arch=amd64
+      options:
+        instance-mtu: 1300
+        ext-port: "eth1"
+      to:
+          - "0"
+    glance:
+      branch: lp:charms/trusty/glance
+      to:
+        - "lxc:0"
+    ceph:
+      branch: lp:charms/trusty/ceph
+      num_units: 3
+      constraints: mem=1G arch=amd64
+      options:
+        monitor-count: 3
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-devices: /dev/sdb /dev/vdb
+        osd-reformat: "yes"
+        ephemeral-unmount: /mnt
+    swift-proxy:
+      branch: lp:charms/trusty/swift-proxy
+      constraints: mem=1G arch=amd64
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+      to:
+        - "lxc:0"
+    swift-storage-z1:
+      branch: lp:charms/trusty/swift-storage
+      constraints: mem=1G arch=amd64
+      options:
+        zone: 1
+        block-device: /dev/sdb /dev/vdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: lp:charms/trusty/swift-storage
+      constraints: mem=1G arch=amd64
+      options:
+        zone: 2
+        block-device: /dev/sdb /dev/vdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: lp:charms/trusty/swift-storage
+      constraints: mem=1G arch=amd64
+      options:
+        zone: 3
+        block-device: /dev/sdb /dev/vdb
+        overwrite: "true"
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute-power, nova-cloud-controller ]
+    - - nova-compute-power
+      - rabbitmq-server:amqp
+    - [ nova-compute-power, glance ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, ceph]
+    - [ neutron-gateway, mysql ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+openstack-singlerabbit:
+  inherits: openstack-services
+  relations:
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+openstack-icehouse:
+  inherits: openstack-singlerabbit
+  services:
+    neutron-api:
+      branch: lp:charms/trusty/neutron-api
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+      to:
+        - "lxc:0"
+  relations:
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
+  - [ neutron-api, nova-compute-power ]
+openstack-icehouse-msg-split:
+  inherits: openstack-services
+  services:
+    neutron-api:
+      branch: lp:charms/trusty/neutron-api
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: lp:charms/trusty/neutron-openvswitch
+    rabbitmq-server-neutron:
+      branch: lp:charms/trusty/rabbitmq-server
+      constraints: mem=1G
+  relations:
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server-neutron ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
+  - [ neutron-openvswitch, nova-compute-power ]
+  - [ neutron-openvswitch, rabbitmq-server-neutron ]
+  - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
+  - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
+# icehouse
+precise-icehouse:
+  inherits: openstack-icehouse
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-updates/icehouse
+precise-icehouse-proposed:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: cloud:precise-icehouse/proposed
+    source: cloud:precise-updates/icehouse
+precise-icehouse-staging:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
+    source: ppa:ubuntu-cloud-archive/icehouse-staging
+precise-icehouse-trunk:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+trusty-icehouse:
+  inherits: openstack-icehouse
+  series: trusty
+trusty-icehouse-msg-split:
+  inherits: openstack-icehouse-msg-split
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"
+# juno
+trusty-juno:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-updates/juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-proposed/juno
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
+utopic-juno:
+  inherits: openstack-icehouse
+  series: utopic
+utopic-juno-proposed:
+  inherits: utopic-juno
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
