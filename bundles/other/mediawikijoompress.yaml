@@ -6,11 +6,6 @@
 #
 # This is for testing.  It is not recommended for production deployments.
 #
-# Unit 0 - Bootstrap + mysql(lxc)
-# Unit 1 - mediawiki
-# Unit 2 - wordpress + juju gui(lxc)
-# Unit 3 - joomla
-#
 # TODO(beisner): Add NFS?
 #
 #==============================================================================
@@ -37,12 +32,8 @@ mediawikijoompress:
         dataset-size: 50%
         flavor: distro
         tuning-level: fast
-      to:
-      - "lxc:0"
     juju-gui:
       branch: lp:charms/juju-gui
-      to:
-      - "lxc:2"
   relations:
   - - mediawiki:db
     - mysql:db
