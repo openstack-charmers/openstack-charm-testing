@@ -1,0 +1,104 @@
+# A quick-check bundle for exercising juju-deployer.
+#
+#=============================================================================
+deployer-quick-check:
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+      constraints: mem=1G
+      options:
+        dataset-size: 50%
+    keystone:
+      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      constraints: mem=1G
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+  relations:
+    - [ keystone, mysql ]
+# icehouse
+precise-icehouse:
+  inherits: deployer-quick-check
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-icehouse
+precise-icehouse-proposed:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: cloud:precise-icehouse/proposed
+    source: cloud:precise-updates/icehouse
+precise-icehouse-staging:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
+    source: ppa:ubuntu-cloud-archive/icehouse-staging
+precise-icehouse-trunk:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+trusty-icehouse:
+  inherits: deployer-quick-check
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"
+# juno
+trusty-juno:
+  inherits: deployer-quick-check
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-juno/proposed
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
+utopic-juno:
+  inherits: deployer-quick-check
+  series: utopic
+utopic-juno-proposed:
+  inherits: utopic-juno
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# kilo
+trusty-kilo:
+  inherits: deployer-quick-check
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+vivid-kilo:
+  inherits: deployer-quick-check
+  series: vivid
+vivid-kilo-proposed:
+  inherits: vivid-kilo
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
