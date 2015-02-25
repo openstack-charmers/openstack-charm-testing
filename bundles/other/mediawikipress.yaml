@@ -11,9 +11,10 @@
 #
 # TODO(beisner): Add NFS?
 #
-==============================================================================
+#==============================================================================
 mediawikipress:
   constraints: mem=4G arch=amd64
+  series: trusty
   services:
     mediawiki:
       branch: lp:charms/trusty/mediawiki
@@ -58,3 +59,12 @@ mediawikipress:
     - mysql:db
   - - wordpress:db
     - mysql:db
+trusty:
+  inherits: mediawikipress
+  series: trusty
+utopic:
+  inherits: mediawikipress
+  series: utopic
+vivid:
+  inherits: mediawikipress
+  series: vivid
