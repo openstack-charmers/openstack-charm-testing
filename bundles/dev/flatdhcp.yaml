@@ -80,8 +80,8 @@ three-smoosh-flat:
       options:
         "block-device": /dev/sdb /dev/vdb
         "glance-api-version": 2
-      to:
-        - "lxc:0"
+#      to:
+#        - "lxc:0"
     ntp:
       charm: "cs:trusty/ntp-6"
       num_units: 0
