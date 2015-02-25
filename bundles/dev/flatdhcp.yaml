@@ -1,0 +1,217 @@
+#
+# Flat networking test bundle.
+#
+# A three-machine smoosh with optional smash.
+# Also, temporarily uses kilo-support branches for exercising those.
+#
+# NOTES(beisner) Feb 20, 2015:
+# /!\ Beware, YMMV. This might be crazy, ill-advised for production use.
+#     Ceph is excluded, as it would need 3 units for quorum.
+#
+# USAGE:
+#     juju bootstrap --constraints mem=8G
+#     juju deployer -v -c <this_file>.yaml -d three-smoosh-flat
+#       -or-
+#     juju deployer -v -c <this_file>.yaml -d three-smash-flat
+#
+#=============================================================================
+three-smoosh-flat:
+  series: trusty
+  services:
+#    juju-gui:
+#      charm: "cs:trusty/juju-gui"
+#      num_units: 1
+#      to:
+#        - "lxc:0"
+    keystone:
+#      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: lp:~1chb1n/charms/trusty/keystone/kilo-support
+      num_units: 1
+      options:
+        "admin-password": openstack
+      to:
+        - "lxc:0"
+    mysql:
+#      branch: lp:charms/trusty/mysql
+      branch: lp:~james-page/charms/trusty/mysql/kilo-support
+      num_units: 1
+      options:
+        "max-connections": 20000
+      to:
+        - "lxc:0"
+    nova-compute:
+#      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: lp:~james-page/charms/trusty/nova-compute/kilo-support
+      constraints: mem=8G
+      num_units: 1
+      options:
+        enable-live-migration: true
+        enable-resize: true
+        migration-auth-type: ssh
+#        bridge-interface: br100
+#        bridge-ip: 10.245.175.200
+#        bridge-netmask: 10.245.175.254
+        flat-interface: eth1
+    glance:
+      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      num_units: 1
+      to:
+        - "lxc:0"
+    nova-cloud-controller:
+#      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: lp:~james-page/charms/trusty/nova-cloud-controller/kilo-support
+      num_units: 1
+      options:
+        network-manager: FlatDHCPManager
+    openstack-dashboard:
+      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      num_units: 1
+      to:
+        - "lxc:0"
+    rabbitmq-server:
+#      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: lp:~james-page/charms/trusty/rabbitmq-server/kilo-support
+      num_units: 1
+      to:
+        - "lxc:0"
+    cinder:
+      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      num_units: 1
+      options:
+        "block-device": /dev/sdb /dev/vdb
+        "glance-api-version": 2
+      to:
+        - "lxc:0"
+    ntp:
+      charm: "cs:trusty/ntp-6"
+      num_units: 0
+  relations:
+    - - "nova-compute:amqp"
+      - "rabbitmq-server:amqp"
+    - - "keystone:shared-db"
+      - "mysql:shared-db"
+    - - "nova-cloud-controller:identity-service"
+      - "keystone:identity-service"
+    - - "glance:identity-service"
+      - "keystone:identity-service"
+    - - "glance:shared-db"
+      - "mysql:shared-db"
+    - - "glance:amqp"
+      - "rabbitmq-server:amqp"
+    - - "nova-cloud-controller:image-service"
+      - "glance:image-service"
+    - - "nova-compute:image-service"
+      - "glance:image-service"
+    - - "nova-cloud-controller:cloud-compute"
+      - "nova-compute:cloud-compute"
+    - - "nova-cloud-controller:amqp"
+      - "rabbitmq-server:amqp"
+    - - "openstack-dashboard:identity-service"
+      - "keystone:identity-service"
+    - - "nova-cloud-controller:shared-db"
+      - "mysql:shared-db"
+    - - "cinder:image-service"
+      - "glance:image-service"
+    - - "cinder:amqp"
+      - "rabbitmq-server:amqp"
+    - - "cinder:identity-service"
+      - "keystone:identity-service"
+    - - "cinder:cinder-volume-service"
+      - "nova-cloud-controller:cinder-volume-service"
+    - - "cinder:shared-db"
+      - "mysql:shared-db"
+    - - "ntp:juju-info"
+      - "nova-compute:juju-info"
+# icehouse
+trusty-icehouse:
+  inherits: three-smoosh-flat
+  series: trusty
+trusty-icehouse-smash:
+  inherits: three-smash
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"
+# juno
+trusty-juno:
+  inherits: three-smoosh-flat
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+trusty-juno-smash:
+  inherits: three-smash
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-proposed/juno
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
+utopic-juno:
+  inherits: three-smoosh-flat
+  series: utopic
+utopic-juno-proposed:
+  inherits: utopic-juno
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# kilo
+trusty-kilo:
+  inherits: three-smoosh-flat
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-smash:
+  inherits: three-smash
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed-smash:
+  inherits: trusty-kilo-smash
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+vivid-kilo:
+  inherits: three-smoosh-flat
+  series: vivid
+vivid-kilo-proposed:
+  inherits: vivid-kilo
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+vivid-kilo-smash:
+  inherits: three-smash
+  series: vivid
+vivid-kilo-proposed-smash:
+  inherits: vivid-kilo-smash
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
