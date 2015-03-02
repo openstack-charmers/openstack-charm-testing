@@ -1,0 +1,37 @@
+# ubuntu3-lxc - the ubuntu ubuntu ubuntu bundle
+#
+# A small test bundle for exercising juju, juju-deployer, lxc, or maas, on
+# bare metal or overcloud deploy testing.
+#
+# This is for testing.  It is not recommended for production deployments.
+#
+# Unit 0 - Bootstrap + ubuntu(lxc)
+# Unit 1 - ubuntu + ubuntu(lxc) + juju gui(lxc)
+#
+#==============================================================================
+u3lxc:
+  constraints: mem=1G arch=amd64
+  services:
+    ubuntu:
+      branch: lp:charms/trusty/ubuntu
+    ubuntu-0-lxc:
+      branch: lp:charms/trusty/ubuntu
+      to:
+      - lxc:0
+    ubuntu-1-lxc:
+      branch: lp:charms/trusty/ubuntu
+      to:
+      - lxc:1
+    juju-gui:
+      branch: lp:charms/juju-gui
+      to:
+      - lxc:0
+trusty:
+  inherits: u3lxc
+  series: trusty
+utopic:
+  inherits: u3lxc
+  series: utopic
+vivid:
+  inherits: u3lxc
+  series: vivid

@@ -1,0 +1,52 @@
+# mediawikijoompress
+# ==================
+#
+# A small test bundle for exercising juju, juju-deployer, or maas, on
+# bare metal or overcloud deploy testing.
+#
+# This is for testing.  It is not recommended for production deployments.
+#
+# TODO(beisner): Add NFS?
+#
+#==============================================================================
+mediawikijoompress:
+  constraints: mem=1G arch=amd64
+#  series: trusty
+  services:
+    mediawiki:
+      branch: lp:charms/trusty/mediawiki
+      options:
+        debug: false
+        name: NothingToSeeHere
+        skin: vector
+    joomla:
+      branch: lp:charms/trusty/joomla
+      options:
+        admin_password: ubuntu
+    wordpress:
+      branch: lp:charms/trusty/wordpress
+    mysql:
+      branch: lp:charms/trusty/mysql
+      options:
+        block-size: 2
+        dataset-size: 50%
+        flavor: distro
+        tuning-level: fast
+    juju-gui:
+      branch: lp:charms/juju-gui
+  relations:
+  - - mediawiki:db
+    - mysql:db
+  - - wordpress:db
+    - mysql:db
+  - - joomla:db
+    - mysql:db
+trusty:
+  inherits: mediawikijoompress
+  series: trusty
+utopic:
+  inherits: mediawikijoompress
+  series: utopic
+vivid:
+  inherits: mediawikijoompress
+  series: vivid
