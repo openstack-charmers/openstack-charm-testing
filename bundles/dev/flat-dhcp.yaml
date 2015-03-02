@@ -1,6 +1,5 @@
-#
-# Flat networking test bundle.
-#
+# WIP flat networking test bundle (not functional @ Mar 2 2015)
+# =============================================================
 # A three-machine smoosh with optional smash.
 # Also, temporarily uses kilo-support branches for exercising those.
 #
