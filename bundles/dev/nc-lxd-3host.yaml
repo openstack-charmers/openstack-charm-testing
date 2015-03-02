@@ -7,8 +7,8 @@
 #     Ceph is excluded, as it would need 3 units for quorum.
 #
 # USAGE EXAMPLE:
+#    Ensure  default-series: vivid  is defined in environments.yaml.
 #    juju switch maas
-#    juju set-environment default-series=vivid
 #    juju bootstrap --series=vivid --upload-tools --constraints arch=amd64
 #    juju-deployer -v -c <this_file>.yaml -d three-smoosh
 #=============================================================================

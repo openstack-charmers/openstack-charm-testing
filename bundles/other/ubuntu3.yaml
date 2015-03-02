@@ -1,20 +1,21 @@
-# ubuntu3-lxc - the ubuntu ubuntu ubuntu bundle
+# ubuntu3 - the ubuntu ubuntu ubuntu bundle
 #
-# A small test bundle for exercising juju, juju-deployer, lxc, or maas, on
+# A small test bundle for exercising juju, juju-deployer, or maas, on
 # bare metal or overcloud deploy testing.
 #
 # This is for testing.  It is not recommended for production deployments.
 #
-# Unit 0 - Bootstrap + ubuntu(lxc)
-# Unit 1 - ubuntu + ubuntu(lxc)
+# Unit 0 - Bootstrap
+# Unit 1 - ubuntu
+# Unit 2 - ubuntu
 #
 #==============================================================================
 u3:
-  constraints: mem=2G arch=amd64
+  constraints: mem=1G arch=amd64
   services:
     ubuntu:
       branch: lp:charms/trusty/ubuntu
-      num_units: 3
+      num_units: 2
 trusty:
   inherits: u3
   series: trusty

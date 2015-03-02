@@ -1,7 +1,7 @@
 # mediawikijoompress
 # ==================
 #
-# A small test bundle for exercising juju, juju-deployer, lxc, or maas, on
+# A small test bundle for exercising juju, juju-deployer, or maas, on
 # bare metal or overcloud deploy testing.
 #
 # This is for testing.  It is not recommended for production deployments.
@@ -10,7 +10,7 @@
 #
 #==============================================================================
 mediawikijoompress:
-  constraints: mem=2G arch=amd64
+  constraints: mem=1G arch=amd64
 #  series: trusty
   services:
     mediawiki:
