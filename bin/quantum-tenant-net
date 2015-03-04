@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
 try:
-  from quantumclient.v2_0 import client
+    from quantumclient.v2_0 import client
 except ImportError:
-  from neutronclient.v2_0 import client
+    from neutronclient.v2_0 import client
 
 from keystoneclient.v2_0 import client as ks_client
 import optparse
@@ -86,18 +86,24 @@ if __name__ == '__main__':
     # Create network
     networks = quantum.list_networks(name=net_name)
     if len(networks['networks']) == 0:
-        logging.info('Creating network: %s',
-                     net_name)
+        logging.info('Creating tenant network: %s', net_name)
         network_msg = {
             'network': {
                 'name': net_name,
                 'shared': opts.shared,
                 'tenant_id': tenant_id,
+                'provider:network_type': opts.network_type,
             }
         }
+
         if opts.network_type == 'vxlan':
-            network_msg['network']['provider:segmentation_id'] = 1233
-            network_msg['network']['provider:network_type'] = opts.network_type
+            network_msg['network']['provider:segmentation_id'] = 1233    
+        elif opts.network_type == 'vlan':
+            network_msg['network']['provider:segmentation_id'] = 5
+            network_msg['network']['provider:physical_network'] = 'physnet1'
+        else:
+            network_msg['network']['provider:segmentation_id'] = 5
+
         network = quantum.create_network(network_msg)['network']
     else:
         logging.warning('Network %s already exists.', net_name)
