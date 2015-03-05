@@ -24,8 +24,7 @@ three-smoosh:
       to:
         - "lxc:0"
     keystone:
-#      branch: lp:~openstack-charmers/charms/trusty/keystone/next
-      branch: lp:~1chb1n/charms/trusty/keystone/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/keystone/next
       num_units: 1
       options:
         "admin-password": openstack
@@ -35,8 +34,7 @@ three-smoosh:
       to:
         - "lxc:0"
     neutron-gateway:
-#      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
-      branch: lp:~james-page/charms/trusty/quantum-gateway/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
       num_units: 1
       options:
         "ext-port": eth1
@@ -46,8 +44,7 @@ three-smoosh:
       to:
         - "0"
     neutron-api:
-#      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
-      branch: lp:~james-page/charms/trusty/neutron-api/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
       num_units: 1
       options:
         "neutron-security-groups": true
@@ -63,8 +60,7 @@ three-smoosh:
         "gui-x": "250"
         "gui-y": "500"
     mysql:
-#      branch: lp:charms/trusty/mysql
-      branch: lp:~james-page/charms/trusty/mysql/kilo-support
+      branch: lp:charms/trusty/mysql
       num_units: 1
       options:
         "max-connections": 20000
@@ -99,8 +95,7 @@ three-smoosh:
       to:
         - "lxc:nova-compute=1"
     nova-cloud-controller:
-#      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
-      branch: lp:~james-page/charms/trusty/nova-cloud-controller/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
       num_units: 1
       options:
         "network-manager": Neutron
@@ -119,8 +114,7 @@ three-smoosh:
       to:
         - "lxc:0"
     rabbitmq-server:
-#      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
-      branch: lp:~james-page/charms/trusty/rabbitmq-server/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       num_units: 1
       annotations:
         "gui-x": "500"
