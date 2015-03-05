@@ -14,18 +14,16 @@ u3lxc:
   services:
     ubuntu:
       branch: lp:charms/trusty/ubuntu
-    ubuntu-0-lxc:
+    ubuntu-lxc:
       branch: lp:charms/trusty/ubuntu
+      num_units: 2
       to:
-      - lxc:0
-    ubuntu-1-lxc:
-      branch: lp:charms/trusty/ubuntu
-      to:
-      - lxc:1
+        - "lxc:0"
+        - "lxc:ubuntu=0"
     juju-gui:
       branch: lp:charms/juju-gui
       to:
-      - lxc:0
+        - "lxc:0"
 trusty:
   inherits: u3lxc
   series: trusty
