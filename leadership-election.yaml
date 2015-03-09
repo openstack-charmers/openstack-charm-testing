@@ -94,7 +94,7 @@ openstack-services:
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/leadership-election
+      branch: lp:~le-charmers/charms/trusty/ceilometer/leadership-election
       constraints: mem=1G
     ceilometer-agent:
       branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
