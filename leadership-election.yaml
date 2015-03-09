@@ -8,6 +8,8 @@ openstack-services:
       constraints: mem=1G
       options:
         dataset-size: 50%
+        sst-password: changeme
+        root-password: changeme
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
