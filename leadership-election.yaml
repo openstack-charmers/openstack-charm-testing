@@ -23,8 +23,9 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: lp:~le-charmers/charms/trusty/keystone/next
+      branch: lp:~le-charmers/charms/trusty/keystone/leadership-election
       constraints: mem=1G
+      num_units: 3
       options:
         admin-password: openstack
         admin-token: ubuntutesting
@@ -39,8 +40,9 @@ openstack-services:
         enable-live-migration: True
         enable-resize: True
     nova-cloud-controller:
-      branch: lp:~le-charmers/charms/trusty/nova-cloud-controller/next
+      branch: lp:~le-charmers/charms/trusty/nova-cloud-controller/leadership-election
       constraints: mem=1G
+      num_units: 3
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
@@ -50,7 +52,8 @@ openstack-services:
       options:
         instance-mtu: 1300
     cinder:
-      branch: lp:~le-charmers/charms/trusty/cinder/next
+      branch: lp:~le-charmers/charms/trusty/cinder/leadership-election
+      num_units: 3
       options:
         block-device: "None"
         glance-api-version: 2
@@ -58,11 +61,13 @@ openstack-services:
     cinder-ceph:
       branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
     glance:
-      branch: lp:~le-charmers/charms/trusty/glance/next
+      branch: lp:~le-charmers/charms/trusty/glance/leadership-election
       constraints: mem=1G
+      num_units: 3
     swift-proxy:
-      branch: lp:~le-charmers/charms/trusty/swift-proxy/next
+      branch: lp:~le-charmers/charms/trusty/swift-proxy/leadership-election
       constraints: mem=1G
+      num_units: 3
       options:
         zone-assignment: manual
         replicas: 3
@@ -89,12 +94,12 @@ openstack-services:
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer/leadership-election
       constraints: mem=1G
     ceilometer-agent:
       branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
     heat:
-      branch: lp:~le-charmers/charms/trusty/heat/next
+      branch: lp:~le-charmers/charms/trusty/heat/leadership-election
     mongodb:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
