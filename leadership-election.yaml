@@ -149,7 +149,7 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: lp:~le-charmers/charms/trusty/neutron-api/next
+      branch: lp:~le-charmers/charms/trusty/neutron-api/leadership-election
       constraints: mem=1G
       options:
         neutron-security-groups: True
