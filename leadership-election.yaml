@@ -16,6 +16,7 @@ openstack-services:
       branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
       options:
         corosync_transport: unicast
+        cluster_count: 3
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
@@ -37,9 +38,22 @@ openstack-services:
       options:
         admin-password: openstack
         admin-token: ubuntutesting
+        vip: 10.5.100.2
+    keystone-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     openstack-dashboard:
       branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
       constraints: mem=1G
+      options:
+        vip: 10.5.100.3
+    dashboard-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     nova-compute:
       branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
       num_units: 3
@@ -54,6 +68,12 @@ openstack-services:
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
+        vip: 10.5.100.4
+    nova-cc-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     neutron-gateway:
       branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
       constraints: mem=1G
@@ -62,16 +82,27 @@ openstack-services:
     cinder:
       branch: lp:~le-charmers/charms/trusty/cinder/leadership-election
       num_units: 3
+      constraints: mem=1G
       options:
         block-device: "None"
         glance-api-version: 2
-      constraints: mem=1G
+        vip: 10.5.100.5
+    cinder-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     cinder-ceph:
       branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
     glance:
       branch: lp:~le-charmers/charms/trusty/glance/leadership-election
       constraints: mem=1G
       num_units: 3
+    glance-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     swift-proxy:
       branch: lp:~le-charmers/charms/trusty/swift-proxy/leadership-election
       constraints: mem=1G
@@ -80,6 +111,12 @@ openstack-services:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+        vip: 10.5.100.6
+    swift-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     swift-storage-z1:
       branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
       constraints: mem=1G
@@ -104,6 +141,13 @@ openstack-services:
     ceilometer:
       branch: lp:~le-charmers/charms/trusty/ceilometer/leadership-election
       constraints: mem=1G
+      options:
+        vip: 10.5.100.7
+    ceilometer-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     ceilometer-agent:
       branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
     heat:
@@ -112,6 +156,13 @@ openstack-services:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
   relations:
+    - [ mysql, mysql-hacluster ]
+    - [ keystone, keystone-hacluster ]
+    - [ nova-cloud-controller, nova-cc-hacluster ]
+    - [ cinder, cinder-hacluster ]
+    - [ glance, glance-hacluster ]
+    - [ openstack-dashboard, dashboard-hacluster ]
+    - [ ceilometer, ceilometer-hacluster ]
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
     - [ nova-cloud-controller, rabbitmq-server ]
@@ -161,6 +212,12 @@ openstack-icehouse:
       constraints: mem=1G
       options:
         neutron-security-groups: True
+        vip: 10.5.100.8
+    neutron-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
     neutron-openvswitch:
       branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
   relations:
