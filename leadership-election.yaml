@@ -11,6 +11,11 @@ openstack-services:
         dataset-size: 50%
         sst-password: changeme
         root-password: changeme
+        vip: 10.5.100.1
+    mysql-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
