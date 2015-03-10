@@ -338,6 +338,7 @@ trusty-juno-ha:
     - [ openstack-dashboard, dashboard-hacluster ]
     - [ ceilometer, ceilometer-hacluster ]
     - [ neutron-api, neutron-hacluster ]
+    - [ swift-proxy, swift-hacluster ]
 # kilo
 trusty-kilo:
   inherits: openstack-icehouse
