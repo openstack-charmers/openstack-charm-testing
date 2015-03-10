@@ -261,6 +261,13 @@ utopic-juno-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+trusty-juno-ssl:
+  inherits: trusty-juno
+  services:
+    keystone:
+      options:
+        use-https: 'yes'
+        https-service-endpoints: 'true'
 trusty-juno-ha:
   inherits: trusty-juno
   services:
