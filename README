@@ -108,6 +108,7 @@ manual instance test example (tools usage)
 ==========================================
 
  * A common use for the bundles and tools might look like this.
+ * See the tune-and-launch script as one common post-deployment time-saver.
 
 ```
 # deploy a cloud
