@@ -5,8 +5,7 @@ echo " + Floating all instances."
 
 function get_ip_f() {
   # Get first unallocated floating IP
-  local var=$(nova floating-ip-list | grep '\-  ' | awk '{ print $2 }' | head -n 1 |\
-    egrep '^((25[0-5]|2[0-4][0-9]|[1]?[1-9][0-9]?).){3}(25[0-5]|2[0-4][0-9]|[1]?[1-9]?[0-9])$')
+  local var=$(nova floating-ip-list | grep '\-  ' | awk '{ print $2 }' | head -n 1)
   echo $var
 }
 
