@@ -12,7 +12,7 @@
 #
 # EXAMPLE USAGE:
 #     juju bootstrap --constraints mem=8G arch=amd64
-#     juju-deployer -v -c ppc64el-two-unit-method1.yaml -d trusty-kilo
+#     juju-deployer -v -c ppc64el-two-unit-method2.yaml -d trusty-kilo
 #==============================================================================
 two-smoosh-ppc64compute:
   series: trusty
