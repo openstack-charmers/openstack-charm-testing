@@ -1,22 +1,19 @@
-# /!\ Experimental WIP!
+# /!\ Experimental Proof-of-Concept /!\
 #
-# ppc64el "method 2":
-#     (1) amd64 trusty host [for neutron-gateway]
+# ppc64el "method 2" (2 physical machines):
+#     (1) amd64 trusty host [for juju state + neutron-gateway]
 #     (1) ppc64el(power8) trusty hwe-u host [for compute + API/storage]
 #
-# A two-machine smoosh with optional smash.  Aims to use only 2 hosts.
-# Also, temporarily uses kilo-support branches for exercising those.
-#
-# NOTES(beisner) Feb 20, 2015:
-# /!\ Beware, YMMV. This might be crazy, ill-advised for production use.
+# NOTES:
+#     The "next" (development) charm versions are used.
+#     hwe-u is achieved via MAAS configuration.
 #     Ceph is excluded, as it would need 3 units for quorum.
+#     Kilo cloud archive is necessary for libvirt ppc64el support.
 #
-# USAGE:
+# EXAMPLE USAGE:
 #     juju bootstrap --constraints mem=8G arch=amd64
-#     juju deployer -v -c two-smoosh.yaml -d two-smoosh-ppc64compute
-#       -or-
-#     juju deployer -v -c two-smoosh.yaml -d two-smash-ppc64compute
-#=============================================================================
+#     juju-deployer -v -c ppc64el-two-unit-method1.yaml -d trusty-kilo
+#==============================================================================
 two-smoosh-ppc64compute:
   series: trusty
   services:
@@ -41,7 +38,6 @@ two-smoosh-ppc64compute:
     neutron-gateway:
       branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
       num_units: 1
-      constraints: arch=amd64
       options:
         "ext-port": eth1
       annotations:
@@ -113,7 +109,7 @@ two-smoosh-ppc64compute:
         "gui-y": "-250"
       to:
         - "lxc:nova-compute=0"
-    "rabbitmq-server":
+    rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       num_units: 1
       annotations:
@@ -197,113 +193,6 @@ two-smoosh-ppc64compute:
       - "nova-compute:juju-info"
     - - "ntp:juju-info"
       - "neutron-gateway:juju-info"
-#=============================================================================
-# Optionally, smash more things into the smoosh.  Pretty much everything but ceph.
-# /!\  Experimental WIP!
-two-smash:
-  inherits: two-smoosh-ppc64compute
-  services:
-#    swift-proxy:
-#      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
-#      options:
-#        zone-assignment: manual
-#        replicas: 1
-#        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
-#      annotations:
-#        "gui-x": "0"
-#        "gui-y": "750"
-#      to:
-#        - "lxc:nova-compute=0"
-#    swift-storage-z1:
-#      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
-#      options:
-#        zone: 1
-#        block-device: /dev/sdb /dev/vdb
-#        overwrite: "true"
-#      annotations:
-#        "gui-x": "250"
-#        "gui-y": "750"
-#      to:
-#        - "0"
-    ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
-      constraints: mem=1G
-      annotations:
-        "gui-x": "500"
-        "gui-y": "750"
-      to:
-        - "lxc:nova-compute=0"
-    ceilometer-agent:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
-      annotations:
-        "gui-x": "750"
-        "gui-y": "750"
-    heat:
-      branch: lp:~openstack-charmers/charms/trusty/heat/next
-      annotations:
-        "gui-x": "1250"
-        "gui-y": "750"
-      to:
-        - "lxc:nova-compute=0"
-    mongodb:
-      branch: lp:charms/trusty/mongodb
-      annotations:
-        "gui-x": "1000"
-        "gui-y": "750"
-      to:
-        - "lxc:nova-compute=0"
-  relations:
-#    - [ swift-proxy, keystone ]
-#    - [ swift-proxy, swift-storage-z1 ]
-    - - ceilometer
-      - keystone:identity-service
-    - [ ceilometer, rabbitmq-server ]
-    - [ ceilometer, mongodb ]
-    - [ ceilometer-agent, nova-compute ]
-    - [ ceilometer-agent, ceilometer ]
-    - [ heat, mysql ]
-    - [ heat, keystone ]
-    - [ heat, rabbitmq-server ]
-# icehouse
-trusty-icehouse:
-  inherits: two-smoosh-ppc64compute
-  series: trusty
-trusty-icehouse-proposed:
-  inherits: trusty-icehouse
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-trusty-icehouse-trunk:
-  inherits: trusty-icehouse
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
-    offline-compression: "no"
-# juno
-trusty-juno:
-  inherits: two-smoosh-ppc64compute
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-juno
-    source: cloud:trusty-juno
-trusty-juno-proposed:
-  inherits: trusty-juno
-  overrides:
-    openstack-origin: cloud:trusty-juno/proposed
-    source: cloud:trusty-proposed/juno
-trusty-juno-staging:
-  inherits: trusty-juno
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
-    source: ppa:ubuntu-cloud-archive/juno-staging
-utopic-juno:
-  inherits: two-smoosh-ppc64compute
-  series: utopic
-utopic-juno-proposed:
-  inherits: utopic-juno
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
 # kilo
 trusty-kilo:
   inherits: two-smoosh-ppc64compute
@@ -313,17 +202,6 @@ trusty-kilo:
     source: cloud:trusty-kilo
 trusty-kilo-proposed:
   inherits: trusty-kilo
-  overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
-    source: cloud:trusty-kilo/proposed
-trusty-kilo-smash:
-  inherits: two-smash
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-kilo
-    source: cloud:trusty-kilo
-trusty-kilo-proposed-smash:
-  inherits: trusty-kilo-smash
   overrides:
     openstack-origin: cloud:trusty-kilo/proposed
     source: cloud:trusty-kilo/proposed
@@ -337,14 +215,6 @@ vivid-kilo:
   series: vivid
 vivid-kilo-proposed:
   inherits: vivid-kilo
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-vivid-kilo-smash:
-  inherits: two-smash
-  series: vivid
-vivid-kilo-proposed-smash:
-  inherits: vivid-kilo-smash
   overrides:
     source: proposed
     openstack-origin: distro-proposed
