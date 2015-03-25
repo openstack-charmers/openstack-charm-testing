@@ -9,10 +9,12 @@
 #     hwe-u is achieved via MAAS configuration.
 #     Ceph is excluded, as it would need 3 units for quorum.
 #     Kilo cloud archive is necessary for libvirt ppc64el support.
+#     Horizon/Dashboard excluded temporarily due to
+#       https://bugs.launchpad.net/ubuntu/+source/horizon/+bug/1432596.
 #
 # EXAMPLE USAGE:
 #     juju bootstrap --constraints mem=8G arch=amd64
-#     juju-deployer -v -c ppc64el-two-unit-method2.yaml -d trusty-kilo
+#     juju-deployer -v -c ppc64el-two-unit-method2.yaml -d trusty-kilo-proposed
 #==============================================================================
 two-smoosh-ppc64compute:
   series: trusty
@@ -101,14 +103,14 @@ two-smoosh-ppc64compute:
         "gui-y": "500"
       to:
         - "lxc:nova-compute=0"
-    openstack-dashboard:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
-      num_units: 1
-      annotations:
-        "gui-x": "500"
-        "gui-y": "-250"
-      to:
-        - "lxc:nova-compute=0"
+#    openstack-dashboard:
+#      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+#      num_units: 1
+#      annotations:
+#        "gui-x": "500"
+#        "gui-y": "-250"
+#      to:
+#        - "lxc:nova-compute=0"
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       num_units: 1
@@ -173,8 +175,8 @@ two-smoosh-ppc64compute:
       - "neutron-openvswitch:neutron-plugin"
     - - "neutron-openvswitch:amqp"
       - "rabbitmq-server:amqp"
-    - - "openstack-dashboard:identity-service"
-      - "keystone:identity-service"
+#    - - "openstack-dashboard:identity-service"
+#      - "keystone:identity-service"
     - - "nova-cloud-controller:shared-db"
       - "mysql:shared-db"
     - - "nova-cloud-controller:neutron-api"
