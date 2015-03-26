@@ -125,6 +125,7 @@ two-smoosh-ppc64compute:
       options:
         block-device: /dev/sdb /dev/vdb
         glance-api-version: 2
+        overwrite: "true"
       annotations:
         "gui-x": "750"
         "gui-y": "0"

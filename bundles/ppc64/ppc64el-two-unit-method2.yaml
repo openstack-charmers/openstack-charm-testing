@@ -4,6 +4,10 @@
 #     (1) amd64 trusty host [for juju state + neutron-gateway]
 #     (1) ppc64el(power8) trusty hwe-u host [for compute + API/storage]
 #
+# /!\ With this configuration having (too) many services located on the ppc64el
+#     host in lxc containers, testing has shown that some of the API services
+#     start to time out, even with only < 4 m1.small instances launched.
+#
 # NOTES:
 #     The "next" (development) charm versions are used.
 #     hwe-u is achieved via MAAS configuration.
@@ -125,6 +129,7 @@ two-smoosh-ppc64compute:
       options:
         block-device: /dev/sdb /dev/vdb
         glance-api-version: 2
+        overwrite: "true"
       annotations:
         "gui-x": "750"
         "gui-y": "0"
