@@ -266,7 +266,8 @@ trusty-juno-ssl:
   services:
     keystone:
       options:
-        use-https: 'yes'
+        enable-pki: 'true'
+        use-https: 'true'
         https-service-endpoints: 'true'
 trusty-juno-ha:
   inherits: trusty-juno
@@ -346,6 +347,14 @@ trusty-juno-ha:
     - [ ceilometer, ceilometer-hacluster ]
     - [ neutron-api, neutron-hacluster ]
     - [ swift-proxy, swift-hacluster ]
+trusty-juno-ha-ssl:
+  inherits: trusty-juno-ha
+  services:
+    keystone:
+      options:
+        enable-pki: 'true'
+        use-https: 'true'
+        https-service-endpoints: 'true'
 # kilo
 trusty-kilo:
   inherits: openstack-icehouse
