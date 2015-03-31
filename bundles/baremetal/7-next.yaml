@@ -93,7 +93,7 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
       options:
         ext-port: eth1
-#        instance-mtu: 1300
+        instance-mtu: 1300
       to:
         - "0"
     cinder:
@@ -124,7 +124,7 @@ openstack-services:
       to:
         - "lxc:swift-storage-z3=0"
     ntp:
-      charm: "cs:trusty/ntp-6"
+      branch: lp:charms/trusty/ntp
       num_units: 0
     juju-gui:
       branch: lp:charms/trusty/juju-gui
