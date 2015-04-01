@@ -20,6 +20,7 @@ openstack-services:
     keystone:
       branch: lp:~openstack-charmers/charms/trusty/keystone/next
       constraints: mem=1G
+      num_units: 3
       options:
         admin-password: openstack
         admin-token: ubuntutesting
@@ -32,7 +33,7 @@ openstack-services:
         enable-resize: True
     nova-cloud-controller:
       branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/0mq
-      num_units: 1
+      num_units: 3
       constraints: mem=1G
       options:
         network-manager: Neutron
@@ -40,6 +41,7 @@ openstack-services:
     neutron-gateway:
       branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/0mq
       constraints: mem=1G
+      num_units: 3
       options:
         instance-mtu: 1300
     cinder:
@@ -85,6 +87,7 @@ openstack-icehouse:
     neutron-api:
       branch: lp:~openstack-charmers/charms/trusty/neutron-api/0mq
       constraints: mem=1G
+      num_units: 3
       options:
         neutron-security-groups: True
     neutron-openvswitch:
@@ -100,7 +103,7 @@ openstack-icehouse-rmq:
   inherits: openstack-icehouse
   services:
     rabbitmq-server:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
   relations:
   - [ neutron-api, rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server ]
@@ -143,3 +146,19 @@ utopic-juno-zmq:
 utopic-juno-rmq:
   inherits: openstack-icehouse-rmq
   series: utopic
+# trusty configurations
+trusty-kilo-zmq:
+  inherits: openstack-icehouse-zmq
+  series: trusty
+  overrides:
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+trusty-kilo-rmq:
+  inherits: openstack-icehouse-rmq
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+# vivid configurations
+vivid-kilo-zmq:
+  inherits: openstack-icehouse-zmq
+  series: vivid
