@@ -129,24 +129,6 @@ openstack-icehouse-zmq:
   - [ cinder, openstack-zeromq ]
   - [ "openstack-zeromq:redis", "redis:db" ]
 # trusty configurations
-trusty-juno-zmq:
-  inherits: openstack-icehouse-zmq
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-juno
-trusty-juno-rmq:
-  inherits: openstack-icehouse-rmq
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-juno
-# utopic configuration
-utopic-juno-zmq:
-  inherits: openstack-icehouse-zmq
-  series: utopic
-utopic-juno-rmq:
-  inherits: openstack-icehouse-rmq
-  series: utopic
-# trusty configurations
 trusty-kilo-zmq:
   inherits: openstack-icehouse-zmq
   series: trusty
