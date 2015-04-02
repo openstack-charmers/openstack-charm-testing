@@ -10,7 +10,7 @@ openstack-services:
         dataset-size: 50%
         sst-password: changeme
         root-password: changeme
-        vip: 10.5.100.1
+        vip: 10.5.100.2
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
@@ -31,7 +31,7 @@ openstack-services:
       options:
         admin-password: openstack
         admin-token: ubuntutesting
-        vip: 10.5.100.2
+        vip: 10.5.100.1
     openstack-dashboard:
       branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
       constraints: mem=1G
