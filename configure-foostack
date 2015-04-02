@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -ex
+
+# Set foostack overrides, if not already set.
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.170.42"
+
+./configure $1 $2 $3 $4 $5
