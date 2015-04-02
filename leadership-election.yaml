@@ -12,7 +12,7 @@ openstack-services:
         root-password: changeme
         vip: 10.5.100.2
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: lp:~le-charmers/charms/trusty/rabbitmq-server/leadership-election
       constraints: mem=1G
     ceph:
       branch: lp:~openstack-charmers/charms/trusty/ceph/next
