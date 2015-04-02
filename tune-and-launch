@@ -1,0 +1,9 @@
+#!/bin/bash
+# A common combo of post-deployment routines
+. novarc
+./tools/flavor_shrink.sh
+./tools/quota_million.sh
+./tools/sec_groups.sh
+./tools/instance_launch.sh 3 trusty
+./tools/float_all.sh
+nova list
