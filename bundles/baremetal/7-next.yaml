@@ -12,6 +12,7 @@ openstack-services:
       branch: lp:charms/trusty/mysql
       options:
         dataset-size: 50%
+        max-connections: 20000
       to:
         - "0"
     rabbitmq-server:
