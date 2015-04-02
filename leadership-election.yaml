@@ -236,6 +236,100 @@ trusty-icehouse-trunk:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
     offline-compression: "no"
+trusty-icehouse-ssl:
+  inherits: trusty-icehouse
+  services:
+    keystone:
+      options:
+        enable-pki: 'true'
+        use-https: 'true'
+        https-service-endpoints: 'true'
+trusty-icehouse-ha:
+  inherits: trusty-icehouse
+  services:
+    keystone:
+      num_units: 3
+    keystone-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    cinder:
+      num_units: 3
+    cinder-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    glance:
+      num_units: 3
+    glance-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    rabbitmq-server:
+      num_units: 3
+    mysql:
+      num_units: 3
+    mysql-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    nova-cloud-controller:
+      num_units: 3
+    nova-cc-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    neutron-api:
+      num_units: 3
+    neutron-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    openstack-dashboard:
+      num_units: 3
+    dashboard-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    swift-proxy:
+      num_units: 3
+    swift-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+    ceilometer:
+      num_units: 3
+    ceilometer-hacluster:
+      branch: lp:~le-charmers/charms/trusty/hacluster/leadership-election
+      options:
+        corosync_transport: unicast
+        cluster_count: 3
+  relations:
+    - [ mysql, mysql-hacluster ]
+    - [ keystone, keystone-hacluster ]
+    - [ nova-cloud-controller, nova-cc-hacluster ]
+    - [ cinder, cinder-hacluster ]
+    - [ glance, glance-hacluster ]
+    - [ openstack-dashboard, dashboard-hacluster ]
+    - [ ceilometer, ceilometer-hacluster ]
+    - [ neutron-api, neutron-hacluster ]
+    - [ swift-proxy, swift-hacluster ]
+trusty-icehouse-ha-ssl:
+  inherits: trusty-icehouse-ha
+  services:
+    keystone:
+      options:
+        enable-pki: 'true'
+        use-https: 'true'
+        https-service-endpoints: 'true'
 # juno
 trusty-juno:
   inherits: openstack-icehouse
