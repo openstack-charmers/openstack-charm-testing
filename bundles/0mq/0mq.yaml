@@ -25,21 +25,21 @@ openstack-services:
         admin-password: openstack
         admin-token: ubuntutesting
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/0mq
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
       num_units: 10
       constraints: mem=8G
       options:
         enable-live-migration: True
         enable-resize: True
     nova-cloud-controller:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/0mq
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
       num_units: 3
       constraints: mem=1G
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/0mq
+      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
       constraints: mem=1G
       num_units: 3
       options:
@@ -85,13 +85,13 @@ openstack-icehouse:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/0mq
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
       constraints: mem=1G
       num_units: 3
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/0mq
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
   relations:
   - [ neutron-api, mysql ]
   - [ neutron-api, nova-cloud-controller ]
