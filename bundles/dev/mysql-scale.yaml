@@ -6,7 +6,7 @@ mysql-scale:
       branch: lp:charms/trusty/mysql
 #      branch: lp:~charmers/charms/precise/mysql/trunk
 #      charm: "cs:precise/mysql-28"
-      constraints: mem=4G
+      constraints: mem=2G
       num_units: 1
       options:
         "binlog-format": MIXED
@@ -51,7 +51,7 @@ mysql-scale:
         "gui-x": 619
         "gui-y": 124
     juju-gui:
-      constraints: mem=1G
+      constraints: mem=2G
       branch: lp:charms/juju-gui
   relations:
     - - "mysql-slave:slave"
