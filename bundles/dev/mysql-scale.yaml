@@ -1,11 +1,9 @@
-# 21 machines, including bootstrap node.
+# 22 machines, including bootstrap node.
 # Experimental bundle for testing only.
 mysql-scale:
   services:
     mysql:
       branch: lp:charms/trusty/mysql
-#      branch: lp:~charmers/charms/precise/mysql/trunk
-#      charm: "cs:precise/mysql-28"
       constraints: mem=2G
       num_units: 1
       options:
@@ -23,13 +21,8 @@ mysql-scale:
         "tuning-level": safest
         vip_cidr: 24
         vip_iface: eth0
-      annotations:
-        "gui-x": 926
-        "gui-y": 123
     "mysql-slave":
       branch: lp:charms/trusty/mysql
-#      branch: lp:~charmers/charms/precise/mysql/trunk
-#      charm: "cs:precise/mysql-28"
       constraints: mem=1G
       num_units: 19
       options:
@@ -47,9 +40,6 @@ mysql-scale:
         "tuning-level": safest
         vip_cidr: 24
         vip_iface: eth0
-      annotations:
-        "gui-x": 619
-        "gui-y": 124
     juju-gui:
       constraints: mem=2G
       branch: lp:charms/juju-gui

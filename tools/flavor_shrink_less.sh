@@ -8,9 +8,9 @@ nova flavor-delete m1.medium
 nova flavor-delete m1.large
 nova flavor-delete m1.xlarge
 nova flavor-create --ephemeral 20 --is-public True m1.tiny 1 512 20 1
-nova flavor-create --ephemeral 20 --is-public True m1.small 2 1536 20 1
-nova flavor-create --ephemeral 40 --is-public True m1.medium 3 2048 40 2
-nova flavor-create --ephemeral 60 --is-public True m1.large 4 4096 60 2
+nova flavor-create --ephemeral 20 --is-public True m1.small 2 3072 20 2
+nova flavor-create --ephemeral 40 --is-public True m1.medium 3 4096 40 2
+nova flavor-create --ephemeral 60 --is-public True m1.large 4 6144 60 2
 nova flavor-create --ephemeral 80 --is-public True m1.xlarge 5 8192 80 2
 
 # FYI, the defaults:
