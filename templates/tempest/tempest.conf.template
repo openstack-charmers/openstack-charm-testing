@@ -48,7 +48,7 @@ http_image = http://__SWIFT__:80/swift/v1/images/cirros-0.3.3-x86_64-uec.tar.gz
 [image-feature-enabled]
 [input-scenario]
 [network]
-tenant_network_cidr=192.168.21.0/24
+tenant_network_cidr=192.168.0.0/16
 public_network_id=__EXT_NET__
 dns_servers=10.5.0.2
 tenant_networks_reachable = false
