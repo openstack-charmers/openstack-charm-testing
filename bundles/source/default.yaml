@@ -253,12 +253,36 @@ utopic-juno:
   inherits: openstack-juno-git
   series: utopic
 # kilo
-trusty-kilo:
+openstack-kilo-git:
   inherits: openstack-icehouse
+  services:
+    keystone:
+      options:
+        openstack-origin-git: include-file://keystone-kilo.yaml
+    glance:
+      options:
+        openstack-origin-git: include-file://glance-kilo.yaml
+    cinder:
+      options:
+        openstack-origin-git: include-file://cinder-kilo.yaml
+    neutron-api:
+      options:
+        openstack-origin-git: include-file://neutron-kilo.yaml
+    neutron-gateway:
+      options:
+        openstack-origin-git: include-file://neutron-kilo.yaml
+    neutron-openvswitch:
+      options:
+        openstack-origin-git: include-file://neutron-kilo.yaml
+    openstack-dashboard:
+      options:
+        openstack-origin-git: include-file://horizon-kilo.yaml
+trusty-kilo:
+  inherits: openstack-kilo-git
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-kilo
     source: cloud:trusty-kilo
 vivid-kilo:
-  inherits: openstack-icehouse
+  inherits: openstack-kilo-git
   series: vivid
