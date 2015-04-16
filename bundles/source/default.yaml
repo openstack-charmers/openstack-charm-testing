@@ -185,14 +185,35 @@ openstack-icehouse-msg-split:
   - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # icehouse
+openstack-icehouse-git:
+  inherits: openstack-icehouse
+  services:
+    keystone:
+      options:
+        openstack-origin-git: include-file://keystone-icehouse.yaml
+    glance:
+      options:
+        openstack-origin-git: include-file://glance-icehouse.yaml
+    cinder:
+      options:
+        openstack-origin-git: include-file://cinder-icehouse.yaml
+    neutron-api:
+      options:
+        openstack-origin-git: include-file://neutron-icehouse.yaml
+    neutron-gateway:
+      options:
+        openstack-origin-git: include-file://neutron-icehouse.yaml
+    neutron-openvswitch:
+      options:
+        openstack-origin-git: include-file://neutron-icehouse.yaml
 precise-icehouse:
-  inherits: openstack-singlerabbit
+  inherits: openstack-icehouse-git
   series: precise
   overrides:
     openstack-origin: cloud:precise-icehouse
     source: cloud:precise-icehouse
 trusty-icehouse:
-  inherits: openstack-icehouse
+  inherits: openstack-icehouse-git
   series: trusty
 # juno
 openstack-juno-git:
