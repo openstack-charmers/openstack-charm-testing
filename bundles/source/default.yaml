@@ -209,6 +209,12 @@ openstack-icehouse-git:
     openstack-dashboard:
       options:
         openstack-origin-git: include-file://horizon-icehouse.yaml
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-icehouse.yaml
+    nova-cloud-controller:
+      options:
+        openstack-origin-git: include-file://nova-icehouse.yaml
 precise-icehouse:
   inherits: openstack-icehouse-git
   series: precise
@@ -243,6 +249,12 @@ openstack-juno-git:
     openstack-dashboard:
       options:
         openstack-origin-git: include-file://horizon-juno.yaml
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-juno.yaml
+    nova-cloud-controller:
+      options:
+        openstack-origin-git: include-file://nova-juno.yaml
 trusty-juno:
   inherits: openstack-juno-git
   series: trusty
@@ -277,6 +289,12 @@ openstack-kilo-git:
     openstack-dashboard:
       options:
         openstack-origin-git: include-file://horizon-kilo.yaml
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-kilo.yaml
+    nova-cloud-controller:
+      options:
+        openstack-origin-git: include-file://nova-kilo.yaml
 trusty-kilo:
   inherits: openstack-kilo-git
   series: trusty
