@@ -58,7 +58,7 @@ openstack-services:
       branch: lp:charms/trusty/neutron-api
       constraints: mem=1G
       options:
-        plugin: nsx
+        neutron-plugin: nsx
         neutron-security-groups: True
         # NOTE - set these per environment
         nsx-controllers: 10.245.1.188
