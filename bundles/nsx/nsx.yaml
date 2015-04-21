@@ -1,0 +1,119 @@
+# vim: set ts=2 et:
+openstack-services:
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+      constraints: mem=1G
+      options:
+        dataset-size: 50%
+    rabbitmq-server:
+      branch: lp:charms/trusty/rabbitmq-server
+      constraints: mem=1G
+    ceph:
+      branch: lp:charms/trusty/ceph
+      constraints: mem=1G
+      num_units: 3
+      options:
+        monitor-count: 3
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-devices: /dev/vdb
+        osd-reformat: "yes"
+        ephemeral-unmount: /mnt
+    keystone:
+      branch: lp:charms/trusty/keystone
+      constraints: mem=1G
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+    openstack-dashboard:
+      branch: lp:charms/trusty/openstack-dashboard
+      constraints: mem=1G
+    nova-compute:
+      branch: lp:charms/trusty/nova-compute
+      num_units: 3
+      constraints: mem=4G
+      options:
+        enable-live-migration: True
+        enable-resize: True
+    nova-cloud-controller:
+      branch: lp:charms/trusty/nova-cloud-controller
+      constraints: mem=4G
+      options:
+        network-manager: Neutron
+        quantum-plugin: nsx
+        quantum-security-groups: "yes"
+    cinder:
+      branch: lp:charms/trusty/cinder
+      constraints: mem=1G
+      options:
+        block-device: "None"
+        glance-api-version: 2
+    cinder-ceph:
+      branch: lp:charms/trusty/cinder-ceph
+    glance:
+      constraints: mem=1G
+      branch: lp:charms/trusty/glance
+    neutron-api:
+      branch: lp:charms/trusty/neutron-api
+      constraints: mem=1G
+      options:
+        plugin: nsx
+        neutron-security-groups: True
+        # NOTE - set these per environment
+        nsx-controllers: 10.245.1.188
+        nsx-tz-uuid: 18aeea23-77f5-46f5-8e63-42d2998d9245
+        nsx-l3-uuid: f5c3aa06-8bf3-4344-ab5d-9f8d1c718245
+    neutron-gateway:
+      branch: lp:charms/trusty/quantum-gateway
+      constraints: mem=1G
+      options:
+        plugin: nsx
+    nsx-transport-node:
+      branch: lp:~openstack-charmers/charms/trusty/nsx-transport-node/trunk
+      options:
+        # NOTE - set these per environment
+        cluster-controllers: 10.245.1.188
+        tz-uuid: 18aeea23-77f5-46f5-8e63-42d2998d9245
+        ovs-tarball-url: http://10.98.191.34/swift/v1/nsx/nsx-ovs-2.1.0-build34867-ubuntu_precise_amd64.tar.gz
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, cinder ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
+    - [ cinder, cinder-ceph ]
+    - [ openstack-dashboard, keystone ]
+    - [ neutron-api, mysql ]
+    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, nova-cloud-controller ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-gateway ]
+    - [ neutron-gateway, rabbitmq-server ]
+    - [ neutron-gateway, mysql ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ nsx-transport-node, neutron-gateway ]
+    - [ nsx-transport-node, nova-compute ]
+# precise configurations
+precise-icehouse:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-updates/icehouse
+# trusty configurations
+trusty-icehouse:
+  inherits: openstack-services
+  series: trusty
