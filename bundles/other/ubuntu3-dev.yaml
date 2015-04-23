@@ -1,0 +1,29 @@
+# ubuntu3 - the ubuntu ubuntu ubuntu bundle
+#
+# /!\ Dev bundle for resolving ubuntu charm vivid issues /!\
+#
+# A small test bundle for exercising juju, juju-deployer, or maas, on
+# bare metal or overcloud deploy testing.
+#
+# This is for testing.  It is not recommended for production deployments.
+#
+# Unit 0 - Bootstrap
+# Unit 1 - ubuntu
+# Unit 2 - ubuntu
+#
+#==============================================================================
+u3:
+  constraints: mem=1G arch=amd64
+  services:
+    ubuntu:
+      branch: lp:~1chb1n/charms/trusty/ubuntu/vivid-enablement
+      num_units: 2
+trusty:
+  inherits: u3
+  series: trusty
+utopic:
+  inherits: u3
+  series: utopic
+vivid:
+  inherits: u3
+  series: vivid
