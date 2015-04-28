@@ -18,6 +18,9 @@ u3:
     ubuntu:
       branch: lp:~1chb1n/charms/trusty/ubuntu/vivid-enablement
       num_units: 2
+precise:
+  inherits: u3
+  series: precise
 trusty:
   inherits: u3
   series: trusty
