@@ -1,9 +1,9 @@
 repositories:
   - {name: requirements,
-     repository: 'git://git.openstack.org/openstack/requirements',
+     repository: 'git://github.com/openstack/requirements',
      branch: stable/juno}
   - {name: glance,
-     repository: 'git://git.openstack.org/openstack/glance',
+     repository: 'git://github.com/openstack/glance',
      branch: stable/juno}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128

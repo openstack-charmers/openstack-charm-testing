@@ -1,18 +1,18 @@
 repositories:
   - {name: requirements,
-     repository: 'git://git.openstack.org/openstack/requirements',
+     repository: 'git://github.com/openstack/requirements',
      branch: stable/kilo}
   - {name: neutron-fwaas,
-     repository: 'git://git.openstack.org/openstack/neutron-fwaas',
+     repository: 'git://github.com/openstack/neutron-fwaas',
      branch: stable/kilo}
   - {name: neutron-lbaas,
-     repository: 'git://git.openstack.org/openstack/neutron-lbaas',
+     repository: 'git://github.com/openstack/neutron-lbaas',
      branch: stable/kilo}
   - {name: neutron-vpnaas,
-     repository: 'git://git.openstack.org/openstack/neutron-vpnaas',
+     repository: 'git://github.com/openstack/neutron-vpnaas',
      branch: stable/kilo}
   - {name: neutron,
-     repository: 'git://git.openstack.org/openstack/neutron',
+     repository: 'git://github.com/openstack/neutron',
      branch: stable/kilo}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
