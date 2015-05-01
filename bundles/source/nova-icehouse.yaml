@@ -1,9 +1,9 @@
 repositories:
   - {name: requirements,
-     repository: 'git://git.openstack.org/openstack/requirements',
+     repository: 'git://github.com/openstack/requirements',
      branch: stable/icehouse}
   - {name: nova,
-     repository: 'git://git.openstack.org/openstack/nova',
+     repository: 'git://github.com/openstack/nova',
      branch: stable/icehouse}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
