@@ -16,7 +16,7 @@ net_type=${1:-"gre"}
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     source ~/novarc
-    ./bin/post-deploy-config
+    ./bin/post-deploy-config neutron-gateway
 fi
 
 # Configure neutron networking on overcloud
@@ -67,6 +67,8 @@ keystone user-create --name alt_demo --tenant alt_demo --pass secret --enabled t
 keystone user-role-add --user alt_demo --role Member --tenant alt_demo || :
 
 nova flavor-create m1.cirros 6 64 1 1
+nova flavor-create m1.tempest 7 256 5 1
+nova flavor-create m2.tempest 8 512 5 1
 
 # Gather vars for tempest template
 access=$(keystone --os-username demo --os-password pass --os-tenant-name demo ec2-credentials-create | grep access | awk '{ print $4 }')

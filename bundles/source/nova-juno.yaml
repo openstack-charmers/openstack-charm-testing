@@ -2,6 +2,9 @@ repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
      branch: stable/juno}
+  - {name: neutron,
+     repository: 'git://git.openstack.org/openstack/neutron',
+     branch: stable/juno}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
      branch: stable/juno}

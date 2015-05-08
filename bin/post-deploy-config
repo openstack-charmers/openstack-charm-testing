@@ -23,13 +23,17 @@ else:
         if net_name in line:
             net_id = line.split('|')[1].replace(' ','')
 
-gateway_config = yaml.load(subprocess.check_output(['juju', 'status', 'neutron-gateway']))
+
+service = sys.argv[1]
+
+service_config = yaml.load(subprocess.check_output(['juju', 'status', service]))
 
 uuids = []
-for machine in gateway_config['machines']:
-    uuids.append(gateway_config['machines'][machine]['instance-id'])
+for machine in service_config['machines']:
+    uuids.append(service_config['machines'][machine]['instance-id'])
 
 if len(uuids) > 0:
     for uuid in uuids:
         subprocess.check_call(['nova', 'interface-attach', '--net-id', net_id, uuid])
-    subprocess.check_call(['juju', 'set', 'neutron-gateway', 'ext-port=eth1'])
+
+subprocess.check_call(['juju', 'set', service , 'ext-port=eth1'])
