@@ -301,6 +301,58 @@ trusty-kilo:
   overrides:
     openstack-origin: cloud:trusty-kilo
     source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: openstack-kilo-git
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
 vivid-kilo:
   inherits: openstack-kilo-git
+  series: vivid
+# master
+openstack-master-git:
+  inherits: openstack-icehouse
+  services:
+    keystone:
+      options:
+        openstack-origin-git: include-file://keystone-master.yaml
+    glance:
+      options:
+        openstack-origin-git: include-file://glance-master.yaml
+    cinder:
+      options:
+        openstack-origin-git: include-file://cinder-master.yaml
+    neutron-api:
+      options:
+        openstack-origin-git: include-file://neutron-master.yaml
+    neutron-gateway:
+      options:
+        openstack-origin-git: include-file://neutron-master.yaml
+    neutron-openvswitch:
+      options:
+        openstack-origin-git: include-file://neutron-master.yaml
+    openstack-dashboard:
+      options:
+        openstack-origin-git: include-file://horizon-master.yaml
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-master.yaml
+    nova-cloud-controller:
+      options:
+        openstack-origin-git: include-file://nova-master.yaml
+trusty-master:
+  inherits: openstack-master-git
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-master-proposed:
+  inherits: openstack-master-git
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+vivid-master:
+  inherits: openstack-master-git
   series: vivid
