@@ -11,4 +11,4 @@ set -ex
 [[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.160.50"
 
 export BARE_METAL="True"
-./configure $1 $2 $3 $4 $5
+./profiles/default $1 $2 $3 $4 $5
