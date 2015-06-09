@@ -37,14 +37,11 @@ targets exist for most combinations, e.g.:
 configure
 =========
 
-# serverstack, or:
-./configure
+To configure serverstack run:
+	./configure
 
-# dellstack, or:
-./configure-dellstack
-
-# cts stack, or:
-./configure-ctsstack
+To configure profiles 'dellstack, ctsstack, ppc64el, kernelstack', run:
+	./configure <profile>
 
 These "configure" scripts:
 

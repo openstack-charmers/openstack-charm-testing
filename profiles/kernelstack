@@ -11,5 +11,5 @@ set -ex
 [[ -z "$SWIFT_IP" ]] && export SWIFT_IP=`juju status --format oneline swift-proxy | awk '{print $3}' | tail -n1`
 
 export BARE_METAL="True"
-./configure $1 $2 $3 $4 $5
+./profiles/default $1 $2 $3 $4 $5
 
