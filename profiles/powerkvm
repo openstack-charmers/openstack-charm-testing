@@ -1,0 +1,40 @@
+#!/bin/bash -ex
+# An experimental configuration script for configuring a ppc64el OpenStack test cloud.
+# Useful in manual deployment testing.
+
+# Set "dellstack" network parameters, if not already set.  Adjust to fit your environment.
+[[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
+[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
+[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.168.64:10.245.175.254"
+[[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.2"
+[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/12"
+
+# Accept network type as first parameter, assume gre if unspecified
+net_type=${1:-"gre"}
+
+# Configure neutron networking on overcloud
+source novarc
+./bin/quantum-ext-net --network-type $net_type -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
+./bin/quantum-tenant-net --network-type $net_type -t admin -r provider-router -N $NAMESERVER private $CIDR_PRIV
+
+# Create demo user and tenant
+keystone tenant-create --name demo || :
+keystone user-create --name demo --tenant demo --pass pass --enabled true --email demo@dev.null || :
+keystone user-role-add --user demo --role Member --tenant demo || :
+keystone tenant-create --name alt_demo || :
+keystone user-create --name alt_demo --tenant alt_demo --pass secret --enabled true --email alt_demo@dev.null || :
+keystone user-role-add --user alt_demo --role Member --tenant alt_demo || :
+
+# Install dependencies and CLI tools
+sudo apt-get install python-cinderclient python-glanceclient python-heatclient \
+    python-keystoneclient python-neutronclient python-novaclient python-swiftclient python-ceilometerclient -y
+
+# Load images into glance
+tools/images_ppc64el.sh
+
+# Set security groups and rules
+tools/sec_groups.sh
+
+# Tune for higher-density testing
+tools/flavor_shrink.sh
+tools/quota_million.sh
