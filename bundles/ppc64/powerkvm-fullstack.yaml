@@ -45,7 +45,8 @@
 #  Example - configure the cloud:
 #    ./configure powerkvm
 #
-#  Example - quick cloud functional validation:
+#  Example - basic cloud functional validation:
+#  Launch an instance, give it a floating IP, ssh to it.
 #    tools/instance_launch 3 trusty-ppc64el
 #    tools/float_all.sh
 #    . novarc   # get the cloud credentials
