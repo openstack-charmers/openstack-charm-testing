@@ -10,3 +10,5 @@ Differentiating bundle naming and purposes:
 
   ppc64el         Power8 box with Ubuntu as the host operating system.
                   ie. "gregory"
+
+Also see comments in each bundle.

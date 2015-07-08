@@ -1,10 +1,64 @@
-# vim: set ts=2 et:
+# /!\ Experimental Proof-of-Concept /!\
+#
+# PowerKVM + x86 mixed stack (7 physical machines):
+#     (7) amd64 hosts [for API and non-compute services]
+#     (1) PowerKVM host [for compute only]
+#
+#  Notes:
+#   * The nova-compute-power charm is a proxy charm.  It handles
+#     operations against the PowerKVM (IBM fedora-based) metal host.
+#   * The PowerKVM unit itself is not managed by maas, and is not
+#     directly managed by juju as a service unit.
+#
+#  Necessary Prep:
+#   * IBM ISO must be mounted on the PowerKVM unit.
+#   * The PowerKVM unit must be configured to accept an ssh key, and that pub key
+#      must be stored in the locally branched ./trusty/nova-compute-power/files/
+#      charm directory (path relative to the openstack-charm-testing checkout).
+#   * The PowerKVM unit must have a static IP address configured in advance.
+#   * The ./configure command below calls a profile in the ./profiles/ dir,
+#     which may need to be adjusted to fit the IP range of the current
+#     environment.
+#
+#  Example - deployment:
+#    bzr branch lp:openstack-charm-testing
+#    cd openstack-charm-testing
+#    juju bootstrap --constraints arch=amd64
+#    juju-deployer -v -c bundles/ppc64/powerkvm-fullstack.yaml -d trusty-kilo
+#
+#  Note - After deploy is "complete," watch juju debug-log and wait for
+#         hooks to settle before proceeding.
+#
+#  Example - basic api functional checks:
+#  Commands should all exit 0.  Some may return empty lists, that is ok.
+#    . novarc
+#    nova list
+#    nova service-list
+#    nova hypervisor-list  # expect the powerkvm host to be listed
+#    neutron net-list
+#    keystone user-list
+#    keystone catalog
+#    keystone endpoint-list
+#    glance image-list
+#    cinder list
+#
+#  Example - configure the cloud:
+#    ./configure powerkvm
+#
+#  Example - basic cloud functional validation:
+#  Launch an instance, give it a floating IP, ssh to it.
+#    tools/instance_launch 3 trusty-ppc64el
+#    tools/float_all.sh
+#    . novarc   # get the cloud credentials
+#    nova list  # choose an instance and get its floating ip
+#    ssh -i ~/testkey.pem <instance-floating-ip>
 openstack-services:
   services:
     mysql:
       branch: lp:charms/trusty/mysql
       options:
         dataset-size: 75%
+        max-connections: 20000
       to:
         - "lxc:0"
     rabbitmq-server:
@@ -24,11 +78,11 @@ openstack-services:
       to:
         - "lxc:0"
     nova-compute-power:
-      branch: lp:~james-page/charms/trusty/nova-compute-power/redux
+      branch: lp:~ibm-charms/charms/trusty/nova-compute-power/trunk
       options:
         power-user: shared
         power-repo: file:///tmp/openstack-iso/openstack
-        power-key: id_rsa
+        power-key: id_dsa
         power-hosts: 10.245.168.3
       to:
         - "lxc:0"
@@ -40,7 +94,7 @@ openstack-services:
       to:
         - "lxc:0"
     neutron-gateway:
-      branch: lp:~james-page/charms/trusty/quantum-gateway/vlan-flat-support
+      branch: lp:charms/trusty/quantum-gateway
       constraints: arch=amd64
       options:
         instance-mtu: 1300
@@ -158,27 +212,6 @@ openstack-icehouse-msg-split:
   - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # icehouse
-precise-icehouse:
-  inherits: openstack-icehouse
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-updates/icehouse
-precise-icehouse-proposed:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: cloud:precise-icehouse/proposed
-    source: cloud:precise-updates/icehouse
-precise-icehouse-staging:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
-    source: ppa:ubuntu-cloud-archive/icehouse-staging
-precise-icehouse-trunk:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
 trusty-icehouse:
   inherits: openstack-icehouse
   series: trusty
