@@ -1,10 +1,10 @@
 repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
-     branch: stable/icehouse}
+     branch: 2014.1.5}
   - {name: cinder,
      repository: 'git://github.com/openstack/cinder',
-     branch: stable/icehouse}
+     branch: 2014.1.5}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128
