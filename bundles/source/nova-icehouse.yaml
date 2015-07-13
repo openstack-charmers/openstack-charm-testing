@@ -1,13 +1,13 @@
 repositories:
   - {name: requirements,
-     repository: 'git://github.com/openstack/requirements',
+     repository: 'git://github.com/coreycb/requirements',
      branch: stable/icehouse}
   - {name: neutron,
-     repository: 'git://github.com/openstack/neutron',
-     branch: icehouse-eol}
+     repository: 'git://github.com/coreycb/neutron',
+     branch: stable/icehouse}
   - {name: nova,
-     repository: 'git://github.com/openstack/nova',
-     branch: icehouse-eol}
+     repository: 'git://github.com/coreycb/nova',
+     branch: stable/icehouse}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128
