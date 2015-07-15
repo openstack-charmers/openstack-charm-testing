@@ -40,13 +40,13 @@ configure
 To configure serverstack run:
 	./configure
 
-To configure profiles 'dellstack, ctsstack, ppc64el, kernelstack', run:
+To configure profiles 'dellstack, stsstack, ppc64el, kernelstack', run:
 	./configure <profile>
 
 These "configure" scripts:
 
 a) Add an extra port to the neutron-gateway service for
-   OpenStack-on-OpenStack deployments (ie. serverstack, ctsstack).
+   OpenStack-on-OpenStack deployments (ie. serverstack, stsstack).
 
 b) Configure appropriate external networking
 
@@ -112,7 +112,7 @@ manual instance test example (tools usage)
 juju-deployer --bootstrap -c default.yaml -d trusty-juno
 
 # configure the cloud and add images
-./configure    (or use configure-dellstack or configure-ctsstack)
+./configure    (or use configure-dellstack or configure-stsstack)
 
 # get overcloud credentials
 . novarc
