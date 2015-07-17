@@ -46,7 +46,7 @@ openstack-services:
         network-manager: Neutron
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
       constraints: mem=1G
       options:
         instance-mtu: 1300
