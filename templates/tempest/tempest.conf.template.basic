@@ -35,6 +35,7 @@ uri_v3=__PROTO__://__KEYSTONE__:5000/v3
 admin_username=admin
 admin_tenant_name=admin
 admin_password=openstack
+admin_domain_name=Default
 username = demo
 password = pass
 tenant_name = demo
