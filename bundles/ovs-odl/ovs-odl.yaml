@@ -29,7 +29,7 @@ openstack-services:
         http-proxy: "http://squid.internal:3128"
         https-proxy: "http://squid.internal:3128"
     openvswitch-odl:
-      branch: git+ssh://git.launchpad.net/~james-page/charms/+source/openvswitch-odl
+      branch: git+ssh://git.launchpad.net/~sdn-charmers/charms/+source/openvswitch-odl
     mysql:
       charm: cs:trusty/mysql
       options:
