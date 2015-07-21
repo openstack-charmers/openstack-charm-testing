@@ -5,7 +5,7 @@ openstack-services:
     mysql:
       num_units: 2
       charm: percona-cluster
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/trunk
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
       constraints: mem=1G
       options:
         dataset-size: 50%
@@ -82,7 +82,7 @@ openstack-services:
         corosync_key: "xZP7GDWV0e8Qs0GxWThXirNNYlScgi3sRTdZk/IXKDqkNFcwdCWfRQnqrHU/6mb6sz6OIoZzX2MtfMQIDcXuPqQyvKuv7YbRyGHmQwAWDUA4ed759VWAO39kHkfWp9y5RRk/wcHakTcWYMwm70upDGJEP00YT3xem3NQy27AC1w="
     neutron-gateway:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
       constraints: mem=1G
       options:
         instance-mtu: 1300

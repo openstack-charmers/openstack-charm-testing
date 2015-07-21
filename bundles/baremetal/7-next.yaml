@@ -9,7 +9,7 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/trusty/percona-cluster
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
       options:
         dataset-size: 50%
         max-connections: 20000
@@ -91,7 +91,7 @@ openstack-services:
       to:
         - "lxc:swift-storage-z3=0"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
       options:
         ext-port: eth1
         instance-mtu: 1300

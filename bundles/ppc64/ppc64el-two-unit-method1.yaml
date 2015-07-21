@@ -36,7 +36,7 @@ two-smoosh-ppc64compute:
       to:
         - "lxc:0"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/quantum-gateway/next
+      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
       num_units: 1
       options:
         "ext-port": eth1
@@ -62,7 +62,7 @@ two-smoosh-ppc64compute:
         "gui-x": "250"
         "gui-y": "500"
     mysql:
-      branch: lp:charms/trusty/percona-cluster
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
       num_units: 1
       options:
         "max-connections": 20000

@@ -4,7 +4,7 @@
 deployer-quick-check:
   services:
     mysql:
-      branch: lp:charms/trusty/percona-cluster
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
       constraints: mem=1G
       options:
         dataset-size: 50%
