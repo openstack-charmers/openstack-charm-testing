@@ -21,7 +21,7 @@ openstack-services:
     neutron-api-odl:
       branch: lp:~james-page/charms/trusty/neutron-api-odl/kilo-support
       options:
-        overlay-network-type: 'vxlan'
+        overlay-network-type: 'vxlan gre'
     odl-controller:
       branch: lp:~sdn-charmers/charms/trusty/odl-controller/trunk
       options:
