@@ -1,0 +1,87 @@
+openstack-services:
+  series: trusty
+  services:
+    neutron-gateway:
+      branch: lp:~sdn-charmers/charms/trusty/neutron-gateway/ovs-odl
+      options:
+        plugin: ovs-odl
+        instance-mtu: 1400
+    nova-compute:
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      num_units: 3
+      constraints: mem=4G
+      options:
+        enable-live-migration: False
+        manage-neutron-plugin-legacy-mode: False
+    neutron-api:
+      branch: lp:~james-page/charms/trusty/neutron-api/subordinate-plugins
+      options:
+        neutron-security-groups: False
+        manage-neutron-plugin-legacy-mode: False
+    neutron-api-odl:
+      branch: lp:~james-page/charms/trusty/neutron-api-odl/kilo-support
+      options:
+        overlay-network-type: 'vxlan gre'
+    odl-controller:
+      branch: lp:~sdn-charmers/charms/trusty/odl-controller/trunk
+      options:
+        install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.2.3-Helium-SR3.tar.gz"
+        http-proxy: "http://squid.internal:3128"
+        https-proxy: "http://squid.internal:3128"
+    openvswitch-odl:
+      branch: git+ssh://git.launchpad.net/~sdn-charmers/charms/+source/openvswitch-odl
+    mysql:
+      charm: cs:trusty/mysql
+      options:
+        dataset-size: 50%
+    rabbitmq-server:
+      charm: cs:trusty/rabbitmq-server
+    keystone:
+      charm: cs:trusty/keystone
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+    openstack-dashboard:
+      charm: cs:trusty/openstack-dashboard
+    nova-cloud-controller:
+      charm: cs:trusty/nova-cloud-controller
+      options:
+        network-manager: Neutron
+        quantum-security-groups: "yes"
+    glance:
+      charm: cs:trusty/glance
+  relations:
+    - ['neutron-api:neutron-plugin-api-subordinate', 'neutron-api-odl:neutron-plugin-api-subordinate']
+    - ['nova-compute:neutron-plugin', 'openvswitch-odl:neutron-plugin']
+    - ['neutron-gateway', 'openvswitch-odl']
+    - ['openvswitch-odl:ovsdb-manager', 'odl-controller:ovsdb-manager']
+    - ['neutron-api-odl:odl-controller', 'odl-controller:controller-api']
+    - ['keystone:shared-db', 'mysql:shared-db']
+    - ['nova-cloud-controller:shared-db', 'mysql:shared-db']
+    - ['nova-cloud-controller:amqp', 'rabbitmq-server:amqp']
+    - ['nova-cloud-controller:image-service', 'glance:image-service']
+    - ['nova-cloud-controller:identity-service', 'keystone:identity-service']
+    - ['nova-compute:cloud-compute', 'nova-cloud-controller:cloud-compute']
+    - ['nova-compute:amqp', 'rabbitmq-server:amqp']
+    - ['nova-compute:image-service', 'glance:image-service']
+    - ['glance:shared-db', 'mysql:shared-db']
+    - ['glance:identity-service', 'keystone:identity-service']
+    - ['glance:amqp', 'rabbitmq-server:amqp']
+    - ['neutron-api:shared-db', 'mysql:shared-db']
+    - ['neutron-api:amqp', 'rabbitmq-server:amqp']
+    - ['neutron-api:neutron-api', 'nova-cloud-controller:neutron-api']
+    - ['neutron-api:identity-service', 'keystone:identity-service']
+    - ['neutron-gateway:amqp', 'rabbitmq-server:amqp']
+    - ['neutron-gateway:neutron-plugin-api', 'neutron-api:neutron-plugin-api']
+    - ['neutron-gateway:quantum-network-service', 'nova-cloud-controller:quantum-network-service']
+trusty-kilo:
+  inherits: openstack-services
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+trusty-juno:
+  inherits: openstack-services
+  overrides:
+    openstack-origin: cloud:trusty-juno
+trusty-icehouse:
+  inherits: openstack-services
+

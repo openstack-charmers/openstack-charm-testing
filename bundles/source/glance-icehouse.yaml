@@ -1,9 +1,9 @@
 repositories:
   - {name: requirements,
-     repository: 'git://github.com/openstack/requirements',
+     repository: 'git://github.com/coreycb/requirements',
      branch: stable/icehouse}
   - {name: glance,
-     repository: 'git://github.com/openstack/glance',
+     repository: 'git://github.com/coreycb/glance',
      branch: stable/icehouse}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128

@@ -1,9 +1,9 @@
 repositories:
   - {name: requirements,
-     repository: 'git://github.com/openstack/requirements',
+     repository: 'git://github.com/coreycb/requirements',
      branch: stable/icehouse}
   - {name: keystone,
-     repository: 'git://github.com/openstack/keystone',
+     repository: 'git://github.com/coreycb/keystone',
      branch: stable/icehouse}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
