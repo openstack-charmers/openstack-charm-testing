@@ -33,3 +33,6 @@ utopic:
 vivid:
   inherits: u3lxc
   series: vivid
+wily:
+  inherits: u3lxc
+  series: wily

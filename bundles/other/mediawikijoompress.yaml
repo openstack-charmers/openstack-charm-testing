@@ -50,3 +50,6 @@ utopic:
 vivid:
   inherits: mediawikijoompress
   series: vivid
+wily:
+  inherits: mediawikijoompress
+  series: wily

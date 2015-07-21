@@ -1,5 +1,7 @@
 # precise-essex next
 #
+# /!\ Not functionally validated /!\
+#
 # NOTE(beisner) 2015 Feb 18: This is a bundle to deploy precise-essex for
 # testing purposes, using the current development ('next') charms.  It is
 # not intended for production deployment use.
