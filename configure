@@ -1,6 +1,6 @@
 #!/bin/sh
 
-valid="stsstack dellstack kernelstack ppc64el powerkvm"
+valid="stsstack dellstack kernelstack ppc64el powerkvm lxd"
 
 usage() {
   echo "$0 <profile>"
