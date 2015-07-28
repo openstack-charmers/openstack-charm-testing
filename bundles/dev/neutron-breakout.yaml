@@ -101,7 +101,7 @@ openstack-services:
     ceilometer-agent:
       branch: lp:charms/ceilometer-agent
     mongodb:
-      branch: lp:charms/mongodb
+      branch: lp:charms/trusty/mongodb
       constraints: mem=1G
   relations:
     - [ keystone, mysql ]
