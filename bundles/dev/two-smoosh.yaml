@@ -347,6 +347,9 @@ trusty-kilo-staging:
 vivid-kilo:
   inherits: two-smoosh
   series: vivid
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
 vivid-kilo-proposed:
   inherits: vivid-kilo
   overrides:

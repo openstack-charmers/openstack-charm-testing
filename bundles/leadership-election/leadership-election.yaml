@@ -201,6 +201,9 @@ openstack-icehouse-msg-split:
 precise-icehouse:
   inherits: openstack-singlerabbit
   series: precise
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
   overrides:
     openstack-origin: cloud:precise-icehouse
     source: cloud:precise-icehouse
@@ -469,6 +472,9 @@ trusty-kilo-staging:
 vivid-kilo:
   inherits: openstack-icehouse
   series: vivid
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
 vivid-kilo-proposed:
   inherits: vivid-kilo
   overrides:
@@ -494,6 +500,9 @@ trusty-liberty-staging:
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:

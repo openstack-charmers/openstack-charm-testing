@@ -1,0 +1,53 @@
+# A simple bundle for testing inheritance and overrides
+#==============================================================================
+base:
+  constraints: mem=1G arch=amd64
+  services:
+    ubuntu:
+      branch: lp:charms/trusty/ubuntu
+      num_units: 1
+    mysql:
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      constraints: mem=1G
+      options:
+        dataset-size: 25%
+        max-connections: 2002
+trusty:
+  inherits: base
+  series: trusty
+vivid:
+  inherits: base
+  series: vivid
+wily:
+  inherits: base
+  series: wily
+alt:
+  inherits: base
+  services:
+    # Test overriding unit count
+    ubuntu:
+      num_units: 2
+    # Test overriding service's charm branch
+    mysql:
+      branch: lp:charms/trusty/mysql
+      options:
+        dataset-size: 33%
+        max-connections: 3003
+trusty-alt:
+  inherits: alt
+  series: trusty
+  overrides:
+    dataset-size: 55%
+    max-connections: 5005
+vivid-alt:
+  inherits: alt
+  series: vivid
+  overrides:
+    dataset-size: 55%
+    max-connections: 5005
+wily-alt:
+  inherits: alt
+  series: wily
+  overrides:
+    dataset-size: 55%
+    max-connections: 5005
