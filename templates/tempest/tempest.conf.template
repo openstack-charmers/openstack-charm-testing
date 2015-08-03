@@ -62,6 +62,7 @@ container_quotas_available = True
 [orchestration]
 instance_type = m1.small
 keypair_name = testkey
+stack_owner_role = Admin
 [scenario]
 img_dir=/home/ubuntu/images
 ssh_user=cirros
