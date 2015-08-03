@@ -8,7 +8,7 @@ set -ex
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.38.3.0:10.38.10.254"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.38.0.1"
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/12"
-[[ -z "$SWIFT_IP" ]] && export SWIFT_IP=`juju status --format oneline swift-proxy | awk '{print $3}' | tail -n1`
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.0.38.3"
 
 export BARE_METAL="True"
 ./profiles/default $1 $2 $3 $4 $5

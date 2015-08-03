@@ -87,6 +87,8 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     -e "s/__DASHBOARD__/$dashboard/g" -e "s/__KEYSTONE__/$keystone/g" \
     -e "s/__EXT_NET__/$ext_net/g" -e "s/__PROTO__/$http/g" \
     -e "s/__SWIFT__/$SWIFT_IP/g" \
+    -e "s/__NAMESERVER__/$NAMESERVER/g" \
+    -e "s/__CIDR_PRIV__/${CIDR_PRIV////\\/}/g" \
     -e "s/__NCC__/$ncc/g" -e "s/__SECRET__/$secret/g" -e "s/__ACCESS__/$access/g" \
     templates/tempest/tempest.conf.template > tempest.conf
 
