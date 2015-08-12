@@ -276,6 +276,9 @@ vivid-kilo:
       branch: lp:charms/trusty/mysql
 vivid-kilo-proposed:
   inherits: vivid-kilo
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
   overrides:
     source: proposed
     openstack-origin: distro-proposed

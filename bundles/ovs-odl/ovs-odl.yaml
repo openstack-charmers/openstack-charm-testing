@@ -84,4 +84,14 @@ trusty-juno:
     openstack-origin: cloud:trusty-juno
 trusty-icehouse:
   inherits: openstack-services
-
+trusty-icehouse-cisco:
+  inherits: trusty-icehouse
+  services:
+    odl-controller:
+      options:
+        install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-1.1.0-10009.tar.gz"
+        profile: 'cisco-vpp'
+  overrides:
+    openstack-origin: ppa:sdn-charmers/cisco-vpp-icehouse-testing
+  relations:
+    - [ 'odl-controller:controller-api', 'openvswitch-odl:controller-api' ]

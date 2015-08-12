@@ -459,6 +459,12 @@ trusty-kilo:
   overrides:
     openstack-origin: cloud:trusty-kilo
     source: cloud:trusty-kilo
+trusty-kilo-ha:
+  inherits: trusty-juno-ha
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
 trusty-kilo-proposed:
   inherits: trusty-kilo
   overrides:
