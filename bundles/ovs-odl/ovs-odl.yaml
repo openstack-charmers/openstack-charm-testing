@@ -92,6 +92,6 @@ trusty-icehouse-cisco:
         install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-1.1.0-10009.tar.gz"
         profile: 'cisco-vpp'
   overrides:
-    openstack-origin: ppa:sdn-charmers/cisco-vpp-icehouse-testing
+    openstack-origin: ppa:cisco-vpp/icehouse-proposed
   relations:
     - [ 'odl-controller:controller-api', 'openvswitch-odl:controller-api' ]
