@@ -7,19 +7,19 @@ openstack-services:
         plugin: ovs-odl
         instance-mtu: 1400
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: lp:~sdn-charmers/charms/trusty/nova-compute/hugepages
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: False
         manage-neutron-plugin-legacy-mode: False
     neutron-api:
-      branch: lp:~james-page/charms/trusty/neutron-api/subordinate-plugins
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
       options:
         neutron-security-groups: False
         manage-neutron-plugin-legacy-mode: False
     neutron-api-odl:
-      branch: lp:~james-page/charms/trusty/neutron-api-odl/kilo-support
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api-odl/vpp
       options:
         overlay-network-type: 'vxlan gre'
     odl-controller:
@@ -91,6 +91,9 @@ trusty-icehouse-cisco:
       options:
         install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-1.1.0-10009.tar.gz"
         profile: 'cisco-vpp'
+    nova-compute:
+      options:
+        hugepages: '70%'
   overrides:
     openstack-origin: ppa:cisco-vpp/icehouse-proposed
   relations:
