@@ -13,7 +13,7 @@ openstack-services:
   services:
     # Co-located
     neutron-gateway:
-      branch: lp:charms/trusty/quantum-gateway
+      branch: lp:charms/trusty/neutron-gateway
       constraints: "tags=gateway arch=amd64"
       options:
         ext-port: eth1
@@ -24,7 +24,7 @@ openstack-services:
     ceph:
       branch: lp:charms/trusty/ceph
       num_units: 3
-      constraints: "tags=storage arch=amd64"
+      constraints: "tags=storage,^object_storage arch=amd64"
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
@@ -32,21 +32,21 @@ openstack-services:
         osd-reformat: "yes"
     swift-storage-z1:
       branch: lp:charms/trusty/swift-storage
-      constraints: "tags=object-zone-1 arch=amd64"
+      constraints: "tags=object_zone_1 arch=amd64"
       options:
         zone: 1
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z2:
       branch: lp:charms/trusty/swift-storage
-      constraints: "tags=object-zone-1 arch=amd64"
+      constraints: "tags=object_zone_2 arch=amd64"
       options:
         zone: 2
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z3:
       branch: lp:charms/trusty/swift-storage
-      constraints: "tags=object-zone-1 arch=amd64"
+      constraints: "tags=object_zone_3 arch=amd64"
       options:
         zone: 3
         block-device: /dev/vdb /dev/sdb
@@ -177,14 +177,10 @@ openstack-services:
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
-    - - ceph-osd:mon
-      - ceph:osd
     - - ntp:juju-info
       - nova-compute:juju-info
     - - ntp:juju-info
       - neutron-gateway:juju-info
-    - - ntp:juju-info
-      - ceph-osd:juju-info
     - [ "neutron-gateway:amqp", rabbitmq-server ]
     - [ neutron-api, mysql ]
     - [ neutron-api, rabbitmq-server ]
