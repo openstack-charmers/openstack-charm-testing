@@ -1,0 +1,231 @@
+# 11-Machine Example with MAAS Tagging & Service Placement
+#
+# /!\ Not Reference Architecture - for Demo/Testing Only /!\
+#
+#
+#
+#
+#
+#
+#
+#
+openstack-services:
+  services:
+    # Co-located
+    neutron-gateway:
+      branch: lp:charms/trusty/quantum-gateway
+      constraints: "tags=gateway arch=amd64"
+      options:
+        ext-port: eth1
+        instance-mtu: 1300
+      to:
+        - "0"
+    # Machines
+    ceph:
+      branch: lp:charms/trusty/ceph
+      num_units: 3
+      constraints: "tags=storage arch=amd64"
+      options:
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-devices: /dev/vdb /dev/sdb
+        osd-reformat: "yes"
+    swift-storage-z1:
+      branch: lp:charms/trusty/swift-storage
+      constraints: "tags=object-zone-1 arch=amd64"
+      options:
+        zone: 1
+        block-device: /dev/vdb /dev/sdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: lp:charms/trusty/swift-storage
+      constraints: "tags=object-zone-1 arch=amd64"
+      options:
+        zone: 2
+        block-device: /dev/vdb /dev/sdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: lp:charms/trusty/swift-storage
+      constraints: "tags=object-zone-1 arch=amd64"
+      options:
+        zone: 3
+        block-device: /dev/vdb /dev/sdb
+        overwrite: "true"
+    nova-compute:
+      branch: lp:charms/trusty/nova-compute
+      num_units: 3
+      constraints: "tags=compute arch=amd64"
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+    mysql:
+      branch: lp:charms/trusty/percona-cluster
+      constraints: "tags=database arch=amd64"
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+    # Containers
+    juju-gui:
+      charm: "cs:trusty/juju-gui"
+      to:
+        - "lxc:0"
+    swift-proxy:
+      branch: lp:charms/trusty/swift-proxy
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+      to:
+        - "lxc:0"
+    heat:
+      branch: lp:charms/trusty/heat
+      to:
+        - "lxc:ceph=0"
+    ceilometer:
+      branch: lp:charms/trusty/ceilometer
+      to:
+        - "lxc:ceph=0"
+    openstack-dashboard:
+      branch: lp:charms/trusty/openstack-dashboard
+      to:
+        - "lxc:ceph=1"
+    neutron-api:
+      branch: lp:charms/trusty/neutron-api
+      options:
+        neutron-security-groups: True
+      to:
+        - "lxc:ceph=1"
+    glance:
+      branch: lp:charms/trusty/glance
+      to:
+        - "lxc:ceph=2"
+    cinder:
+      branch: lp:charms/trusty/cinder
+      options:
+        block-device: "None"
+        glance-api-version: 2
+      to:
+        - "lxc:ceph=2"
+    keystone:
+      branch: lp:charms/trusty/keystone
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+      to:
+        - "lxc:swift-storage-z1=0"
+    nova-cloud-controller:
+      branch: lp:charms/trusty/nova-cloud-controller
+      options:
+        network-manager: Neutron
+        quantum-security-groups: "yes"
+      to:
+        - "lxc:swift-storage-z2=0"
+    rabbitmq-server:
+      branch: lp:charms/trusty/rabbitmq-server
+      to:
+        - "lxc:swift-storage-z3=0"
+    mongodb:
+      branch: lp:charms/trusty/mongodb
+      to:
+        - "lxc:mysql"
+    # Subordinates
+    cinder-ceph:
+      branch: lp:charms/trusty/cinder-ceph
+    ceilometer-agent:
+      branch: lp:charms/trusty/ceilometer-agent
+    neutron-openvswitch:
+      branch: lp:charms/trusty/neutron-openvswitch
+    ntp:
+      branch: lp:charms/trusty/ntp
+      num_units: 0
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ nova-compute, ceph ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, ceph ]
+    - [ glance, cinder ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
+    - [ cinder, cinder-ceph ]
+    - [ cinder-ceph, ceph ]
+    - [ neutron-gateway, mysql ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+    - - ceilometer
+      - keystone:identity-service
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
+    - - ntp:juju-info
+      - nova-compute:juju-info
+    - - ntp:juju-info
+      - neutron-gateway:juju-info
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+    - [ neutron-api, mysql ]
+    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, nova-cloud-controller ]
+    - [ neutron-api, neutron-openvswitch ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-gateway ]
+    - [ neutron-openvswitch, nova-compute ]
+    - [ neutron-openvswitch, rabbitmq-server ]
+# icehouse
+trusty-icehouse:
+  inherits: openstack-services
+  series: trusty
+# juno
+trusty-juno:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+# kilo
+trusty-kilo:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+vivid-kilo:
+  inherits: openstack-services
+  series: vivid
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+vivid-kilo-proposed:
+  inherits: vivid-kilo
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
