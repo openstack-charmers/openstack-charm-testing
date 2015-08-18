@@ -34,6 +34,11 @@ time juju bootstrap --constraints "tags=gateway arch=amd64"
 #    on the bootstrap node (this may not always be possible in the future).
 
 
+# Deploy juju-gui for obervability
+# ================================
+juju deploy juju-gui --to lxc:0
+
+
 # Deploy the stack
 # ================
 time juju-deployer -v -c bundles/dev/11-default.yaml -d trusty-kilo
