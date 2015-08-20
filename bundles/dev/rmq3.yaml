@@ -1,0 +1,78 @@
+# A 3-node native rabbitmq-server cluster with nrpe as a subordinate and cinder amqp relation.
+#
+# For exercising rmq native cluster behavior, and reproducing issues found in:
+# https://code.launchpad.net/~1chb1n/charms/trusty/rabbitmq-server/next.amulet-fix-20-delay/+merge/266958
+# https://launchpad.net/bugs/1486177
+# https://launchpad.net/bugs/1485722
+#
+# Deploy:
+# juju-deployer -B -v -c rmq3.yaml -d precise-icehouse
+#
+# Ensure that all 3 rmq units are represented in "running nodes" on all 3 rmq units:
+# juju run --service rabbitmq-server "sudo rabbitmqctl cluster_status"
+#
+openstack-services:
+  services:
+    rabbitmq-server:
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      num_units: 3
+      options:
+        min-cluster-size: 3
+        max-cluster-tries: 10
+    cinder:
+      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+    nrpe:
+      branch: lp:charms/trusty/nrpe
+  relations:
+    - - cinder:amqp
+      - rabbitmq-server:amqp
+    - - nrpe:nrpe-external-master
+      - rabbitmq-server:nrpe-external-master
+# icehouse
+precise-icehouse:
+  inherits: openstack-services
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-icehouse
+trusty-icehouse:
+  inherits: openstack-services
+  series: trusty
+# juno
+trusty-juno:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+# kilo
+trusty-kilo:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+vivid-kilo:
+  inherits: openstack-services
+  series: vivid
+# metal, slightly more dense
+precise-icehouse-metal:
+  services:
+    cinder:
+      to:
+        - "0"
+trusty-icehouse-metal:
+  services:
+    cinder:
+      to:
+        - "0"
+trusty-juno-metal:
+  services:
+    cinder:
+      to:
+        - "0"
+vivid-kilo-metal:
+  services:
+    cinder:
+      to:
+        - "0"
