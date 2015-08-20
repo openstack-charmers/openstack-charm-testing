@@ -1,19 +1,42 @@
-# 11-Machine Example with MAAS Tagging & Service Placement
+# 11-Machine Bare Metal Example with MAAS Tagging & Service Placement
+# ===================================================================
+#   /!\ Not Reference Architecture: for Testing Only /!\
+# lp:~1chb1n   irc:beisner   fn  #juju  or  #ubuntu-server
 #
-# /!\ Not Reference Architecture - for Demo/Testing Only /!\
+# User Scenario:
+#   * There is 1 machine, with low storage, less compute capacity, but with a
+#     pair of NICs intended to be the cloud's edge/gateway.
 #
+#   * There are 6 machines tagged as "storage."  These machines contain less
+#     compute and more storage, and/or more resilient or performant storage.
 #
+#   * There are 3 machines tagged as "object."  While these machines are are
+#     also tagged as "storage," they are preferred for serving blobs.
 #
+#   * There are 3 machines tagged as both "object" and to specific swift
+#     zones (1 machine per zone).  This is necessary due to failure domains
+#     in this mock datacenter.
 #
+#   * There is 1 machine tagged as "database."  This machine has been
+#     specifically designed to house database services.
 #
+#   * Without hard-coding addresses or other unique machine identifiers,
+#     deploy the services to the appropriate "classes" of metal in a
+#     simple and repeatable way.
 #
-#
+# Quick Start:
+#  juju bootstrap --constraints "tags=gateway arch=amd64"
+#  juju-deployer -v -c bundles/dev/11-default.yaml -d trusty-kilo
+#  ./configure dellstack
+#  ./tune-and-launch
+#  juju stat openstack-dashboard --format tabular
+#  juju stat juju-gui --format tabular
 #
 openstack-services:
   services:
     # Co-located
     neutron-gateway:
-      branch: lp:charms/trusty/quantum-gateway
+      branch: lp:charms/trusty/neutron-gateway
       constraints: "tags=gateway arch=amd64"
       options:
         ext-port: eth1
@@ -24,7 +47,7 @@ openstack-services:
     ceph:
       branch: lp:charms/trusty/ceph
       num_units: 3
-      constraints: "tags=storage arch=amd64"
+      constraints: "tags=storage,^object_storage arch=amd64"
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
@@ -32,21 +55,21 @@ openstack-services:
         osd-reformat: "yes"
     swift-storage-z1:
       branch: lp:charms/trusty/swift-storage
-      constraints: "tags=object-zone-1 arch=amd64"
+      constraints: "tags=object_zone_1 arch=amd64"
       options:
         zone: 1
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z2:
       branch: lp:charms/trusty/swift-storage
-      constraints: "tags=object-zone-1 arch=amd64"
+      constraints: "tags=object_zone_2 arch=amd64"
       options:
         zone: 2
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z3:
       branch: lp:charms/trusty/swift-storage
-      constraints: "tags=object-zone-1 arch=amd64"
+      constraints: "tags=object_zone_3 arch=amd64"
       options:
         zone: 3
         block-device: /dev/vdb /dev/sdb
