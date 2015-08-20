@@ -1,11 +1,11 @@
 #!/bin/bash -e
 #
-# 11-Machine Example with MAAS Tagging & Service Placement
-# ========================================================
+# 11-Machine Bare Metal Example with MAAS Tagging & Service Placement
+# ===================================================================
 #   /!\ Not Reference Architecture: for Testing Only /!\
 # lp:~1chb1n   irc:beisner   fn  #juju  or  #ubuntu-server
 #
-# http://bazaar.launchpad.net/~1chb1n/openstack-charm-testing/metal-demo/view/head:/bundles/dev/11-default.yaml
+# See notes in bundle:  bundles/dev/11-default.yaml for scenario notes.
 
 
 # Get pre-reqs, if not already installed
@@ -34,8 +34,8 @@ time juju bootstrap --constraints "tags=gateway arch=amd64"
 #    on the bootstrap node (this may not always be possible in the future).
 
 
-# Deploy juju-gui for obervability
-# ================================
+# Deploy juju-gui ahead of the other services for obervability
+# ============================================================
 juju deploy juju-gui --to lxc:0
 
 
