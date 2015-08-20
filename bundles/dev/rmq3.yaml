@@ -55,24 +55,3 @@ trusty-kilo:
 vivid-kilo:
   inherits: openstack-services
   series: vivid
-# metal, slightly more dense
-precise-icehouse-metal:
-  services:
-    cinder:
-      to:
-        - "0"
-trusty-icehouse-metal:
-  services:
-    cinder:
-      to:
-        - "0"
-trusty-juno-metal:
-  services:
-    cinder:
-      to:
-        - "0"
-vivid-kilo-metal:
-  services:
-    cinder:
-      to:
-        - "0"
