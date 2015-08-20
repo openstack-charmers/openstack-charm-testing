@@ -65,7 +65,7 @@ openstack-services:
         nsx-tz-uuid: 18aeea23-77f5-46f5-8e63-42d2998d9245
         nsx-l3-uuid: f5c3aa06-8bf3-4344-ab5d-9f8d1c718245
     neutron-gateway:
-      branch: lp:charms/trusty/quantum-gateway
+      branch: lp:charms/trusty/neutron-gateway
       constraints: mem=1G
       options:
         plugin: nsx
