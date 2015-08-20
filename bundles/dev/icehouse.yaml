@@ -46,7 +46,7 @@ openstack-services:
         network-manager: Quantum
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:charms/quantum-gateway
+      branch: lp:charms/neutron-gateway
       constraints: mem=1G
       options:
         instance-mtu: 1350

@@ -41,7 +41,7 @@ openstack-services:
       branch: lp:charms/rabbitmq-server
       constraints: mem=1G
     neutron-gateway:
-      branch: lp:charms/quantum-gateway
+      branch: lp:charms/neutron-gateway
       constraints: mem=1G
       options:
         database: neutron

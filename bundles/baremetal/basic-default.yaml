@@ -22,7 +22,7 @@ basic:
       to: 
         - "lxc:nova-compute=0"
     "neutron-gateway": 
-      charm: "cs:trusty/quantum-gateway-7"
+      charm: "cs:trusty/neutron-gateway-7"
       num_units: 1
       options: 
         "ext-port": eth1

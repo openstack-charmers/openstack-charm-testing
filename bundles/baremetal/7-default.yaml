@@ -91,7 +91,7 @@ openstack-services:
       to:
         - "lxc:swift-storage-z3=0"
     neutron-gateway:
-      branch: lp:charms/trusty/quantum-gateway
+      branch: lp:charms/trusty/neutron-gateway
       options:
         ext-port: eth1
         instance-mtu: 1300

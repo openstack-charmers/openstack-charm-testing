@@ -44,7 +44,7 @@ openstack-services:
       to:
         - "lxc:0"
     neutron-gateway:
-      branch: lp:~james-page/charms/trusty/quantum-gateway/vlan-flat-support
+      branch: lp:~james-page/charms/trusty/neutron-gateway/vlan-flat-support
       constraints: arch=amd64
       options:
         instance-mtu: 1300

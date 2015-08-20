@@ -52,7 +52,7 @@ openstack-services:
         network-manager: Quantum
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/precise/quantum-gateway/ssl-everywhere
+      branch: lp:~openstack-charmers/charms/precise/neutron-gateway/ssl-everywhere
       constraints: mem=1G
     cinder:
       branch: lp:~openstack-charmers/charms/precise/cinder/ssl-everywhere

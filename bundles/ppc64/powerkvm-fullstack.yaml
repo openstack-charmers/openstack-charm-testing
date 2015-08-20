@@ -94,7 +94,7 @@ openstack-services:
       to:
         - "lxc:0"
     neutron-gateway:
-      branch: lp:charms/trusty/quantum-gateway
+      branch: lp:charms/trusty/neutron-gateway
       constraints: arch=amd64
       options:
         instance-mtu: 1300
