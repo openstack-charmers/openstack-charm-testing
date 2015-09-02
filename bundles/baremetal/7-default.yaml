@@ -82,7 +82,6 @@ openstack-services:
         enable-live-migration: True
         enable-resize: True
         migration-auth-type: ssh
-        enable-resize: True
     nova-cloud-controller:
       branch: lp:charms/trusty/nova-cloud-controller
       options:
