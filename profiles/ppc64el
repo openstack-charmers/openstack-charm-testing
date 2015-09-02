@@ -40,4 +40,5 @@ tools/flavor_shrink.sh
 tools/quota_million.sh
 
 # Temporary workaround: libvirt and nova conf patches and mods, specific to ppc64el
-tools/ppc64el-post-deploy-patches.sh
+#
+# tools/ppc64el-post-deploy-patches.sh

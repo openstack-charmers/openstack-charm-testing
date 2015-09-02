@@ -72,10 +72,13 @@ openstack-services:
       to:
         - "lxc:swift-storage-z2=0"
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+#      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: lp:~1chb1n/charms/trusty/nova-compute/cpu-mode
       num_units: 1
       constraints: arch=ppc64el
       options:
+        "cpu-mode": "host-passthrough"
+        "ppc64-cpu-smt-state": "off"
         "enable-live-migration": true
         "enable-resize": true
         "migration-auth-type": ssh
