@@ -32,7 +32,7 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
       constraints: mem=1G
     nova-compute:
-      branch: lp:~zulcss/charms/trusty/nova-compute/nova-compute-lxd
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/lxd-updates
       num_units: 3
       constraints: mem=4G
       options:
@@ -101,12 +101,11 @@ openstack-services:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
     lxd:
-      branch: lp:~zulcss/+junk/lxd-container
+      branch: lp:~openstack-charmers/charms/trusty/lxd/next
       options:
         lxd-block-device: /mnt/disk.img|20G
-        lxd-origin: ppa:ubuntu-lxc/lxd-git-master
-        lxd-use-source: True
-        lxd-trust-password: blah
+        #lxd-origin: ppa:ubuntu-lxc/lxd-git-master
+        lxd-trust-password: changeme
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -193,70 +192,6 @@ openstack-icehouse-msg-split:
   - [ neutron-openvswitch, rabbitmq-server-neutron ]
   - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
-# icehouse
-precise-icehouse:
-  inherits: openstack-singlerabbit
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-icehouse
-precise-icehouse-proposed:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: cloud:precise-icehouse/proposed
-    source: cloud:precise-updates/icehouse
-precise-icehouse-staging:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
-    source: ppa:ubuntu-cloud-archive/icehouse-staging
-precise-icehouse-trunk:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
-trusty-icehouse:
-  inherits: openstack-icehouse
-  series: trusty
-trusty-icehouse-msg-split:
-  inherits: openstack-icehouse-msg-split
-  series: trusty
-trusty-icehouse-proposed:
-  inherits: trusty-icehouse
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-trusty-icehouse-trunk:
-  inherits: trusty-icehouse
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
-    offline-compression: "no"
-# juno
-trusty-juno:
-  inherits: openstack-icehouse
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-juno
-    source: cloud:trusty-juno
-trusty-juno-proposed:
-  inherits: trusty-juno
-  overrides:
-    openstack-origin: cloud:trusty-juno/proposed
-    source: cloud:trusty-juno/proposed
-trusty-juno-staging:
-  inherits: trusty-juno
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
-    source: ppa:ubuntu-cloud-archive/juno-staging
-utopic-juno:
-  inherits: openstack-icehouse
-  series: utopic
-utopic-juno-proposed:
-  inherits: utopic-juno
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
 # kilo
 trusty-kilo:
   inherits: openstack-icehouse
@@ -307,4 +242,3 @@ wily-liberty-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-
