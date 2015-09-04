@@ -240,7 +240,7 @@ trusty-liberty-staging:
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
-  serviceS:
+  services:
     mysql:
       branch: lp:charms/trusty/mysql
 wily-liberty-proposed:
