@@ -212,6 +212,9 @@ trusty-kilo-staging:
 vivid-kilo:
   inherits: openstack-icehouse
   series: vivid
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
 vivid-kilo-proposed:
   inherits: vivid-kilo
   overrides:
@@ -237,6 +240,9 @@ trusty-liberty-staging:
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
+  serviceS:
+    mysql:
+      branch: lp:charms/trusty/mysql
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
