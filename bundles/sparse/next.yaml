@@ -8,6 +8,7 @@ openstack-services:
       constraints: mem=1G
       options:
         dataset-size: 50%
+        max-connections: 20000
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
