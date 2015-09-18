@@ -4,7 +4,7 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: lp:charms/trusty/mysql
       constraints: mem=1G
       options:
         dataset-size: 50%
@@ -12,17 +12,6 @@ openstack-services:
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
-    ceph:
-      branch: lp:~openstack-charmers/charms/trusty/ceph/next
-      num_units: 3
-      constraints: mem=1G
-      options:
-        monitor-count: 3
-        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
-        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        osd-devices: /dev/vdb
-        osd-reformat: "yes"
-        ephemeral-unmount: /mnt
     keystone:
       branch: lp:~openstack-charmers/charms/trusty/keystone/next
       constraints: mem=1G
@@ -48,18 +37,10 @@ openstack-services:
         network-manager: Neutron
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      branch: lp:~james-page/charms/trusty/neutron-gateway/liberty-fixup
       constraints: mem=1G
       options:
         instance-mtu: 1300
-    cinder:
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
-      options:
-        block-device: "None"
-        glance-api-version: 2
-      constraints: mem=1G
-    cinder-ceph:
-      branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
     glance:
       branch: lp:~openstack-charmers/charms/trusty/glance/next
       constraints: mem=1G
@@ -91,22 +72,14 @@ openstack-services:
         zone: 3
         block-device: vdb
         overwrite: "true"
-    ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
-      constraints: mem=1G
-    ceilometer-agent:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
-    heat:
-      branch: lp:~openstack-charmers/charms/trusty/heat/next
-    mongodb:
-      branch: lp:charms/trusty/mongodb
-      constraints: mem=1G
     lxd:
       branch: lp:~openstack-charmers/charms/trusty/lxd/next
       options:
-        lxd-block-device: /mnt/disk.img|20G
-        #lxd-origin: ppa:ubuntu-lxc/lxd-git-master
-        lxd-trust-password: changeme
+        block-device: /dev/vdb
+        trust-password: changeme
+        ephemeral-unmount: /mnt
+        storage-type: lvm
+        use-source: True
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -119,17 +92,9 @@ openstack-services:
     - - nova-compute
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
-    - [ nova-compute, ceph ]
     - [ glance, mysql ]
     - [ glance, keystone ]
-    - [ glance, ceph ]
-    - [ glance, cinder ]
-    - [ cinder, mysql ]
-    - [ cinder, rabbitmq-server ]
-    - [ cinder, nova-cloud-controller ]
-    - [ cinder, keystone ]
-    - [ cinder, cinder-ceph ]
-    - [ cinder-ceph, ceph ]
+    - [ glance, swift-proxy ]
     - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
@@ -137,15 +102,6 @@ openstack-services:
     - [ swift-proxy, swift-storage-z1 ]
     - [ swift-proxy, swift-storage-z2 ]
     - [ swift-proxy, swift-storage-z3 ]
-    - - ceilometer
-      - keystone:identity-service
-    - [ ceilometer, rabbitmq-server ]
-    - [ ceilometer, mongodb ]
-    - [ ceilometer-agent, nova-compute ]
-    - [ ceilometer-agent, ceilometer ]
-    - [ heat, mysql ]
-    - [ heat, keystone ]
-    - [ heat, rabbitmq-server ]
 openstack-singlerabbit:
   inherits: openstack-services
   relations:

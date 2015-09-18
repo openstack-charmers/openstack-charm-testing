@@ -5,10 +5,12 @@ openstack-services:
   services:
     mysql:
       branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
-      constraints: mem=1G
+      constraints: mem=4G
       options:
         dataset-size: 50%
         max-connections: 20000
+        root-password: changeme
+        sst-password: changeme
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
