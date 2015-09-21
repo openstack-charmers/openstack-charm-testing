@@ -4,7 +4,8 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: lp:charms/trusty/mysql
+      #lp:~openstack-charmers/charms/trusty/percona-cluster/next
       constraints: mem=1G
       options:
         dataset-size: 50%
@@ -145,9 +146,6 @@ openstack-icehouse:
 vivid-kilo:
   inherits: openstack-icehouse
   series: vivid
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
 vivid-kilo-proposed:
   inherits: vivid-kilo
   overrides:
@@ -156,9 +154,6 @@ vivid-kilo-proposed:
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
-  serviceS:
-    mysql:
-      branch: lp:charms/trusty/mysql
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
