@@ -12,17 +12,6 @@ openstack-services:
     rabbitmq-server:
       branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
       constraints: mem=1G
-    ceph:
-      branch: lp:~openstack-charmers/charms/trusty/ceph/next
-      num_units: 3
-      constraints: mem=1G
-      options:
-        monitor-count: 3
-        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
-        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        osd-devices: /dev/vdb
-        osd-reformat: "yes"
-        ephemeral-unmount: /mnt
     keystone:
       branch: lp:~openstack-charmers/charms/trusty/keystone/next
       constraints: mem=1G
@@ -52,14 +41,6 @@ openstack-services:
       constraints: mem=1G
       options:
         instance-mtu: 1300
-    cinder:
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
-      options:
-        block-device: "None"
-        glance-api-version: 2
-      constraints: mem=1G
-    cinder-ceph:
-      branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
     glance:
       branch: lp:~openstack-charmers/charms/trusty/glance/next
       constraints: mem=1G
@@ -104,9 +85,10 @@ openstack-services:
     lxd:
       branch: lp:~openstack-charmers/charms/trusty/lxd/next
       options:
-        lxd-block-device: /mnt/disk.img|20G
-        #lxd-origin: ppa:ubuntu-lxc/lxd-git-master
+        lxd-block-device: /dev/vdb
         lxd-trust-password: changeme
+        ephemeral-unmount: /mnt
+        storage-type: lvm
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -119,18 +101,9 @@ openstack-services:
     - - nova-compute
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
-    - [ nova-compute, ceph ]
     - [ glance, mysql ]
     - [ glance, keystone ]
-    - [ glance, ceph ]
-    - [ glance, cinder ]
-    - [ cinder, mysql ]
-    - [ cinder, rabbitmq-server ]
-    - [ cinder, nova-cloud-controller ]
-    - [ cinder, keystone ]
-    - [ cinder, cinder-ceph ]
-    - [ cinder-ceph, ceph ]
-    - [ neutron-gateway, mysql ]
+    - [ glance, swift-proxy ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -169,47 +142,6 @@ openstack-icehouse:
   - [ neutron-api, neutron-gateway ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
-openstack-icehouse-msg-split:
-  inherits: openstack-services
-  services:
-    neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
-      constraints: mem=1G
-      options:
-        neutron-security-groups: True
-    neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
-    rabbitmq-server-neutron:
-      branch: lp:charms/trusty/rabbitmq-server
-      constraints: mem=1G
-  relations:
-  - [ neutron-api, mysql ]
-  - [ neutron-api, rabbitmq-server-neutron ]
-  - [ neutron-api, nova-cloud-controller ]
-  - [ neutron-api, neutron-openvswitch ]
-  - [ neutron-api, keystone ]
-  - [ neutron-api, neutron-gateway ]
-  - [ neutron-openvswitch, nova-compute ]
-  - [ neutron-openvswitch, rabbitmq-server-neutron ]
-  - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
-  - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
-# kilo
-trusty-kilo:
-  inherits: openstack-icehouse
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-kilo
-    source: cloud:trusty-kilo
-trusty-kilo-proposed:
-  inherits: trusty-kilo
-  overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
-    source: cloud:trusty-kilo/proposed
-trusty-kilo-staging:
-  inherits: trusty-kilo
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
-    source: ppa:ubuntu-cloud-archive/kilo-staging
 vivid-kilo:
   inherits: openstack-icehouse
   series: vivid
@@ -221,23 +153,6 @@ vivid-kilo-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-# liberty
-trusty-liberty:
-  inherits: openstack-icehouse
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-liberty
-    source: cloud:trusty-liberty
-trusty-liberty-proposed:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: cloud:trusty-liberty/proposed
-    source: cloud:trusty-liberty/proposed
-trusty-liberty-staging:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
-    source: ppa:ubuntu-cloud-archive/liberty-staging
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
