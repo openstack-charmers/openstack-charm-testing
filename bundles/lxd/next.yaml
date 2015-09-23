@@ -87,7 +87,6 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/trusty/lxd/next
       options:
         block-device: /dev/vdb
-        trust-password: changeme
         ephemeral-unmount: /mnt
         storage-type: lvm
   relations:
