@@ -38,7 +38,7 @@ mkdir -vp ~/images
     wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.xz
 }
 
-glance image-create --name trusty --container-format=bare --disk-format=raw --public --progress --property architecture="x86_64" < ~/images/trusty-server-cloudimg-amd64-root.tar.xz
+glance image-create --name trusty --container-format=bare --disk-format=raw --visibility=public --progress --property architecture="x86_64" < ~/images/trusty-server-cloudimg-amd64-root.tar.xz
 
 nova flavor-create m1.cirros 6 64 1 1
 nova flavor-create m1.tempest 7 256 5 1

@@ -103,6 +103,7 @@ openstack-services:
     - [ nova-compute, glance ]
     - [ glance, mysql ]
     - [ glance, keystone ]
+    - [ glance, rabbitmq-server ]
     - [ glance, swift-proxy ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
