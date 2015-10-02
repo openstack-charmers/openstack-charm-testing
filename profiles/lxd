@@ -32,6 +32,14 @@ keystone tenant-create --name alt_demo
 keystone user-create --name alt_demo --tenant alt_demo --pass secret --enabled true --email alt_demo@dev.null
 keystone user-role-add --user alt_demo --role Member --tenant alt_demo || :
 
+# Download images if not already present
+mkdir -vp ~/images
+[ -f ~/images/trusty-server-cloudimg-amd64-root.tar.xz ] || {
+    wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.xz
+}
+
+glance image-create --name trusty --container-format=bare --disk-format=raw --visibility=public --progress --property architecture="x86_64" < ~/images/trusty-server-cloudimg-amd64-root.tar.xz
+
 nova flavor-create m1.cirros 6 64 1 1
 nova flavor-create m1.tempest 7 256 5 1
 nova flavor-create m2.tempest 8 512 5 1
