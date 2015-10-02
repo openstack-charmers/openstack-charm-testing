@@ -23,7 +23,7 @@ openstack-services:
       branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
       constraints: mem=1G
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/lxd-updates
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
       num_units: 3
       constraints: mem=4G
       options:
