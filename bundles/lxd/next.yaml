@@ -37,6 +37,7 @@ openstack-services:
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
+        ram-allocation-ratio: 5.0
     neutron-gateway:
       branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
       constraints: mem=1G
