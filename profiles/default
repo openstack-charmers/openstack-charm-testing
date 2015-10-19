@@ -2,15 +2,6 @@
 
 set -ex
 
-# Install dependencies and CLI tools
-# See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
-sudo apt-get update
-sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
-    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
-    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
-    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
-    python-openstackclient openvswitch-test openvswitch-common -y
-
 # Set serverstack defaults, if not already set.
 [[ -z "$GATEWAY" ]] && export GATEWAY="10.5.0.1"
 [[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.5.0.0/16"
@@ -56,16 +47,16 @@ mkdir -vp ~/images
 }
 
 # Upload glance images to overcloud
-openstack image create --public --container-format bare --disk_format qcow2 \
-    --file ~/images/vivid-server-cloudimg-amd64-disk1.img vivid
-openstack image create --public --container-format bare --disk_format qcow2 \
-    --file ~/images/utopic-server-cloudimg-amd64-disk1.img utopic
-openstack image create --public --container-format bare --disk_format qcow2 \
-    --file ~/images/trusty-server-cloudimg-amd64-disk1.img trusty
-openstack image create --public --container-format bare --disk_format qcow2 \
-    --file ~/images/precise-server-cloudimg-amd64-disk1.img precise
-openstack image create --public --container-format bare --disk_format qcow2 \
-    --file ~/images/cirros-0.3.3-x86_64-disk.img cirros
+glance image-create --name="vivid" --is-public=true --progress \
+    --container-format=bare --disk-format=qcow2 < ~/images/vivid-server-cloudimg-amd64-disk1.img
+glance image-create --name="utopic" --is-public=true --progress \
+    --container-format=bare --disk-format=qcow2 < ~/images/utopic-server-cloudimg-amd64-disk1.img
+glance image-create --name="trusty" --is-public=true --progress \
+    --container-format=bare --disk-format=qcow2 < ~/images/trusty-server-cloudimg-amd64-disk1.img
+glance image-create --name="precise" --is-public=true --progress \
+    --container-format=bare --disk-format=qcow2 < ~/images/precise-server-cloudimg-amd64-disk1.img
+glance image-create --name="cirros" --is-public=true  --progress \
+    --container-format=bare --disk-format=qcow2 < ~/images/cirros-0.3.3-x86_64-disk.img
 
 # Create demo/testing users, tenants and flavor
 keystone tenant-create --name demo
@@ -100,6 +91,14 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     -e "s/__CIDR_PRIV__/${CIDR_PRIV////\\/}/g" \
     -e "s/__NCC__/$ncc/g" -e "s/__SECRET__/$secret/g" -e "s/__ACCESS__/$access/g" \
     templates/tempest/tempest.conf.template > tempest.conf
+
+# Install dependencies and CLI tools
+# See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
+sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
+    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
+    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
+    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
+    openvswitch-test openvswitch-common -y
 
 # Git tempest, place the rendered tempest template
 [ -d tempest ] || git clone https://github.com/openstack/tempest
