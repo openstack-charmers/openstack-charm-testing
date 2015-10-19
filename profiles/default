@@ -56,15 +56,15 @@ mkdir -vp ~/images
 }
 
 # Upload glance images to overcloud
-openstack image create --public --container-format bare --disk-format qcow2 \
+openstack image create --public --container-format bare --disk_format qcow2 \
     --file ~/images/vivid-server-cloudimg-amd64-disk1.img vivid
-openstack image create --public --container-format bare --disk-format qcow2 \
+openstack image create --public --container-format bare --disk_format qcow2 \
     --file ~/images/utopic-server-cloudimg-amd64-disk1.img utopic
-openstack image create --public --container-format bare --disk-format qcow2 \
+openstack image create --public --container-format bare --disk_format qcow2 \
     --file ~/images/trusty-server-cloudimg-amd64-disk1.img trusty
-openstack image create --public --container-format bare --disk-format qcow2 \
+openstack image create --public --container-format bare --disk_format qcow2 \
     --file ~/images/precise-server-cloudimg-amd64-disk1.img precise
-openstack image create --public --container-format bare --disk-format qcow2 \
+openstack image create --public --container-format bare --disk_format qcow2 \
     --file ~/images/cirros-0.3.3-x86_64-disk.img cirros
 
 # Create demo/testing users, tenants and flavor
