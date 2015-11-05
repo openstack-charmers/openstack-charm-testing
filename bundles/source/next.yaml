@@ -311,6 +311,52 @@ trusty-kilo-proposed:
 vivid-kilo:
   inherits: openstack-kilo-git
   series: vivid
+# liberty
+openstack-liberty-git:
+  inherits: openstack-icehouse
+  services:
+    keystone:
+      options:
+        openstack-origin-git: include-file://keystone-liberty.yaml
+    glance:
+      options:
+        openstack-origin-git: include-file://glance-liberty.yaml
+    cinder:
+      options:
+        openstack-origin-git: include-file://cinder-liberty.yaml
+    neutron-api:
+      options:
+        openstack-origin-git: include-file://neutron-liberty.yaml
+    neutron-gateway:
+      options:
+        openstack-origin-git: include-file://neutron-liberty.yaml
+    neutron-openvswitch:
+      options:
+        openstack-origin-git: include-file://neutron-liberty.yaml
+    openstack-dashboard:
+      options:
+        openstack-origin-git: include-file://horizon-liberty.yaml
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-liberty.yaml
+    nova-cloud-controller:
+      options:
+        openstack-origin-git: include-file://nova-liberty.yaml
+trusty-liberty:
+  inherits: openstack-liberty-git
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: openstack-liberty-git
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+wily-liberty:
+  inherits: openstack-liberty-git
+  series: wily
 # master
 openstack-master-git:
   inherits: openstack-icehouse
@@ -346,14 +392,14 @@ trusty-master:
   inherits: openstack-master-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-kilo
-    source: cloud:trusty-kilo
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
 trusty-master-proposed:
   inherits: openstack-master-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
-    source: cloud:trusty-kilo/proposed
-vivid-master:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+wily-master:
   inherits: openstack-master-git
-  series: vivid
+  series: wily
