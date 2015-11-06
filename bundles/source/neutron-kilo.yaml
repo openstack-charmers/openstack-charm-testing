@@ -1,6 +1,9 @@
 repositories:
   - {name: requirements,
-     repository: 'git://github.com/openstack/requirements',
+     # Temporarily use my repo until this is merged:
+     #   https://review.openstack.org/#/c/232250/
+     repository: 'git://github.com/coreycb/requirements',
+     #repository: 'git://github.com/openstack/requirements',
      branch: stable/kilo}
   - {name: neutron-fwaas,
      repository: 'git://github.com/openstack/neutron-fwaas',
