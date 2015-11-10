@@ -2,26 +2,27 @@ openstack-services:
   series: trusty
   services:
     neutron-gateway:
-      branch: lp:~sdn-charmers/charms/trusty/neutron-gateway/ovs-odl
+      branch: lp:charms/trusty/neutron-gateway
       options:
         plugin: ovs-odl
         instance-mtu: 1400
     nova-compute:
-      branch: lp:~sdn-charmers/charms/trusty/nova-compute/hugepages
+      branch: lp:charms/trusty/nova-compute
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: False
         manage-neutron-plugin-legacy-mode: False
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: lp:charms/trusty/neutron-api
       options:
-        neutron-security-groups: False
+        neutron-security-groups: True
         manage-neutron-plugin-legacy-mode: False
     neutron-api-odl:
       branch: lp:~openstack-charmers/charms/trusty/neutron-api-odl/vpp
       options:
         overlay-network-type: 'vxlan gre'
+        security-groups: True
     odl-controller:
       branch: lp:~sdn-charmers/charms/trusty/odl-controller/trunk
       options:
@@ -29,27 +30,27 @@ openstack-services:
         http-proxy: "http://squid.internal:3128"
         https-proxy: "http://squid.internal:3128"
     openvswitch-odl:
-      branch: git+ssh://git.launchpad.net/~sdn-charmers/charms/+source/openvswitch-odl
+      branch: lp:~openstack-charmers/charms/trusty/openvswitch-odl/trunk
     mysql:
-      charm: cs:trusty/mysql
+      branch: lp:charms/trusty/mysql
       options:
         dataset-size: 50%
     rabbitmq-server:
-      charm: cs:trusty/rabbitmq-server
+      branch: lp:charms/trusty/rabbitmq-server
     keystone:
-      charm: cs:trusty/keystone
+      branch: lp:charms/trusty/keystone
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      charm: cs:trusty/openstack-dashboard
+      branch: lp:charms/trusty/openstack-dashboard
     nova-cloud-controller:
-      charm: cs:trusty/nova-cloud-controller
+      branch: lp:charms/trusty/nova-cloud-controller
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
     glance:
-      charm: cs:trusty/glance
+      branch: lp:charms/trusty/glance
   relations:
     - ['neutron-api:neutron-plugin-api-subordinate', 'neutron-api-odl:neutron-plugin-api-subordinate']
     - ['nova-compute:neutron-plugin', 'openvswitch-odl:neutron-plugin']
@@ -74,6 +75,11 @@ openstack-services:
     - ['neutron-gateway:amqp', 'rabbitmq-server:amqp']
     - ['neutron-gateway:neutron-plugin-api', 'neutron-api:neutron-plugin-api']
     - ['neutron-gateway:quantum-network-service', 'nova-cloud-controller:quantum-network-service']
+trusty-liberty:
+  inherits: openstack-services
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
 trusty-kilo:
   inherits: openstack-services
   overrides:
@@ -94,6 +100,9 @@ trusty-icehouse-cisco:
     nova-compute:
       options:
         hugepages: '70%'
+    neutron-api-odl:
+      options:
+        security-groups: False
   overrides:
     openstack-origin: ppa:cisco-vpp/icehouse-proposed
   relations:
