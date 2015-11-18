@@ -1,9 +1,6 @@
 repositories:
   - {name: requirements,
-     # Temporarily use my repo until this is merged:
-     #   https://review.openstack.org/#/c/232250/
-     repository: 'git://github.com/coreycb/requirements',
-     #repository: 'git://github.com/openstack/requirements',
+     repository: 'git://github.com/openstack/requirements',
      branch: stable/kilo}
   - {name: cinder,
      repository: 'git://github.com/openstack/cinder',
