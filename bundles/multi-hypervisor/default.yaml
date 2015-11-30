@@ -178,9 +178,25 @@ trusty-liberty:
   overrides:
     openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
 wily-liberty:
   inherits: openstack-services
   series: wily
   services:
     mysql:
       branch: lp:charms/trusty/mysql
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+
