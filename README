@@ -7,7 +7,7 @@ This openstack-charm-testing (aka o-c-t) project contains reference
 juju deployer bundles, post-deployment configuration scripts, and 
 other templates for Ubuntu OpenStack charm testing.
 
-For automated testing, the Ubuntu OpenStack CI engine (aka osci / uosci)
+For automated testing, the Ubuntu OpenStack CI engine (aka uosci)
 consumes the bundles and other templates provided herein.
 
 OpenStack package and charm developers also perform manual testing
@@ -40,7 +40,7 @@ configure
 To configure serverstack run:
 	./configure
 
-To configure profiles 'dellstack, stsstack, ppc64el, kernelstack', run:
+To configure profiles 'dellstack, stsstack, ppc64el, kernelstack, multihypervisor', run:
 	./configure <profile>
 
 These "configure" scripts:

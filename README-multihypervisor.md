@@ -6,7 +6,7 @@ An OpenStack-on-OpenStack example exercise.
 ### Get o-c-t bundle and scripts
 ```
 mkdir -p ~/tools
-bzr branch lp:openstack-charm-testing ~/./tools/openstack-charm-testing
+bzr branch lp:openstack-charm-testing ~/tools/openstack-charm-testing
 cd ~/./tools/openstack-charm-testing
 ```
 
@@ -92,7 +92,8 @@ Not required, but allows drastic resource overcommits.
 ./tools/quota_million.sh
 ```
 
-### Set security groups very permissive and lower instance MTU due to nested tunnels in cloud-on-cloud scenarios
+### Set security groups + MTU
+Very permissive secgroups for testing, and lower instance MTU due to nested tunnels in cloud-on-cloud scenarios.
 ```
 ./tools/sec_groups.sh
 ```
