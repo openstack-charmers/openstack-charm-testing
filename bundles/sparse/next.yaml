@@ -310,3 +310,31 @@ wily-liberty-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+# mitaka
+trusty-mitaka:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: openstack-icehouse
+  series: xenial
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
