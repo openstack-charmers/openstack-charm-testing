@@ -178,6 +178,7 @@ trusty-liberty:
   overrides:
     openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
+    storage-type: btrfs
 trusty-liberty-proposed:
   inherits: trusty-liberty
   overrides:
