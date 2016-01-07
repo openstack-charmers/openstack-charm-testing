@@ -82,7 +82,7 @@ openstack-services:
     heat:
       branch: lp:~openstack-charmers/charms/trusty/heat/next
     mongodb:
-      branch: lp:~james-page/charms/trusty/mongodb/pymongo-3.x
+      branch: lp:charms/trusty/mongodb
       constraints: mem=1G
     lxd:
       branch: lp:~openstack-charmers/charms/trusty/lxd/next
