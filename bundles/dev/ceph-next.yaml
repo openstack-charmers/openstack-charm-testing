@@ -33,7 +33,8 @@ ceph-cluster:
   services:
     ceph:
 #      branch: lp:~openstack-charmers/charms/trusty/ceph/next
-      branch: lp:~1chb1n/charms/trusty/ceph/next.1601-test-update1
+#      branch: lp:~1chb1n/charms/trusty/ceph/next.1601-test-update1
+      branch: lp:~chris.macnaughton/charms/trusty/ceph/add-infernalis
       constraints: mem=1G
       num_units: 3
       options:
