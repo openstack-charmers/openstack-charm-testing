@@ -51,13 +51,15 @@ ceph-cluster:
         admin-password: 'openstack'
         admin-token: 'ubuntutesting'
     mysql:
-      branch: lp:charms/trusty/mysql
+#      branch: lp:charms/trusty/mysql
+      branch: lp:~1chb1n/charms/trusty/mysql/ch-sync-mitaka
       constraints: mem=1G
       num_units: 1
       options:
         dataset-size: '50%'
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+#      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: lp:~1chb1n/charms/trusty/rabbitmq-server/next-ch-sync-mitaka-uca
       constraints: mem=1G
     nova-compute:
       branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
