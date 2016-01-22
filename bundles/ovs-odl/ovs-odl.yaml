@@ -19,7 +19,7 @@ openstack-services:
         neutron-security-groups: True
         manage-neutron-plugin-legacy-mode: False
     neutron-api-odl:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api-odl/vpp
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api-odl/next
       options:
         overlay-network-type: 'vxlan gre'
         security-groups: True
@@ -30,7 +30,7 @@ openstack-services:
         http-proxy: "http://squid.internal:3128"
         https-proxy: "http://squid.internal:3128"
     openvswitch-odl:
-      branch: lp:~openstack-charmers/charms/trusty/openvswitch-odl/trunk
+      branch: lp:~openstack-charmers/charms/trusty/openvswitch-odl/next
     mysql:
       branch: lp:charms/trusty/mysql
       options:
@@ -80,6 +80,11 @@ trusty-liberty:
   overrides:
     openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
+trusty-liberty-lithium:
+  inherits: trusty-liberty
+  overrides:
+    install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.3.3-Lithium-SR3.tar.gz"
+    profile: openvswitch-odl-lithium
 trusty-kilo:
   inherits: openstack-services
   overrides:

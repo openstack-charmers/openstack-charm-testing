@@ -144,14 +144,6 @@ openstack-icehouse:
   - [ neutron-api, neutron-gateway ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
-vivid-kilo:
-  inherits: openstack-icehouse
-  series: vivid
-vivid-kilo-proposed:
-  inherits: vivid-kilo
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
