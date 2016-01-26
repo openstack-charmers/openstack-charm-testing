@@ -1,0 +1,229 @@
+# vim: set ts=2 et:
+# deployer bundle for development ('next') charms
+# UOSCI relies on this for OS-on-OS deployment testing
+openstack-services:
+  services:
+    mysql:
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+#        root-password: changeme
+#        sst-password: changeme
+    rabbitmq-server:
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      constraints: mem=1G
+    ceph:
+      branch: lp:~openstack-charmers/charms/trusty/ceph/next
+      num_units: 3
+      constraints: mem=1G
+      options:
+        monitor-count: 3
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-devices: /dev/vdb
+        osd-reformat: "yes"
+        ephemeral-unmount: /mnt
+    keystone:
+      branch: lp:~gnuoy/charms/trusty/keystone/add-dnsaas-svc
+      constraints: mem=1G
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+    openstack-dashboard:
+      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      constraints: mem=1G
+    nova-compute:
+      branch: lp:~gnuoy/charms/trusty/nova-compute/dnsaas-tactical
+      num_units: 3
+      constraints: mem=4G
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+    nova-cloud-controller:
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      constraints: mem=1G
+      options:
+        network-manager: Neutron
+        quantum-security-groups: "yes"
+    neutron-gateway:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      constraints: mem=1G
+      options:
+        instance-mtu: 1300
+    cinder:
+      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      options:
+        block-device: "None"
+        glance-api-version: 2
+      constraints: mem=1G
+    cinder-ceph:
+      branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
+    glance:
+      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      constraints: mem=1G
+    swift-proxy:
+      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      constraints: mem=1G
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+    swift-storage-z1:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 1
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 2
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 3
+        block-device: vdb
+        overwrite: "true"
+    ceilometer:
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+      constraints: mem=1G
+    ceilometer-agent:
+      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+    heat:
+      branch: lp:~openstack-charmers/charms/trusty/heat/next
+    mongodb:
+      branch: lp:charms/trusty/mongodb
+      constraints: mem=1G
+    designate:
+      branch: lp:~gnuoy/charms/trusty/designate/auto-built
+      options:
+        verbose: true 
+        debug: true 
+        nova-domain: 'serverstack.ubuntu.com.'
+        neutron-domain: 'serverstack.ubuntu.com.'
+        nova-domain-email: 'bob@serverstack.ubuntu.com'
+        neutron-domain-email: 'bob@serverstack.ubuntu.com'
+    designate-bind:
+      branch: lp:~gnuoy/charms/trusty/designate-bind/auto-built
+    neutron-api:
+      branch: lp:~gnuoy/charms/trusty/neutron-api/designate
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ nova-compute, ceph ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, ceph ]
+    - [ glance, cinder ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
+    - [ cinder, cinder-ceph ]
+    - [ cinder-ceph, ceph ]
+    - [ neutron-gateway, mysql ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+    - - ceilometer
+      - keystone:identity-service
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
+    - [ designate, keystone ]
+    - [ designate, mysql ]
+    - [ designate, rabbitmq-server ]
+    - [ designate, nova-compute ]
+    - [ designate, designate-bind ]
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+    - [ neutron-api, mysql ]
+    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, nova-cloud-controller ]
+    - [ neutron-api, neutron-openvswitch ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-gateway ]
+    - [ neutron-openvswitch, nova-compute ]
+    - [ neutron-openvswitch, rabbitmq-server ]
+trusty-liberty:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
+wily-liberty:
+  inherits: openstack-services
+  series: wily
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
+trusty-mitaka:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: openstack-services
+  series: xenial
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
