@@ -1,0 +1,437 @@
+# vim: set ts=2 et:
+# deployer bundle for development ('next') charms
+# UOSCI relies on this for OS-on-OS deployment testing
+openstack-services:
+  services:
+    mysql:
+      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      constraints: mem=4G
+      num_units: 3
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ubuntu
+        sst-password: ubuntu
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5000'
+        vip_cidr: 64
+    mysql-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+        debug: true
+    rabbitmq-server:
+      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      constraints: mem=1G
+    ceph:
+      branch: lp:~openstack-charmers/charms/trusty/ceph/next
+      num_units: 3
+      constraints: mem=1G
+      options:
+        monitor-count: 3
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-devices: /dev/vdb
+        osd-reformat: "yes"
+        ephemeral-unmount: /mnt
+    ceph-osd:
+      branch: lp:~openstack-charmers/charms/trusty/ceph-osd/next
+      num_units: 1
+      constraints: mem=1G
+      options:
+        osd-devices: /dev/vdb
+        osd-reformat: "yes"
+        ephemeral-unmount: /mnt
+    keystone:
+      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      num_units: 3
+      constraints: mem=1G
+      options:
+        debug: "True"
+        verbose: "True"
+        admin-password: openstack
+        admin-token: ubuntutesting
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5001'
+    keystone-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+        debug: true
+    openstack-dashboard:
+      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      constraints: mem=1G
+      num_units: 3
+      options:
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5005'
+    openstack-dashboard-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+         debug: true
+    nova-compute:
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      num_units: 3
+      constraints: mem=4G
+      options:
+        debug: True
+        verbose: True
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+    nova-cloud-controller:
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      num_units: 3
+      constraints: mem=1G
+      options:
+        debug: True
+        verbose: True
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5002'
+        network-manager: Neutron
+        quantum-security-groups: "yes"
+        ha-mcastport: 5500
+    nova-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+         debug: true
+    neutron-gateway:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+# NOTE: Icehouse only
+#      branch: lp:~hopem/charms/trusty/neutron-gateway/ipv6
+      constraints: mem=1G
+      options:
+        debug: True
+        verbose: True
+        instance-mtu: 1300
+    cinder:
+      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      num_units: 3
+      options:
+        block-device: "None"
+        glance-api-version: 2
+        debug: True
+        verbose: True
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5003'
+      constraints: mem=1G
+    cinder-ceph:
+      branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
+    cinder-hacluster:
+      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+    glance:
+      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      num_units: 3
+      constraints: mem=1G
+      options:
+        debug: True
+        verbose: True
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5004'
+    glance-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+         debug: true
+    swift-proxy:
+      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      constraints: mem=1G
+      num_units: 3
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5007'
+    swift-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+         debug: true
+    swift-storage-z1:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 1
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 2
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      constraints: mem=1G
+      options:
+        zone: 3
+        block-device: vdb
+        overwrite: "true"
+    heat:
+      branch: lp:~openstack-charmers/charms/trusty/heat/next
+      constraints: mem=1G
+  overrides:
+    corosync_transport: 'unicast'
+    corosync_mcastaddr: ff05::2
+    prefer-ipv6: true
+    netmtu: 1352
+    cluster_count: 3
+  relations:
+    - [ openstack-dashboard, openstack-dashboard-hacluster ]
+    - [ keystone, keystone-hacluster ]
+    - [ glance, glance-hacluster ]
+    - [ nova-cloud-controller, nova-hacluster ]
+    - [ cinder, cinder-hacluster ]
+    - [ swift-proxy, swift-hacluster ]
+    - [ mysql, mysql-hacluster ]
+    - [ ceph, ceph-osd ]
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ nova-compute, ceph ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, ceph ]
+    - [ glance, cinder ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
+    - [ cinder, cinder-ceph ]
+    - [ cinder-ceph, ceph ]
+    - [ neutron-gateway, mysql ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
+openstack-singlerabbit:
+  inherits: openstack-services
+  relations:
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+openstack-icehouse:
+  inherits: openstack-singlerabbit
+  services:
+    neutron-api:
+      num_units: 3
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      constraints: mem=1G
+      options:
+        debug: True
+        verbose: True
+        neutron-security-groups: True
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5006'
+        prefer-ipv6: true
+    neutron-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+         debug: true
+         corosync_transport: 'unicast'
+         corosync_mcastaddr: ff05::2
+         prefer-ipv6: true
+         netmtu: 1352
+         cluster_count: 3
+    neutron-openvswitch:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+  relations:
+  - [ neutron-api, neutron-hacluster ]
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
+  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-openvswitch, rabbitmq-server ]
+openstack-icehouse-msg-split:
+  inherits: openstack-services
+  services:
+    neutron-api:
+      num_units: 3
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      constraints: mem=1G
+      options:
+        debug: True
+        verbose: True
+        neutron-security-groups: True
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5006'
+        prefer-ipv6: true
+    neutron-hacluster:
+      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      options:
+         debug: true
+         corosync_transport: 'unicast'
+         corosync_mcastaddr: ff05::2
+         prefer-ipv6: true
+         netmtu: 1352
+         cluster_count: 3
+    neutron-openvswitch:
+      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+    rabbitmq-server-neutron:
+      branch: lp:charms/trusty/rabbitmq-server
+      constraints: mem=1G
+  relations:
+  - [ neutron-api, neutron-hacluster ]
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server-neutron ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
+  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-openvswitch, rabbitmq-server-neutron ]
+  - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
+  - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
+# icehouse
+precise-icehouse:
+  inherits: openstack-singlerabbit
+  series: precise
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-icehouse
+precise-icehouse-proposed:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: cloud:precise-icehouse/proposed
+    source: cloud:precise-updates/icehouse
+precise-icehouse-staging:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
+    source: ppa:ubuntu-cloud-archive/icehouse-staging
+precise-icehouse-trunk:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+trusty-icehouse:
+  inherits: openstack-icehouse
+  series: trusty
+trusty-icehouse-msg-split:
+  inherits: openstack-icehouse-msg-split
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"
+# juno
+trusty-juno:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-juno/proposed
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
+utopic-juno:
+  inherits: openstack-icehouse
+  series: utopic
+utopic-juno-proposed:
+  inherits: utopic-juno
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# kilo
+trusty-kilo:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+vivid-kilo:
+  inherits: openstack-icehouse
+  series: vivid
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+vivid-kilo-proposed:
+  inherits: vivid-kilo
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# liberty
+trusty-liberty:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
+wily-liberty:
+  inherits: openstack-icehouse
+  series: wily
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
+trusty-mitaka:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: openstack-icehouse
+  series: xenial
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
