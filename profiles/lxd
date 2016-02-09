@@ -16,7 +16,7 @@ sudo apt-get install git testrepository subunit python-nose python-lxml python-b
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.5.150.0:10.5.200.254"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.160.2"
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
-[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.160.50"
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.161.162"
 
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}

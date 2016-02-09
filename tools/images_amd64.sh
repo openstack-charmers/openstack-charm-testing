@@ -15,12 +15,12 @@ mkdir -vp ~/images
 [ -f ~/images/precise-server-cloudimg-amd64-disk1.img ] || {
     wget -O ~/images/precise-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
 }
-[ -f ~/images/cirros-0.3.3-x86_64-disk.img ] || {
-    wget -O ~/images/cirros-0.3.3-x86_64-disk.img http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.3-x86_64-disk.img
+[ -f ~/images/cirros-0.3.4-x86_64-disk.img ] || {
+    wget -O ~/images/cirros-0.3.4-x86_64-disk.img http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.4-x86_64-disk.img
 }
-[ -f ~/images/cirros-0.3.3-x86_64-uec.tar.gz ] || {
-    wget -O ~/images/cirros-0.3.3-x86_64-uec.tar.gz http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.3-x86_64-uec.tar.gz
-    (cd ~/images && tar -xzf cirros-0.3.3-x86_64-uec.tar.gz)
+[ -f ~/images/cirros-0.3.4-x86_64-uec.tar.gz ] || {
+    wget -O ~/images/cirros-0.3.4-x86_64-uec.tar.gz http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.4-x86_64-uec.tar.gz
+    (cd ~/images && tar -xzf cirros-0.3.4-x86_64-uec.tar.gz)
 }
 
 # Upload glance images to overcloud
@@ -33,4 +33,4 @@ glance image-create --name="trusty" --is-public=true --progress \
 glance image-create --name="precise" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/precise-server-cloudimg-amd64-disk1.img
 glance image-create --name="cirros" --is-public=true  --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/cirros-0.3.3-x86_64-disk.img
+    --container-format=bare --disk-format=qcow2 < ~/images/cirros-0.3.4-x86_64-disk.img
