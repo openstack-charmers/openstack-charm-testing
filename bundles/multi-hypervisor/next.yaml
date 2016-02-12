@@ -202,11 +202,12 @@ wily-liberty-proposed:
     openstack-origin: distro-proposed
 # mitaka
 trusty-mitaka:
-  inherits: openstack-icehouse
+  inherits: openstack-services
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
+    storage-type: btrfs
 trusty-mitaka-proposed:
   inherits: trusty-mitaka
   overrides:
@@ -218,7 +219,7 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  inherits: openstack-icehouse
+  inherits: openstack-services
   series: xenial
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
