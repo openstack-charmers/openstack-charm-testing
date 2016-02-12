@@ -144,11 +144,21 @@ openstack-icehouse:
   - [ neutron-api, neutron-gateway ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
+# Liberty
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
 wily-liberty-proposed:
   inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# Mitaka
+xenial-mitaka:
+  inherits: openstack-icehouse
+  series: xenial
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
   overrides:
     source: proposed
     openstack-origin: distro-proposed
