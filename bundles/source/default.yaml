@@ -392,14 +392,14 @@ trusty-master:
   inherits: openstack-master-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-liberty
-    source: cloud:trusty-liberty
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
 trusty-master-proposed:
   inherits: openstack-master-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-liberty/proposed
-    source: cloud:trusty-liberty/proposed
-wily-master:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+xenial-master:
   inherits: openstack-master-git
-  series: wily
+  series: xenial
