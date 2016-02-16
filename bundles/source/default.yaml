@@ -5,10 +5,12 @@ openstack-services:
   services:
     mysql:
       branch: lp:charms/trusty/percona-cluster
-      constraints: mem=1G
+      constraints: mem=4G
       options:
         dataset-size: 50%
         max-connections: 20000
+#        root-password: changeme
+#        sst-password: changeme
     rabbitmq-server:
       branch: lp:charms/trusty/rabbitmq-server
       constraints: mem=1G
@@ -39,6 +41,7 @@ openstack-services:
       options:
         enable-live-migration: True
         enable-resize: True
+        migration-auth-type: ssh
     nova-cloud-controller:
       branch: lp:charms/trusty/nova-cloud-controller
       constraints: mem=1G
@@ -219,6 +222,9 @@ openstack-icehouse-git:
 precise-icehouse:
   inherits: openstack-icehouse-git
   series: precise
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
   overrides:
     openstack-origin: cloud:precise-icehouse
     source: cloud:precise-icehouse
@@ -311,6 +317,9 @@ trusty-kilo-proposed:
 vivid-kilo:
   inherits: openstack-kilo-git
   series: vivid
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
 # liberty
 openstack-liberty-git:
   inherits: openstack-icehouse
@@ -357,6 +366,9 @@ trusty-liberty-proposed:
 wily-liberty:
   inherits: openstack-liberty-git
   series: wily
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
 # master
 openstack-master-git:
   inherits: openstack-icehouse
@@ -403,3 +415,6 @@ trusty-master-proposed:
 xenial-master:
   inherits: openstack-master-git
   series: xenial
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
