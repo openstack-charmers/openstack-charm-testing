@@ -39,8 +39,8 @@ mkdir -vp ~/images
 }
 
 # Upload glance images to overcloud
-glance --os-image-api-version 1 image-create --name="trusty-root.tar.xz" --is-public=true --progress \
-    --container-format=bare --disk-format=root-tar --property hypervisor_type=lxc \
+glance --os-image-api-version 1 image-create --name="trusty-server" --is-public=true --progress \
+    --container-format=bare --disk-format=raw --property hypervisor_type=lxc \
     --property architecture=x86_64 < ~/images/trusty-server-cloudimg-amd64-root.tar.xz
 
 # Create demo/testing users, tenants and flavor
@@ -58,8 +58,8 @@ nova flavor-create m2.tempest 8 512 5 1
 # Gather vars for tempest template
 access=$(keystone --os-username demo --os-password pass --os-tenant-name demo ec2-credentials-create | grep access | awk '{ print $4 }')
 secret=$(keystone ec2-credentials-get --access $access | grep secret | awk '{ print $4 }')
-image_id=$(glance image-list | grep cirros | awk '{ print $2 }')
-image_alt_id=$(glance image-list | grep precise | awk '{ print $2 }')
+image_id=$(glance image-list | grep trusty-server | awk '{ print $2 }')
+image_alt_id=$(glance image-list | grep trusty-server | awk '{ print $2 }')
 ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
 router=$(neutron router-list | grep provider-router | awk '{ print $2}')
 keystone=$(juju-deployer -f keystone)
