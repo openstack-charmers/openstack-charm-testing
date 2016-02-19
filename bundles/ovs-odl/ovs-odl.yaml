@@ -2,19 +2,19 @@ openstack-services:
   series: trusty
   services:
     neutron-gateway:
-      branch: lp:charms/trusty/neutron-gateway
+      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
       options:
         plugin: ovs-odl
         instance-mtu: 1400
     nova-compute:
-      branch: lp:charms/trusty/nova-compute
+      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: False
         manage-neutron-plugin-legacy-mode: False
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
       options:
         neutron-security-groups: True
         manage-neutron-plugin-legacy-mode: False
@@ -24,7 +24,7 @@ openstack-services:
         overlay-network-type: 'vxlan gre'
         security-groups: True
     odl-controller:
-      branch: lp:~sdn-charmers/charms/trusty/odl-controller/trunk
+      branch: lp:~openstack-charmers/charms/trusty/odl-controller/next
       options:
         install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.2.3-Helium-SR3.tar.gz"
         http-proxy: "http://squid.internal:3128"
@@ -38,19 +38,19 @@ openstack-services:
     rabbitmq-server:
       branch: lp:charms/trusty/rabbitmq-server
     keystone:
-      branch: lp:charms/trusty/keystone
+      branch: lp:~openstack-charmers/charms/trusty/keystone/next
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: lp:charms/trusty/openstack-dashboard
+      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
     nova-cloud-controller:
-      branch: lp:charms/trusty/nova-cloud-controller
+      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
     glance:
-      branch: lp:charms/trusty/glance
+      branch: lp:~openstack-charmers/charms/trusty/glance/next
   relations:
     - ['neutron-api:neutron-plugin-api-subordinate', 'neutron-api-odl:neutron-plugin-api-subordinate']
     - ['nova-compute:neutron-plugin', 'openvswitch-odl:neutron-plugin']
@@ -85,6 +85,17 @@ trusty-liberty-lithium:
   overrides:
     install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.3.3-Lithium-SR3.tar.gz"
     profile: openvswitch-odl-lithium
+trusty-liberty-beryllium:
+  inherits: trusty-liberty
+  overrides:
+    install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.4.0-Beryllium.tar.gz"
+    profile: openvswitch-odl-beryllium
+xenial-mitaka-beryllium:
+  inherits: trusty-liberty-beryllium
+  series: xenial
+  overrides:
+    openstack-origin: distro
+    source: distro
 trusty-kilo:
   inherits: openstack-services
   overrides:
