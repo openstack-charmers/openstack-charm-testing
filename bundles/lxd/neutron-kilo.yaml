@@ -1,0 +1,19 @@
+repositories:
+  - {name: requirements,
+     repository: 'git://github.com/openstack/requirements',
+     branch: stable/kilo}
+  - {name: neutron-fwaas,
+     repository: 'git://github.com/openstack/neutron-fwaas',
+     branch: stable/kilo}
+  - {name: neutron-lbaas,
+     repository: 'git://github.com/openstack/neutron-lbaas',
+     branch: stable/kilo}
+  - {name: neutron-vpnaas,
+     repository: 'git://github.com/openstack/neutron-vpnaas',
+     branch: stable/kilo}
+  - {name: neutron,
+     repository: 'git://github.com/openstack/neutron',
+     branch: stable/kilo}
+directory: /mnt/openstack-git
+http_proxy: http://squid.internal:3128
+https_proxy: http://squid.internal:3128

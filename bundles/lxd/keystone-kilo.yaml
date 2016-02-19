@@ -1,0 +1,10 @@
+repositories:
+  - {name: requirements,
+     repository: 'git://github.com/openstack/requirements',
+     branch: stable/kilo}
+  - {name: keystone,
+     repository: 'git://github.com/openstack/keystone',
+     branch: stable/kilo}
+directory: /mnt/openstack-git
+http_proxy: http://squid.internal:3128
+https_proxy: http://squid.internal:3128

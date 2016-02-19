@@ -1,0 +1,10 @@
+repositories:
+  - {name: requirements,
+     repository: 'git://github.com/zulcss/requirements',
+     branch: master}
+  - {name: glance,
+     repository: 'git://github.com/openstack/glance',
+     branch: 12.0.0.0b2}
+directory: /mnt/openstack-git
+http_proxy: http://squid.internal:3128
+https_proxy: http://squid.internal:3128
