@@ -1,0 +1,25 @@
+lts:
+  constraints: mem=1G arch=amd64
+  services:
+    ubuntu-trusty:
+      series: trusty
+      branch: lp:charms/trusty/ubuntu
+      num_units: 1
+intermediate:
+  constraints: mem=1G arch=amd64
+  services:
+    ubuntu-wily:
+      series: wily
+      branch: lp:charms/trusty/ubuntu
+      num_units: 1
+dev:
+  constraints: mem=1G arch=amd64
+  services:
+    ubuntu-xenial:
+      series: xenial
+      branch: lp:charms/trusty/ubuntu
+      num_units: 1
+supported:
+  inherits: [lts, intermediate]
+all:
+  inherits: [lts, intermediate, dev]
