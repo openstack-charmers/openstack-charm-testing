@@ -97,7 +97,6 @@ openstack-services:
     - [ cinder, mysql-api ]
     - [ cinder, rabbitmq-server-api ]
     - [ cinder, keystone ]
-    - [ neutron-gateway, mysql-neutron ]
     - - rabbitmq-server-api
       - neutron-gateway:amqp-nova
     - - rabbitmq-server-neutron

@@ -103,7 +103,6 @@ openstack-services:
     - [ neutron-api, neutron-gateway ]
     - - neutron-gateway:amqp
       - rabbitmq-server:amqp
-    - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ nsx-transport-node, neutron-gateway ]
     - [ nsx-transport-node, nova-compute ]

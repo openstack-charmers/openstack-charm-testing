@@ -77,7 +77,6 @@ openstack-services:
     - [ cinder, keystone ]
     - [ cinder, ceph ]
     - [ cinder, ganglia-node ]
-    - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ neutron-gateway, ganglia-node ]
     - [ "ganglia:master", ganglia-node ]

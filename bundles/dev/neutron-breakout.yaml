@@ -130,7 +130,6 @@ openstack-services:
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, ceph ]
-    - [ neutron-gateway, mysql ]
     - - rabbitmq-server-nova
       - neutron-gateway:amqp-nova
     - - rabbitmq-server-neutron

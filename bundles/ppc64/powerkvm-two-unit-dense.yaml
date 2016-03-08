@@ -65,7 +65,6 @@ openstack-services:
     - [ nova-compute-power, glance ]
     - [ glance, mysql ]
     - [ glance, keystone ]
-    - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
 openstack-singlerabbit:
