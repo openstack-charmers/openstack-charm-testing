@@ -4,12 +4,12 @@
 deployer-quick-check:
   services:
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: https://github.com/openstack/charm-percona-cluster
       constraints: mem=1G
       options:
         dataset-size: 50%
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       constraints: mem=1G
       options:
         admin-password: openstack

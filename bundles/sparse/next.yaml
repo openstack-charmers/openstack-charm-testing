@@ -4,7 +4,7 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: https://github.com/openstack/charm-percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -12,10 +12,10 @@ openstack-services:
 #        root-password: changeme
 #        sst-password: changeme
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: https://github.com/openstack/charm-rabbitmq-server
       constraints: mem=1G
     ceph:
-      branch: lp:~openstack-charmers/charms/trusty/ceph/next
+      branch: https://github.com/openstack/charm-ceph
       num_units: 3
       constraints: mem=1G
       options:
@@ -26,16 +26,16 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
       constraints: mem=1G
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
       constraints: mem=4G
       options:
@@ -43,62 +43,62 @@ openstack-services:
         enable-resize: True
         migration-auth-type: ssh
     nova-cloud-controller:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      branch: https://github.com/openstack/charm-neutron-gateway
       constraints: mem=1G
       options:
         instance-mtu: 1300
     cinder:
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      branch: https://github.com/openstack/charm-cinder
       options:
         block-device: "None"
         glance-api-version: 2
       constraints: mem=1G
     cinder-ceph:
-      branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
+      branch: https://github.com/openstack/charm-cinder-ceph
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
     swift-proxy:
-      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      branch: https://github.com/openstack/charm-swift-proxy
       constraints: mem=1G
       options:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
     swift-storage-z1:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 1
         block-device: vdb
         overwrite: "true"
     swift-storage-z2:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 2
         block-device: vdb
         overwrite: "true"
     swift-storage-z3:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 3
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+      branch: https://github.com/openstack/charm-ceilometer
       constraints: mem=1G
     ceilometer-agent:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+      branch: https://github.com/openstack/charm-ceilometer-agent
     heat:
-      branch: lp:~openstack-charmers/charms/trusty/heat/next
+      branch: https://github.com/openstack/charm-heat
     mongodb:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
@@ -148,12 +148,12 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
   relations:
   - [ neutron-api, mysql ]
   - [ neutron-api, rabbitmq-server ]
@@ -167,14 +167,14 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
     rabbitmq-server-neutron:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable
       constraints: mem=1G
   relations:
   - [ neutron-api, mysql ]

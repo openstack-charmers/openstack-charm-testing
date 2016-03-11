@@ -4,7 +4,7 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: https://github.com/openstack/charm-percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -12,19 +12,19 @@ openstack-services:
 #        root-password: changeme
 #        sst-password: changeme
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: https://github.com/openstack/charm-rabbitmq-server
       constraints: mem=1G
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
       constraints: mem=1G
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 1
       constraints: mem=4G
       options:
@@ -33,18 +33,18 @@ openstack-services:
         migration-auth-type: ssh
         virt-type: lxd
     nova-cloud-controller:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      branch: https://github.com/openstack/charm-neutron-gateway
       constraints: mem=1G
       options:
         instance-mtu: 1300
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
     lxd:
       branch: lp:~zulcss/charms/trusty/lxd/lxd-2.0
@@ -76,12 +76,12 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
   relations:
   - [ neutron-api, mysql ]
   - [ neutron-api, rabbitmq-server ]
@@ -95,14 +95,14 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
     rabbitmq-server-neutron:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable
       constraints: mem=1G
   relations:
   - [ neutron-api, mysql ]

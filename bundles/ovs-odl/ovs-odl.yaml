@@ -2,55 +2,55 @@ openstack-services:
   series: trusty
   services:
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      branch: https://github.com/openstack/charm-neutron-gateway
       options:
         plugin: ovs-odl
         instance-mtu: 1400
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: False
         manage-neutron-plugin-legacy-mode: False
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       options:
         neutron-security-groups: True
         manage-neutron-plugin-legacy-mode: False
     neutron-api-odl:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api-odl/next
+      branch: https://github.com/openstack/charm-neutron-api-odl
       options:
         overlay-network-type: 'vxlan gre'
         security-groups: True
     odl-controller:
-      branch: lp:~openstack-charmers/charms/trusty/odl-controller/next
+      branch: https://github.com/openstack/charm-odl-controller
       options:
         install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.2.3-Helium-SR3.tar.gz"
         http-proxy: "http://squid.internal:3128"
         https-proxy: "http://squid.internal:3128"
     openvswitch-odl:
-      branch: lp:~openstack-charmers/charms/trusty/openvswitch-odl/next
+      branch: https://github.com/openstack/charm-openvswitch-odl
     mysql:
       branch: lp:charms/trusty/mysql
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
     nova-cloud-controller:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
   relations:
     - ['neutron-api:neutron-plugin-api-subordinate', 'neutron-api-odl:neutron-plugin-api-subordinate']
     - ['nova-compute:neutron-plugin', 'openvswitch-odl:neutron-plugin']
