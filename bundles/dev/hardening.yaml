@@ -4,9 +4,10 @@
 openstack-services:
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/4
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/10
       constraints: mem=4G
       options:
+        harden: "os ssh mysql"
         dataset-size: 50%
         max-connections: 20000
 #        root-password: changeme
@@ -26,9 +27,10 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: https://review.openstack.org/openstack/charm-keystone#changeref=291550/1
+      branch: https://review.openstack.org/openstack/charm-keystone#changeref=291550/10
       constraints: mem=1G
       options:
+        harden: "os ssh apache"
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
@@ -92,18 +94,14 @@ openstack-services:
         zone: 3
         block-device: vdb
         overwrite: "true"
-
     hardening-ssh-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-ssh-tests-charm
       constraints: mem=1G
-
     hardening-mysql-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-mysql-tests-charm
       constraints: mem=1G
-
     hardening-os-tests:
       branch: lp:~billy-olsen/charms/trusty/hardening-os-tests/trunk
-
   relations:
     - [ keystone, percona-cluster ]
     - [ nova-cloud-controller, percona-cluster ]
@@ -133,7 +131,6 @@ openstack-services:
     - [ swift-proxy, swift-storage-z1 ]
     - [ swift-proxy, swift-storage-z2 ]
     - [ swift-proxy, swift-storage-z3 ]
-
     - [ hardening-os-tests, percona-cluster ]
     - [ hardening-os-tests, keystone ]
     - [ hardening-os-tests, openstack-dashboard ]
