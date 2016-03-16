@@ -36,6 +36,9 @@ openstack-services:
     openstack-dashboard:
       branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/1
       constraints: mem=1G
+      options:
+        harden: "os ssh apache"
+0587d9ea-31d1-4690-873a-e82043fe8a36
     nova-compute:
       branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
