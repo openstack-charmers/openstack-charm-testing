@@ -4,7 +4,7 @@
 openstack-services:
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/12
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/13
       constraints: mem=4G
       options:
         harden: "os ssh mysql"
@@ -34,7 +34,7 @@ openstack-services:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: https://github.com/openstack/charm-openstack-dashboard
+      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/1
       constraints: mem=1G
     nova-compute:
       branch: https://github.com/openstack/charm-nova-compute
@@ -96,6 +96,9 @@ openstack-services:
         overwrite: "true"
     hardening-ssh-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-ssh-tests-charm
+      constraints: mem=1G
+    hardening-apache-tests:
+      branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-apache-tests-charm
       constraints: mem=1G
     hardening-mysql-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-mysql-tests-charm
