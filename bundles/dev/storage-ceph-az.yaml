@@ -1,16 +1,33 @@
-series: trusty
-services: 
-  "ceph-osd":
-    branch: https://review.openstack.org/openstack/charm-ceph-osd#changeref=293694/4
-    num_units: 3
-    options: 
-      "ephemeral-unmount": /mnt
-      "osd-devices": /dev/vdb
-  "ceph-mon":
-    branch: https://review.openstack.org/openstack/charm-ceph-mon#changeref=293982/2
-    num_units: 3
-    options: 
-      "customize-failure-domain": true
-relations: 
-  - - "ceph-osd:mon"
-    - "ceph-mon:osd"
+base:
+  services:
+    ceph-osd:
+      branch: https://review.openstack.org/openstack/charm-ceph-osd#changeref=293694/4
+      num_units: 3
+      constraints: tags=netspaces
+      options:
+        ephemeral-unmount: /mnt
+        osd-devices: /dev/vdb /dev/sdb
+    ceph-mon:
+      branch: https://review.openstack.org/openstack/charm-ceph-mon#changeref=293982/2
+      num_units: 3
+      options:
+        customize-failure-domain: true
+      to:
+        - "lxc:ceph-osd=0"
+        - "lxc:ceph-osd=1"
+        - "lxc:ceph-osd=2"
+  relations:
+    - - "ceph-osd:mon"
+      - "ceph-mon:osd"
+precise:
+  inherits: base
+  series: precise
+trusty:
+  inherits: base
+  series: trusty
+wily:
+  inherits: base
+  series: wily
+xenial:
+  inherits: base
+  series: xenial
