@@ -6,24 +6,24 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/trusty/percona-cluster
+      branch: https://github.com/openstack/charm-percona-cluster;stable
       options:
         dataset-size: 75%
       to:
         - "lxc:0"
     rabbitmq-server:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable
       to:
         - "lxc:0"
     keystone:
-      branch: lp:charms/trusty/keystone
+      branch: https://github.com/openstack/charm-keystone;stable
       options:
         admin-password: openstack
         admin-token: ubuntutesting
       to:
         - "lxc:0"
     openstack-dashboard:
-      branch: lp:charms/trusty/openstack-dashboard
+      branch: https://github.com/openstack/charm-openstack-dashboard;stable
       constraints: mem=1G
       to:
         - "lxc:0"
@@ -37,7 +37,7 @@ openstack-services:
       to:
         - "lxc:0"
     nova-cloud-controller:
-      branch: lp:charms/trusty/nova-cloud-controller
+      branch: https://github.com/openstack/charm-nova-cloud-controller;stable
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
@@ -50,7 +50,7 @@ openstack-services:
         instance-mtu: 1300
         ext-port: "eth1"
     glance:
-      branch: lp:charms/trusty/glance
+      branch: https://github.com/openstack/charm-glance;stable
       to:
         - "lxc:0"
   relations:
@@ -75,7 +75,7 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable
       constraints: mem=1G
       options:
         neutron-security-groups: True
@@ -92,14 +92,14 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:charms/trusty/neutron-openvswitch
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable
     rabbitmq-server-neutron:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable
       constraints: mem=1G
   relations:
   - [ neutron-api, mysql ]
