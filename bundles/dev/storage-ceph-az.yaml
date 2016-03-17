@@ -1,0 +1,16 @@
+series: trusty
+services: 
+  "ceph-osd":
+    branch: https://review.openstack.org/openstack/charm-ceph-osd#changeref=293694/4
+    num_units: 3
+    options: 
+      "ephemeral-unmount": /mnt
+      "osd-devices": /dev/vdb
+  "ceph-mon":
+    branch: https://review.openstack.org/openstack/charm-ceph-mon#changeref=293982/2
+    num_units: 3
+    options: 
+      "customize-failure-domain": true
+relations: 
+  - - "ceph-osd:mon"
+    - "ceph-mon:osd"
