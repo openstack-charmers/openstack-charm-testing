@@ -192,52 +192,6 @@ trusty-juno:
 utopic-juno:
   inherits: openstack-juno-git
   series: utopic
-# kilo
-openstack-kilo-git:
-  inherits: openstack-icehouse
-  services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-kilo.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-kilo.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-kilo.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-kilo.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-kilo.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-kilo.yaml
-    nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-kilo.yaml
-    nova-cloud-controller:
-      options:
-        openstack-origin-git: include-file://nova-kilo.yaml
-trusty-kilo:
-  inherits: openstack-kilo-git
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-kilo
-    source: cloud:trusty-kilo
-trusty-kilo-proposed:
-  inherits: openstack-kilo-git
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
-    source: cloud:trusty-kilo/proposed
-vivid-kilo:
-  inherits: openstack-kilo-git
-  series: vivid
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
 # liberty
 openstack-liberty-git:
   inherits: openstack-icehouse
