@@ -97,6 +97,9 @@ openstack-services:
         zone: 3
         block-device: vdb
         overwrite: "true"
+    hardening-os-tests:
+      branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-os-tests-charm
+      constraints: mem=1G
     hardening-ssh-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-ssh-tests-charm
       constraints: mem=1G
@@ -106,8 +109,6 @@ openstack-services:
     hardening-mysql-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-mysql-tests-charm
       constraints: mem=1G
-    hardening-os-tests:
-      branch: lp:~billy-olsen/charms/trusty/hardening-os-tests/trunk
   relations:
     - [ keystone, percona-cluster ]
     - [ nova-cloud-controller, percona-cluster ]
