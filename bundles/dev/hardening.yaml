@@ -34,7 +34,7 @@ openstack-services:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/1
+      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/2
       constraints: mem=1G
       options:
         harden: "os ssh apache"
@@ -98,7 +98,6 @@ openstack-services:
         overwrite: "true"
     hardening-os-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-os-tests-charm
-      constraints: mem=1G
     hardening-ssh-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-ssh-tests-charm
       constraints: mem=1G
