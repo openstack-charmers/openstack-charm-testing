@@ -47,11 +47,10 @@ openstack-services:
       branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
     lxd:
-      branch: lp:~zulcss/charms/trusty/lxd/lxd-2.0
+      branch: https://github.com/openstack/charms-lxd
       options:
         block-device: /mnt/disk.img|20G
         storage-type: btrfs
-        lxd-origin: ppa:ubuntu-lxc/lxd-git-master
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
