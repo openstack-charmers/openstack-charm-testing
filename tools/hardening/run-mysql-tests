@@ -10,8 +10,6 @@ juju run --unit $UNIT_TO_TEST "\
     install -m 640 -o hiotest /tmp/id_rsa.pub /home/hiotest/.ssh/authorized_keys; \
     echo 'hiotest ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-hiotest-user; \
     sudo chmod 440 /etc/sudoers.d/90-hiotest-user;"
---------------------------------------------------------------------------------
 
 # Running a test
-
 juju action do hardening-mysql-tests/0 run-test target-ip=$TARGET_IP
