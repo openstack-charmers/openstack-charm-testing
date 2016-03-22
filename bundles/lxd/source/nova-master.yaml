@@ -1,9 +1,6 @@
 repositories:
   - {name: requirements,
-     repository: 'git://github.com/openstack/requirements',
-     branch: master}
-  - {name: neutron,
-     repository: 'git://github.com/openstack/neutron',
+     repository: 'git://github.com/zulcss/requirements',
      branch: master}
   - {name: pylxd,
      repository: 'https://github.com/lxc/pylxd',
