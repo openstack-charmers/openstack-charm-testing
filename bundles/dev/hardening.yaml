@@ -4,19 +4,21 @@
 openstack-services:
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/17
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
       constraints: mem=4G
       options:
-        harden: "os ssh mysql"
         dataset-size: 50%
         max-connections: 20000
         root-password: iloverandompasswordsbutthiswilldo
         sst-password: iloverandompasswordsbutthiswilldo
+        harden: "os ssh mysql apache"
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server
+      branch: https://review.openstack.org/openstack/charm-rabbitmq-server#changeref=296057/1
       constraints: mem=1G
+      options:
+        harden: "os ssh mysql apache"
     ceph:
-      branch: https://github.com/openstack/charm-ceph
+      branch: https://review.openstack.org/openstack/charm-ceph#changeref=296026/1
       num_units: 3
       constraints: mem=1G
       options:
@@ -26,76 +28,87 @@ openstack-services:
         osd-devices: /dev/vdb
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
+        harden: "os ssh mysql apache"
     keystone:
-      branch: https://review.openstack.org/openstack/charm-keystone#changeref=291550/15
+      branch: https://review.openstack.org/openstack/charm-keystone#changeref=291550/17
       constraints: mem=1G
       options:
-        harden: "os ssh apache"
         admin-password: openstack
         admin-token: ubuntutesting
+        harden: "os ssh mysql apache"
     openstack-dashboard:
-      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/5
+      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/8
       constraints: mem=1G
       options:
-        harden: "os ssh apache"
+        harden: "os ssh mysql apache"
     nova-compute:
-      branch: https://github.com/openstack/charm-nova-compute
+      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=296056/1
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: True
         enable-resize: True
         migration-auth-type: ssh
+        harden: "os ssh mysql apache"
     nova-cloud-controller:
-      branch: https://github.com/openstack/charm-nova-cloud-controller
+      branch: https://review.openstack.org/openstack/charm-nova-cloud-controller#changeref=296055/1
       constraints: mem=1G
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
+        harden: "os ssh mysql apache"
     neutron-gateway:
-      branch: https://github.com/openstack/charm-neutron-gateway
+      branch: https://review.openstack.org/openstack/charm-neutron-gateway#changeref=296054/1
       constraints: mem=1G
       options:
         instance-mtu: 1300
+        harden: "os ssh mysql apache"
     cinder:
-      branch: https://github.com/openstack/charm-cinder
+      branch: https://review.openstack.org/openstack/charm-cinder#changeref=296029/1
       options:
         block-device: "None"
         glance-api-version: 2
+        harden: "os ssh mysql apache"
       constraints: mem=1G
     cinder-ceph:
       branch: https://github.com/openstack/charm-cinder-ceph
     glance:
-      branch: https://github.com/openstack/charm-glance
+      branch: https://review.openstack.org/openstack/charm-glance#changeref=296030/1
       constraints: mem=1G
+      options:
+        harden: "os ssh mysql apache"
     swift-proxy:
-      branch: https://github.com/openstack/charm-swift-proxy
+      branch: https://review.openstack.org/openstack/charm-swift-proxy#changeref=296058/1
       constraints: mem=1G
       options:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+        harden: "os ssh mysql apache"
     swift-storage-z1:
-      branch: https://github.com/openstack/charm-swift-storage
+      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/1
       constraints: mem=1G
       options:
         zone: 1
         block-device: vdb
         overwrite: "true"
+        harden: "os ssh mysql apache"
     swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage
+      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/1
       constraints: mem=1G
       options:
         zone: 2
         block-device: vdb
         overwrite: "true"
+        harden: "os ssh mysql apache"
     swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage
+      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/1
       constraints: mem=1G
       options:
         zone: 3
         block-device: vdb
         overwrite: "true"
+        harden: "os ssh mysql apache"
     hardening-os-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-os-tests-charm
     hardening-ssh-tests:
@@ -147,9 +160,10 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
+      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/1
       constraints: mem=1G
       options:
+        harden: "os ssh mysql apache"
         neutron-security-groups: True
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
@@ -166,9 +180,10 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
+      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/1
       constraints: mem=1G
       options:
+        harden: "os ssh mysql apache"
         neutron-security-groups: True
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
@@ -192,7 +207,14 @@ precise-icehouse:
   series: precise
   services:
     percona-cluster:
-      branch: https://github.com/openstack/charm-percona-cluster
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: iloverandompasswordsbutthiswilldo
+        sst-password: iloverandompasswordsbutthiswilldo
+        harden: "os ssh mysql apache"
   overrides:
     openstack-origin: cloud:precise-icehouse
     source: cloud:precise-icehouse
@@ -275,7 +297,14 @@ vivid-kilo:
   series: vivid
   services:
     percona-cluster:
-      branch: https://github.com/openstack/charm-percona-cluster
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: iloverandompasswordsbutthiswilldo
+        sst-password: iloverandompasswordsbutthiswilldo
+        harden: "os ssh mysql apache"
 vivid-kilo-proposed:
   inherits: vivid-kilo
   overrides:
@@ -303,7 +332,14 @@ wily-liberty:
   series: wily
   services:
     percona-cluster:
-      branch: https://github.com/openstack/charm-percona-cluster
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: iloverandompasswordsbutthiswilldo
+        sst-password: iloverandompasswordsbutthiswilldo
+        harden: "os ssh mysql apache"
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
@@ -331,7 +367,14 @@ xenial-mitaka:
   series: xenial
   services:
     percona-cluster:
-      branch: https://github.com/openstack/charm-percona-cluster
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: iloverandompasswordsbutthiswilldo
+        sst-password: iloverandompasswordsbutthiswilldo
+        harden: "os ssh mysql apache"
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
