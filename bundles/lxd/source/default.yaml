@@ -9,8 +9,6 @@ openstack-services:
       options:
         dataset-size: 50%
         max-connections: 20000
-#        root-password: changeme
-#        sst-password: changeme
     rabbitmq-server:
       branch: https://github.com/openstack/charm-rabbitmq-server;stable
       constraints: mem=1G
@@ -46,9 +44,9 @@ openstack-services:
     glance:
       branch: https://github.com/openstack/charm-glance;stable
       constraints: mem=1G
-    lxd:
-      branch: 
-      options: https://github.com/openstack/charm-lxd
+    lxd: 
+      branch: lp:~openstack-charmers-next/charms/trusty/lxd/trunk
+      options:
         block-device: /mnt/disk.img|20G
         storage-type: btrfs
   relations:
@@ -58,13 +56,14 @@ openstack-services:
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
     - [ nova-compute, nova-cloud-controller ]
-    - [ nova-compute, mysql ]
     - [ nova-compute, lxd ]
+    - [ nova-compute, mysql ]
     - - nova-compute
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
     - [ glance, mysql ]
     - [ glance, keystone ]
+    - [ glance, rabbitmq-server ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
 openstack-singlerabbit:
@@ -75,12 +74,12 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable
   relations:
   - [ neutron-api, mysql ]
   - [ neutron-api, rabbitmq-server ]
@@ -94,12 +93,12 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable
     rabbitmq-server-neutron:
       branch: https://github.com/openstack/charm-rabbitmq-server;stable
       constraints: mem=1G
@@ -114,172 +113,71 @@ openstack-icehouse-msg-split:
   - [ neutron-openvswitch, rabbitmq-server-neutron ]
   - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
-# icehouse
-openstack-icehouse-git:
-  inherits: openstack-icehouse
-  services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-icehouse.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-icehouse.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-icehouse.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-icehouse.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-icehouse.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-icehouse.yaml
-    nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-icehouse.yaml
-    nova-cloud-controller:
-      options:
-        openstack-origin-git: include-file://nova-icehouse.yaml
-precise-icehouse:
-  inherits: openstack-icehouse-git
-  series: precise
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-  overrides:
-    openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-icehouse
-trusty-icehouse:
-  inherits: openstack-icehouse-git
-  series: trusty
-# juno
-openstack-juno-git:
-  inherits: openstack-icehouse
-  services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-juno.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-juno.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-juno.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-juno.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-juno.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-juno.yaml
-    nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-juno.yaml
-    nova-cloud-controller:
-      options:
-        openstack-origin-git: include-file://nova-juno.yaml
-trusty-juno:
-  inherits: openstack-juno-git
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-juno
-    source: cloud:trusty-juno
-utopic-juno:
-  inherits: openstack-juno-git
-  series: utopic
 # liberty
-openstack-liberty-git:
+openestck-liberty-git:
   inherits: openstack-icehouse
   services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-liberty.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-liberty.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-liberty.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-liberty.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-liberty.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-liberty.yaml
     nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-liberty.yaml
-    nova-cloud-controller:
       options:
         openstack-origin-git: include-file://nova-liberty.yaml
 trusty-liberty:
-  inherits: openstack-liberty-git
+  inherits: openstack-icehouse-git
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
 trusty-liberty-proposed:
-  inherits: openstack-liberty-git
-  series: trusty
+  inherits: trusty-liberty
   overrides:
     openstack-origin: cloud:trusty-liberty/proposed
     source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
 wily-liberty:
-  inherits: openstack-liberty-git
+  inherits: openstack-icehouse
   series: wily
   services:
     mysql:
       branch: lp:charms/trusty/mysql
-# master
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
 openstack-master-git:
   inherits: openstack-icehouse
   services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-master.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-master.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-master.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-master.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-master.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-master.yaml
     nova-compute:
       options:
         openstack-origin-git: include-file://nova-master.yaml
-    nova-cloud-controller:
-      options:
-        openstack-origin-git: include-file://nova-master.yaml
-trusty-master:
-  inherits: openstack-master-git
+trusty-mitaka:
+  inherits: openstack-icehouse
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
-trusty-master-proposed:
-  inherits: openstack-master-git
-  series: trusty
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
   overrides:
     openstack-origin: cloud:trusty-mitaka/proposed
     source: cloud:trusty-mitaka/proposed
-xenial-master:
-  inherits: openstack-master-git
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: openstack-icehouse
   series: xenial
   services:
     mysql:
       branch: lp:charms/trusty/mysql
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
