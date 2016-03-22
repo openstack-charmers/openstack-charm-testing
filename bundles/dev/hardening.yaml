@@ -4,7 +4,7 @@
 openstack-services:
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/14
+      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/17
       constraints: mem=4G
       options:
         harden: "os ssh mysql"
@@ -27,14 +27,14 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: https://review.openstack.org/openstack/charm-keystone#changeref=291550/13
+      branch: https://review.openstack.org/openstack/charm-keystone#changeref=291550/15
       constraints: mem=1G
       options:
         harden: "os ssh apache"
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/3
+      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/5
       constraints: mem=1G
       options:
         harden: "os ssh apache"

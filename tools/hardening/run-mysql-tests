@@ -1,0 +1,17 @@
+#!/bin/bash -eu
+UNIT_TO_TEST=$1
+TESTER_UNIT=${2:-hardening-mysql-tests/0}
+TARGET_IP=`juju-deployer -f ${UNIT_TO_TEST%/*}`
+juju scp $TESTER_UNIT:/home/ubuntu/.ssh/id_rsa.pub /tmp/id_rsa.pub
+juju scp /tmp/id_rsa.pub $UNIT_TO_TEST:/tmp/
+juju run --unit $UNIT_TO_TEST "\
+    useradd -m -s /bin/bash -d /home/hiotest hiotest; \
+    install -m 700 -o hiotest -d /home/hiotest/.ssh; \
+    install -m 640 -o hiotest /tmp/id_rsa.pub /home/hiotest/.ssh/authorized_keys; \
+    echo 'hiotest ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-hiotest-user; \
+    sudo chmod 440 /etc/sudoers.d/90-hiotest-user;"
+--------------------------------------------------------------------------------
+
+# Running a test
+
+juju action do hardening-mysql-tests/0 run-test target-ip=$TARGET_IP
