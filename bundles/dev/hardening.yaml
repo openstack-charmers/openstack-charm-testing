@@ -10,8 +10,8 @@ openstack-services:
         harden: "os ssh mysql"
         dataset-size: 50%
         max-connections: 20000
-#        root-password: changeme
-#        sst-password: changeme
+        root-password: iloverandompasswordsbutthiswilldo
+        sst-password: iloverandompasswordsbutthiswilldo
     rabbitmq-server:
       branch: https://github.com/openstack/charm-rabbitmq-server
       constraints: mem=1G
