@@ -51,14 +51,14 @@ openstack-services:
         migration-auth-type: ssh
         harden: "os ssh mysql apache"
     nova-cloud-controller:
-      branch: https://review.openstack.org/openstack/charm-nova-cloud-controller#changeref=296055/1
+      branch: https://review.openstack.org/openstack/charm-nova-cloud-controller#changeref=296055/2
       constraints: mem=1G
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
         harden: "os ssh mysql apache"
     neutron-gateway:
-      branch: https://review.openstack.org/openstack/charm-neutron-gateway#changeref=296054/1
+      branch: https://review.openstack.org/openstack/charm-neutron-gateway#changeref=296054/2
       constraints: mem=1G
       options:
         instance-mtu: 1300
@@ -78,7 +78,7 @@ openstack-services:
       options:
         harden: "os ssh mysql apache"
     swift-proxy:
-      branch: https://review.openstack.org/openstack/charm-swift-proxy#changeref=296058/1
+      branch: https://review.openstack.org/openstack/charm-swift-proxy#changeref=296058/2
       constraints: mem=1G
       options:
         zone-assignment: manual
@@ -86,7 +86,7 @@ openstack-services:
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
         harden: "os ssh mysql apache"
     swift-storage-z1:
-      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/1
+      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/2
       constraints: mem=1G
       options:
         zone: 1
@@ -94,7 +94,7 @@ openstack-services:
         overwrite: "true"
         harden: "os ssh mysql apache"
     swift-storage-z2:
-      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/1
+      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/2
       constraints: mem=1G
       options:
         zone: 2
@@ -102,7 +102,7 @@ openstack-services:
         overwrite: "true"
         harden: "os ssh mysql apache"
     swift-storage-z3:
-      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/1
+      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/2
       constraints: mem=1G
       options:
         zone: 3
@@ -160,7 +160,7 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/1
+      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/2
       constraints: mem=1G
       options:
         harden: "os ssh mysql apache"
@@ -180,7 +180,7 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/1
+      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/2
       constraints: mem=1G
       options:
         harden: "os ssh mysql apache"
