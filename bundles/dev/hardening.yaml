@@ -4,7 +4,7 @@
 openstack-services:
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      branch: https://github.com/dosaboy/charm-percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -13,12 +13,12 @@ openstack-services:
         sst-password: iloverandompasswordsbutthiswilldo
         harden: "os ssh mysql apache"
     rabbitmq-server:
-      branch: https://review.openstack.org/openstack/charm-rabbitmq-server#changeref=296057/1
+      branch: https://github.com/dosaboy/charm-rabbitmq-server
       constraints: mem=1G
       options:
         harden: "os ssh mysql apache"
     ceph:
-      branch: https://review.openstack.org/openstack/charm-ceph#changeref=296026/1
+      branch: https://github.com/dosaboy/charm-ceph
       num_units: 3
       constraints: mem=1G
       options:
@@ -30,19 +30,19 @@ openstack-services:
         ephemeral-unmount: /mnt
         harden: "os ssh mysql apache"
     keystone:
-      branch: https://review.openstack.org/openstack/charm-keystone#changeref=291550/17
+      branch: https://github.com/dosaboy/charm-keystone
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
         harden: "os ssh mysql apache"
     openstack-dashboard:
-      branch: https://review.openstack.org/openstack/charm-openstack-dashboard#changeref=293615/8
+      branch: https://github.com/dosaboy/charm-openstack-dashboard
       constraints: mem=1G
       options:
         harden: "os ssh mysql apache"
     nova-compute:
-      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=296056/1
+      branch: https://github.com/dosaboy/charm-nova-compute
       num_units: 3
       constraints: mem=4G
       options:
@@ -51,20 +51,20 @@ openstack-services:
         migration-auth-type: ssh
         harden: "os ssh mysql apache"
     nova-cloud-controller:
-      branch: https://review.openstack.org/openstack/charm-nova-cloud-controller#changeref=296055/2
+      branch: https://github.com/dosaboy/charm-nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
         harden: "os ssh mysql apache"
     neutron-gateway:
-      branch: https://review.openstack.org/openstack/charm-neutron-gateway#changeref=296054/2
+      branch: https://github.com/dosaboy/charm-neutron-gateway
       constraints: mem=1G
       options:
         instance-mtu: 1300
         harden: "os ssh mysql apache"
     cinder:
-      branch: https://review.openstack.org/openstack/charm-cinder#changeref=296029/1
+      branch: https://github.com/dosaboy/charm-cinder
       options:
         block-device: "None"
         glance-api-version: 2
@@ -73,12 +73,12 @@ openstack-services:
     cinder-ceph:
       branch: https://github.com/openstack/charm-cinder-ceph
     glance:
-      branch: https://review.openstack.org/openstack/charm-glance#changeref=296030/1
+      branch: https://github.com/dosaboy/charm-glance
       constraints: mem=1G
       options:
         harden: "os ssh mysql apache"
     swift-proxy:
-      branch: https://review.openstack.org/openstack/charm-swift-proxy#changeref=296058/2
+      branch: https://github.com/dosaboy/charm-swift-proxy
       constraints: mem=1G
       options:
         zone-assignment: manual
@@ -86,7 +86,7 @@ openstack-services:
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
         harden: "os ssh mysql apache"
     swift-storage-z1:
-      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/2
+      branch: https://github.com/dosaboy/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 1
@@ -94,7 +94,7 @@ openstack-services:
         overwrite: "true"
         harden: "os ssh mysql apache"
     swift-storage-z2:
-      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/2
+      branch: https://github.com/dosaboy/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 2
@@ -102,7 +102,7 @@ openstack-services:
         overwrite: "true"
         harden: "os ssh mysql apache"
     swift-storage-z3:
-      branch: https://review.openstack.org/openstack/charm-swift-storage#changeref=296059/2
+      branch: https://github.com/dosaboy/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 3
@@ -160,7 +160,7 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/2
+      branch: https://github.com/dosaboy/charm-neutron-api
       constraints: mem=1G
       options:
         harden: "os ssh mysql apache"
@@ -180,7 +180,7 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: https://review.openstack.org/openstack/charm-neutron-api#changeref=296053/2
+      branch: https://github.com/dosaboy/charm-neutron-api
       constraints: mem=1G
       options:
         harden: "os ssh mysql apache"
@@ -207,7 +207,7 @@ precise-icehouse:
   series: precise
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      branch: https://github.com/dosaboy/charm-percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -297,7 +297,7 @@ vivid-kilo:
   series: vivid
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      branch: https://github.com/dosaboy/charm-percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -332,7 +332,7 @@ wily-liberty:
   series: wily
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      branch: https://github.com/dosaboy/charm-percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -367,7 +367,7 @@ xenial-mitaka:
   series: xenial
   services:
     percona-cluster:
-      branch: https://review.openstack.org/openstack/charm-percona-cluster#changeref=291484/19
+      branch: https://github.com/dosaboy/charm-percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
