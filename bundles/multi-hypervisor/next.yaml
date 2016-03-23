@@ -52,6 +52,7 @@ openstack-services:
         block-device: /dev/vdb
         ephemeral-unmount: /mnt
         storage-type: lvm
+        overwrite: "true"
     nova-cloud-controller:
       branch: https://github.com/openstack/charm-nova-cloud-controller
       constraints: mem=1G
