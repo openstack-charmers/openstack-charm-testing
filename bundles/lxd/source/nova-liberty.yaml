@@ -6,7 +6,7 @@ repositories:
      repository: 'https://github.com/lxc/pylxd',
      branch: master}
   - {name: nova-compute-lxd,
-     repository: 'https://github.com/lxc/nova-compute-lxd',
+     repository: 'https://github.com/lxc/nova-lxd',
      branch: master}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
