@@ -114,14 +114,14 @@ openstack-icehouse-msg-split:
   - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # liberty
-openestck-liberty-git:
+openstack-liberty-git:
   inherits: openstack-icehouse
   services:
     nova-compute:
       options:
         openstack-origin-git: include-file://nova-liberty.yaml
 trusty-liberty:
-  inherits: openstack-icehouse-git
+  inherits: openstack-liberty-git
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-liberty
