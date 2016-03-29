@@ -151,8 +151,16 @@ openstack-liberty-git:
     nova-compute:
       options:
         openstack-origin-git: include-file://nova-liberty.yaml
+wily-liberty:
+  inherits: openstack-liberty-git
+  series: wily
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
 trusty-liberty:
-  inherits: openstack-icehouse-git
+  inherits: openstack-liberty-git
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-liberty
