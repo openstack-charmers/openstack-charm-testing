@@ -109,6 +109,20 @@ openstack-services:
         block-device: vdb
         overwrite: "true"
         harden: "os ssh mysql apache"
+    ceilometer:
+      branch: https://github.com/dosaboy/charm-ceilometer
+      constraints: mem=1G
+      options:
+          harden: "os ssh"
+    ceilometer-agent:
+      branch: https://github.com/openstack/charm-ceilometer-agent
+    heat:
+      branch: https://github.com/dosaboy/charm-heat
+      options:
+          harden: "os ssh"
+    mongodb:
+      branch: lp:charms/trusty/mongodb
+      constraints: mem=1G
     hardening-os-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-os-tests-charm
     hardening-ssh-tests:
@@ -149,6 +163,15 @@ openstack-services:
     - [ swift-proxy, swift-storage-z1 ]
     - [ swift-proxy, swift-storage-z2 ]
     - [ swift-proxy, swift-storage-z3 ]
+    - - ceilometer
+      - keystone:identity-service
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
     - [ hardening-os-tests, percona-cluster ]
     - [ hardening-os-tests, keystone ]
     - [ hardening-os-tests, openstack-dashboard ]
