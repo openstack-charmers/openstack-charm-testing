@@ -150,35 +150,36 @@ openstack-liberty-git:
   services:
     nova-compute:
       options:
-        opentack-origin-git: include-file://nova-liberty.yaml
+        openstack-origin-git: include-file://nova-liberty.yaml
 trusty-liberty:
   inherits: openstack-liberty-git
   series: trusty
   overrides:
      openstack-origin: cloud:trusty-liberty
      source: cloud:trusty-liberty
-#master
+wily-liberty:
+  inherits: openstack-liberty-git
+  series: wily
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
 openstack-master-git:
   inherits: openstack-icehouse
   services:
     nova-compute:
      options:
        openstack-origin-git: include-file://nova-master.yaml
-trusty-master:
-  inherits: openstack-master-git
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-mitaka
-    source: cloud:trusty-mitaka
-trusty-master-proposed:
-  inherits: openstack-master-git
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-mitaka/proposed
-    source: cloud:trusty-mitaka/proposed
 xenial-master:
   inherits: openstack-master-git
   series: xenial
   services:
     mysql:
       branch: lp:charms/trusty/mysql
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
