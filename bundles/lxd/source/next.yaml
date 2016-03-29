@@ -167,7 +167,7 @@ trusty-liberty:
     source: cloud:trusty-liberty
 # mitaka
 openstack-master-git:
-  inherit: openstack-icehouse
+  inherits: openstack-icehouse
   services:
     nova-compute:
       options:
