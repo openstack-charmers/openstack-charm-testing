@@ -1,0 +1,11 @@
+bundles/lxd/qa
+==============
+
+The following bundle are meant to be consumed by UOSCI
+in automated git deployment testing. They are working
+bundles, updated throughout the dev cycle.
+
+== Branches ==
+
+To test your branch, replace the master branch with 
+the branch that you want to test in the nova-master.yaml.

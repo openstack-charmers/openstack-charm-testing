@@ -1,5 +1,5 @@
 # vim: set ts=2 et:
-# deployer bundle for development (stable/trunk) charms
+# deployer bundle for development ('next') charms
 # UOSCI relies on this for OS-on-OS deployment testing
 openstack-services:
   services:
@@ -82,7 +82,7 @@ openstack-services:
     heat:
       branch: https://github.com/openstack/charm-heat;stable
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      branch: lp:charms/trusty/mongodb;stable
       constraints: mem=1G
     lxd:
       branch: https://github.com/openstack/charm-lxd
@@ -90,7 +90,6 @@ openstack-services:
         block-device: /dev/vdb
         ephemeral-unmount: /mnt
         storage-type: lvm
-        overwrite: "true"
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -145,19 +144,42 @@ openstack-icehouse:
   - [ neutron-api, neutron-gateway ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
-vivid-kilo:
+# liberty
+openstack-liberty-git:
   inherits: openstack-icehouse
-  series: vivid
-vivid-kilo-proposed:
-  inherits: vivid-kilo
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
+  services:
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-liberty.yaml
 wily-liberty:
-  inherits: openstack-icehouse
+  inherits: openstack-liberty-git
   series: wily
 wily-liberty-proposed:
   inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-liberty:
+  inherits: openstack-liberty-git
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+# mitaka
+openstack-master-git:
+  inherits: openstack-icehouse
+  services:
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-master.yaml
+xenial-mitaka:
+  inherits: openstack-master-git
+  series: xenial
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
   overrides:
     source: proposed
     openstack-origin: distro-proposed
