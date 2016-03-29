@@ -1,11 +1,12 @@
 # vim: set ts=2 et:
-# deployer bundle for development ('next') charms
+# deployer bundle for development (stable/trunk) charms
 # UOSCI relies on this for OS-on-OS deployment testing
 openstack-services:
   services:
     mysql:
-      branch: https://github.com/openstack/charm-percona-cluster;stable
-      constraints: mem=4G
+      branch: lp:charms/trusty/mysql
+      #https://github.com/openstack/charm-percona-cluster
+      constraints: mem=1G
       options:
         dataset-size: 50%
         max-connections: 20000
@@ -23,7 +24,7 @@ openstack-services:
       constraints: mem=1G
     nova-compute:
       branch: https://github.com/openstack/charm-nova-compute;stable
-      num_units: 1
+      num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: True
@@ -36,6 +37,7 @@ openstack-services:
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
+        ram-allocation-ratio: 5.0
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway;stable
       constraints: mem=1G
@@ -44,11 +46,50 @@ openstack-services:
     glance:
       branch: https://github.com/openstack/charm-glance;stable
       constraints: mem=1G
-    lxd: 
-      branch: lp:~openstack-charmers-next/charms/trusty/lxd/trunk
+    swift-proxy:
+      branch: https://github.com/openstack/charm-swift-proxy;stable
+      constraints: mem=1G
       options:
-        block-device: /mnt/disk.img|20G
-        storage-type: btrfs
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+    swift-storage-z1:
+      branch: https://github.com/openstack/charm-swift-storage;stable
+      constraints: mem=1G
+      options:
+        zone: 1
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: https://github.com/openstack/charm-swift-storage;stable
+      constraints: mem=1G
+      options:
+        zone: 2
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: https://github.com/openstack/charm-swift-storage;stable
+      constraints: mem=1G
+      options:
+        zone: 3
+        block-device: vdb
+        overwrite: "true"
+    ceilometer:
+      branch: https://github.com/openstack/charm-ceilometer;stable
+      constraints: mem=1G
+    ceilometer-agent:
+      branch: https://github.com/openstack/charm-ceilometer-agent;stable
+    heat:
+      branch: https://github.com/openstack/charm-heat;stable
+    mongodb:
+      branch: lp:charms/trusty/mongodb
+      constraints: mem=1G
+    lxd:
+      branch: https://github.com/openstack/charm-lxd
+      options:
+        block-device: /dev/vdb
+        ephemeral-unmount: /mnt
+        storage-type: lvm
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -64,8 +105,22 @@ openstack-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, rabbitmq-server ]
+    - [ glance, swift-proxy ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+    - - ceilometer
+      - keystone:identity-service
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
 openstack-singlerabbit:
   inherits: openstack-services
   relations:
@@ -89,95 +144,41 @@ openstack-icehouse:
   - [ neutron-api, neutron-gateway ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
-openstack-icehouse-msg-split:
-  inherits: openstack-services
-  services:
-    neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api;stable
-      constraints: mem=1G
-      options:
-        neutron-security-groups: True
-    neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch;stable
-    rabbitmq-server-neutron:
-      branch: https://github.com/openstack/charm-rabbitmq-server;stable
-      constraints: mem=1G
-  relations:
-  - [ neutron-api, mysql ]
-  - [ neutron-api, rabbitmq-server-neutron ]
-  - [ neutron-api, nova-cloud-controller ]
-  - [ neutron-api, neutron-openvswitch ]
-  - [ neutron-api, keystone ]
-  - [ neutron-api, neutron-gateway ]
-  - [ neutron-openvswitch, nova-compute ]
-  - [ neutron-openvswitch, rabbitmq-server-neutron ]
-  - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
-  - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # liberty
-openestck-liberty-git:
+openstack-liberty-git:
   inherits: openstack-icehouse
   services:
     nova-compute:
       options:
-        openstack-origin-git: include-file://nova-liberty.yaml
+        opentack-origin-git: include-file://nova-liberty.yaml
 trusty-liberty:
-  inherits: openstack-icehouse-git
+  inherits: openstack-liberty-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-liberty
-    source: cloud:trusty-liberty
-trusty-liberty-proposed:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: cloud:trusty-liberty/proposed
-    source: cloud:trusty-liberty/proposed
-trusty-liberty-staging:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
-    source: ppa:ubuntu-cloud-archive/liberty-staging
-wily-liberty:
-  inherits: openstack-icehouse
-  series: wily
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-wily-liberty-proposed:
-  inherits: wily-liberty
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-# mitaka
+     openstack-origin: cloud:trusty-liberty
+     source: cloud:trusty-liberty
+#master
 openstack-master-git:
   inherits: openstack-icehouse
   services:
     nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-master.yaml
-trusty-mitaka:
-  inherits: openstack-icehouse
+     options:
+       openstack-origin-git: include-file://nova-master.yaml
+trusty-master:
+  inherits: openstack-master-git
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
-trusty-mitaka-proposed:
-  inherits: trusty-mitaka
+trusty-master-proposed:
+  inherits: openstack-master-git
+  series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka/proposed
     source: cloud:trusty-mitaka/proposed
-trusty-mitaka-staging:
-  inherits: trusty-mitaka
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
-    source: ppa:ubuntu-cloud-archive/mitaka-staging
-xenial-mitaka:
-  inherits: openstack-icehouse
+xenial-master:
+  inherits: openstack-master-git
   series: xenial
   services:
     mysql:
       branch: lp:charms/trusty/mysql
-xenial-mitaka-proposed:
-  inherits: xenial-mitaka
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed

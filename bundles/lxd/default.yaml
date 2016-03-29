@@ -85,7 +85,7 @@ openstack-services:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
     lxd:
-      branch: lp:~openstack-charmers-next/charms/trusty/lxd/trunk
+      branch: https://github.com/openstack/charm-lxd
       options:
         block-device: /dev/vdb
         ephemeral-unmount: /mnt
