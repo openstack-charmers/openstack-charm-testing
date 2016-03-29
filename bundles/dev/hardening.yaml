@@ -169,7 +169,7 @@ openstack-services:
     - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
-    - [ heat, mysql ]
+    - [ heat, percona-cluster ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
     - [ hardening-os-tests, percona-cluster ]
