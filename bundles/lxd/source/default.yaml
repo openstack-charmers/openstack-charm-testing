@@ -1,5 +1,5 @@
 # vim: set ts=2 et:
-# deployer bundle for development (stable/trunk) charms
+# deployer bundle for development ('next') charms
 # UOSCI relies on this for OS-on-OS deployment testing
 openstack-services:
   services:
@@ -82,7 +82,7 @@ openstack-services:
     heat:
       branch: https://github.com/openstack/charm-heat;stable
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      branch: lp:charms/trusty/mongodb;stable
       constraints: mem=1G
     lxd:
       branch: https://github.com/openstack/charm-lxd
@@ -151,12 +151,6 @@ openstack-liberty-git:
     nova-compute:
       options:
         openstack-origin-git: include-file://nova-liberty.yaml
-trusty-liberty:
-  inherits: openstack-liberty-git
-  series: trusty
-  overrides:
-     openstack-origin: cloud:trusty-liberty
-     source: cloud:trusty-liberty
 wily-liberty:
   inherits: openstack-liberty-git
   series: wily
@@ -165,14 +159,20 @@ wily-liberty-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+trusty-liberty:
+  inherits: openstack-liberty-git
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
 # mitaka
 openstack-master-git:
   inherits: openstack-icehouse
   services:
     nova-compute:
-     options:
-       openstack-origin-git: include-file://nova-master.yaml
-xenial-master:
+      options:
+        openstack-origin-git: include-file://nova-master.yaml
+xenial-mitaka:
   inherits: openstack-master-git
   series: xenial
   services:
