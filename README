@@ -40,7 +40,7 @@ configure
 To configure serverstack run:
 	./configure
 
-To configure profiles 'dellstack, stsstack, ppc64el, kernelstack, multihypervisor', run:
+To configure profiles 'dellstack, stsstack, ppc64el, kernelstack, lxd, multihypervisor', run:
 	./configure <profile>
 
 These "configure" scripts:
