@@ -25,12 +25,13 @@ openstack-services:
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        osd-devices: "/dev/vdb /dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
+        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
         osd-reformat: "yes"
     ceph-osd:
       branch: https://github.com/openstack/charm-ceph-osd
       options:
-        osd-devices: "/dev/vdb /dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
+        # Skip sda and sdg, typically in use when deploying to ppc64el native
+        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
         osd-reformat: "yes"
       to:
         - "0"
@@ -46,19 +47,21 @@ openstack-services:
       branch: https://github.com/openstack/charm-swift-storage
       options:
         zone: 1
-        block-device: "/dev/vdb /dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
+        # Skip sda and sdg, typically in use when deploying to ppc64el native
+        block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
         overwrite: "true"
     swift-storage-z2:
       branch: https://github.com/openstack/charm-swift-storage
       options:
         zone: 2
-        block-device: "/dev/vdb /dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
+        # Skip sda and sdg, typically in use when deploying to ppc64el native
+        block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
         overwrite: "true"
     swift-storage-z3:
       branch: https://github.com/openstack/charm-swift-storage
       options:
         zone: 3
-        block-device: "/dev/vdb /dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
+        block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdh /dev/sdi /dev/sdj /dev/sdk /dev/sdl /dev/sdm"
         overwrite: "true"
     keystone:
       branch: https://github.com/openstack/charm-keystone
@@ -73,6 +76,9 @@ openstack-services:
         - "lxc:swift-storage-z2=0"
     nova-compute:
 #      branch: https://github.com/openstack/charm-nova-compute
+#
+#
+#  NOTE(beisner):  need to rebase, resume work on the new options and propose @ gerrit
       branch: lp:~1chb1n/charms/trusty/nova-compute/cpu-mode
       num_units: 1
       constraints: arch=ppc64el
