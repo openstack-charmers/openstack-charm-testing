@@ -76,10 +76,8 @@ openstack-services:
         - "lxc:swift-storage-z2=0"
     nova-compute:
 #      branch: https://github.com/openstack/charm-nova-compute
-#
-#
-#  NOTE(beisner):  need to rebase, resume work on the new options and propose @ gerrit
-      branch: lp:~1chb1n/charms/trusty/nova-compute/cpu-mode
+#      branch: lp:~1chb1n/charms/trusty/nova-compute/cpu-mode
+      branch: https://github.com/ryan-beisner/charm-nova-compute
       num_units: 1
       constraints: arch=ppc64el
       options:
