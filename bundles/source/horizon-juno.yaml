@@ -1,7 +1,7 @@
 repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
-     branch: stable/juno}
+     branch: juno-eol}
   # NOTE(coreycb): Pin oslo libraries here because they're not
   # capped and recently released versions causing issues for juno.
   - {name: oslo-config,
@@ -18,7 +18,7 @@ repositories:
      branch: 1.4.0}
   - {name: horizon,
      repository: 'git://github.com/openstack/horizon',
-     branch: stable/juno}
+     branch: juno-eol}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128

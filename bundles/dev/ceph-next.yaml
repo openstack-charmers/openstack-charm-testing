@@ -1,0 +1,199 @@
+# ceph-cluster
+# ========================================================================
+# A basic deployer bundle to exercise ceph.  This topology and
+# configuration are based on the ceph amulet test.  It is NOT used in
+# automation, but is periodically referenced by engineers to validate
+# basic ceph functionality on proposed releases.
+#
+# Deploys 10 machines, including the bootstrap nodes.
+#
+# Glance, cinder, et al, are present and related to satisfy workload
+# status requirements, and to represent the ceph amulet test topology.
+#
+# Usage and validation example:
+#     cd openstack-charm-testing
+#     juju-deployer -vdB -c bundles/dev/ceph.yaml trusty-mitaka-proposed
+#     . novarc
+#     keystone user-list  # just to confirm cloud apis
+#     keystone token-get  # just to confirm cloud apis
+#     juju ssh ceph/0 "sudo ceph status"  # poke ceph
+#     juju ssh ceph/0 "sudo ceph osd tree"  # poke ceph
+#
+# Amulet tests can also be run against this, which is useful for
+# validating -staging or -proposed pockets.  Just deploy
+# trusty-mitaka-staging first with this bundle as per above.
+# Then:
+#     cd trusty/ceph
+#     chmod +x tests/021-basic-trusty-mitaka
+#     tests/021-basic-trusty-mitaka
+#
+# The amulet tests will then run (BEWARE, any topology or config diffs
+# may be overridden with those from the amulet test).
+ceph-cluster:
+  services:
+    ceph:
+#      branch: https://github.com/openstack/charm-ceph
+#      branch: lp:~1chb1n/charms/trusty/ceph/next.1601-test-update1
+      branch: lp:~chris.macnaughton/charms/trusty/ceph/add-infernalis
+      constraints: mem=1G
+      num_units: 3
+      options:
+        monitor-count: 3
+        auth-supported: none
+        fsid: afebdcec-4070-4a87-ae7c-d4418c5e3c89
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-reformat: 'yes'
+        ephemeral-unmount: /mnt
+        osd-devices: /dev/vdb /srv/ceph
+    keystone:
+      branch: https://github.com/openstack/charm-keystone
+      constraints: mem=1G
+      options:
+        admin-password: 'openstack'
+        admin-token: 'ubuntutesting'
+    mysql:
+#      branch: lp:charms/trusty/mysql
+      branch: lp:~1chb1n/charms/trusty/mysql/ch-sync-mitaka
+      constraints: mem=1G
+      num_units: 1
+      options:
+        dataset-size: '50%'
+    rabbitmq-server:
+#      branch: https://github.com/openstack/charm-rabbitmq-server
+      branch: lp:~1chb1n/charms/trusty/rabbitmq-server/next-ch-sync-mitaka-uca
+      constraints: mem=1G
+    nova-compute:
+      branch: https://github.com/openstack/charm-nova-compute
+      constraints: mem=1G
+    glance:
+      branch: https://github.com/openstack/charm-glance
+      constraints: mem=1G
+    cinder:
+      branch: https://github.com/openstack/charm-cinder
+      constraints: mem=1G
+      options:
+        block-device: None
+        glance-api-version: 2
+  relations:
+  - - nova-compute:shared-db
+    - mysql:shared-db
+  - - nova-compute:amqp
+    - rabbitmq-server:amqp
+  - - nova-compute:image-service
+    - glance:image-service
+  - - nova-compute:ceph
+    - ceph:client
+  - - keystone:shared-db
+    - mysql:shared-db
+  - - glance:shared-db
+    - mysql:shared-db
+  - - glance:identity-service
+    - keystone:identity-service
+  - - glance:amqp
+    - rabbitmq-server:amqp
+  - - glance:ceph
+    - ceph:client
+  - - cinder:shared-db
+    - mysql:shared-db
+  - - cinder:identity-service
+    - keystone:identity-service
+  - - cinder:amqp
+    - rabbitmq-server:amqp
+  - - cinder:image-service
+    - glance:image-service
+  - - cinder:ceph
+    - ceph:client
+# icehouse
+trusty-icehouse:
+  inherits: ceph-cluster
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# juno
+trusty-juno:
+  inherits: ceph-cluster
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-juno/proposed
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
+# kilo
+trusty-kilo:
+  inherits: ceph-cluster
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+# liberty
+trusty-liberty:
+  inherits: ceph-cluster
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
+wily-liberty:
+  inherits: ceph-cluster
+  series: wily
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
+trusty-mitaka:
+  inherits: ceph-cluster
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: ceph-cluster
+  series: xenial
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+

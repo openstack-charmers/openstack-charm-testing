@@ -1,13 +1,13 @@
 repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
-     branch: juno-eol}
+     branch: stable/liberty}
   - {name: neutron,
      repository: 'git://github.com/openstack/neutron',
-     branch: juno-eol}
+     branch: stable/liberty}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
-     branch: juno-eol}
+     branch: stable/liberty}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128

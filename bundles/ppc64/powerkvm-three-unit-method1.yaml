@@ -33,7 +33,7 @@ powerkvm:
       to:
         - "lxc:0"
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       num_units: 1
       options:
         "admin-password": openstack
@@ -43,7 +43,7 @@ powerkvm:
       to:
         - "lxc:nova-compute-power=0"
     neutron-gateway:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      branch: https://github.com/openstack/charm-neutron-gateway
       num_units: 1
       options:
         "ext-port": eth1
@@ -53,7 +53,7 @@ powerkvm:
       to:
         - "0"
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       num_units: 1
       options:
         "neutron-security-groups": true
@@ -63,13 +63,13 @@ powerkvm:
       to:
         - "lxc:nova-compute-power=0"
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
       num_units: 0
       annotations:
         "gui-x": "250"
         "gui-y": "500"
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: https://github.com/openstack/charm-percona-cluster
       num_units: 1
       options:
         "max-connections": 20000
@@ -90,7 +90,7 @@ powerkvm:
 # /!\ Temporary AMD64 substitute for bundle validation:
     nova-compute-power:
 #    nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 1
       constraints: arch=amd64 mem=8G
       options:
@@ -101,7 +101,7 @@ powerkvm:
         "gui-x": "250"
         "gui-y": "250"
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       num_units: 1
       options:
       annotations:
@@ -110,7 +110,7 @@ powerkvm:
       to:
         - "lxc:nova-compute-power=0"
     nova-cloud-controller:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       num_units: 1
       options:
         "network-manager": Neutron
@@ -121,7 +121,7 @@ powerkvm:
       to:
         - "lxc:nova-compute-power=0"
     openstack-dashboard:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
       num_units: 1
       annotations:
         "gui-x": "500"
@@ -129,7 +129,7 @@ powerkvm:
       to:
         - "lxc:0"
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: https://github.com/openstack/charm-rabbitmq-server
       num_units: 1
       annotations:
         "gui-x": "500"
@@ -137,7 +137,7 @@ powerkvm:
       to:
         - "lxc:0"
     cinder:
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      branch: https://github.com/openstack/charm-cinder
       num_units: 1
       options:
         block-device: /dev/sdb /dev/vdb
@@ -218,7 +218,7 @@ powerkvm-smash:
   inherits: powerkvm
   services:
     swift-proxy:
-      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      branch: https://github.com/openstack/charm-swift-proxy
       options:
         zone-assignment: manual
         replicas: 1
@@ -229,7 +229,7 @@ powerkvm-smash:
       to:
         - "0"
     swift-storage-z1:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       options:
         zone: 1
         block-device: /dev/sdb /dev/vdb
@@ -240,7 +240,7 @@ powerkvm-smash:
       to:
         - "lxc:nova-compute-power=0"
     ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+      branch: https://github.com/openstack/charm-ceilometer
       constraints: mem=1G
       annotations:
         "gui-x": "500"
@@ -248,12 +248,12 @@ powerkvm-smash:
       to:
         - "lxc:nova-compute-power=0"
     ceilometer-agent:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+      branch: https://github.com/openstack/charm-ceilometer-agent
       annotations:
         "gui-x": "750"
         "gui-y": "750"
     heat:
-      branch: lp:~openstack-charmers/charms/trusty/heat/next
+      branch: https://github.com/openstack/charm-heat
       annotations:
         "gui-x": "1250"
         "gui-y": "750"

@@ -7,7 +7,7 @@ base:
       branch: lp:charms/trusty/ubuntu
       num_units: 1
     mysql:
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: https://github.com/openstack/charm-percona-cluster
       constraints: mem=1G
       options:
         dataset-size: 25%

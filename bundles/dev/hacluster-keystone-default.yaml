@@ -1,0 +1,150 @@
+# hacluster-keystone
+# ========================================================================
+# A small deployer bundle to exercise hacluster + keystone in HA.  This
+# topology and configuration are based on the hacluster amulet test.  It is
+# NOT use in automation, but is periodically referenced by engineers to
+# validate basic hacluster functionality on releases.
+#
+# NOTES:
+#  * The vip for keystone may need to be set to match your environment.
+#  * Mysql is present for ks functionality, but is not tested or clustered.
+#
+# Usage and validation example:
+#     juju-deployer -vdB -c hacluster-keystone.yaml trusty-kilo
+#     export OS_REGION_NAME=RegionOne
+#     export OS_PASSWORD=openstack
+#     export OS_AUTH_URL=http://10.5.254.100:5000/v2.0
+#     export OS_USERNAME=admin
+#     export OS_TENANT_NAME=admin
+#     keystone user-list
+#     keystone token-get
+#
+hacluster-keystone:
+  services:
+    hacluster:
+      branch: lp:charms/trusty/hacluster
+      num_units: 1
+      options:
+        debug: 'true'
+        netmtu: 1300
+    keystone:
+      branch: https://github.com/openstack/charm-keystone;stable
+      num_units: 3
+      admin-password: 'openstack'
+      admin-token: 'ubuntutesting'
+      options:
+        debug: 'true'
+        verbose: 'true'
+        vip: 10.5.254.100
+        vip_cidr: 16
+    mysql:
+      branch: lp:charms/trusty/mysql
+      num_units: 1
+      options:
+        dataset-size: '50%'
+  relations:
+  - - hacluster
+    - keystone
+  - - keystone
+    - mysql
+# icehouse
+trusty-icehouse:
+  inherits: hacluster-keystone
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# juno
+trusty-juno:
+  inherits: hacluster-keystone
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-juno
+    source: cloud:trusty-juno
+trusty-juno-proposed:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: cloud:trusty-juno/proposed
+    source: cloud:trusty-juno/proposed
+trusty-juno-staging:
+  inherits: trusty-juno
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
+    source: ppa:ubuntu-cloud-archive/juno-staging
+# kilo
+trusty-kilo:
+  inherits: hacluster-keystone
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+vivid-kilo:
+  inherits: hacluster-keystone
+  series: vivid
+vivid-kilo-proposed:
+  inherits: vivid-kilo
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# liberty
+trusty-liberty:
+  inherits: hacluster-keystone
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
+wily-liberty:
+  inherits: hacluster-keystone
+  series: wily
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
+trusty-mitaka:
+  inherits: hacluster-keystone
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: hacluster-keystone
+  series: xenial
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed

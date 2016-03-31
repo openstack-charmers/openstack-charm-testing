@@ -2,13 +2,21 @@
 
 set -ex
 
+# Install dependencies and CLI tools
+# See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
+sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
+    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
+    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
+    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
+    openvswitch-test openvswitch-common -y
+
 # Set serverstack defaults, if not already set.
 [[ -z "$GATEWAY" ]] && export GATEWAY="10.5.0.1"
 [[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.5.0.0/16"
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.5.150.0:10.5.200.254"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.160.2"
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
-[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.160.50"
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.161.162"
 
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}
@@ -23,6 +31,17 @@ fi
 source novarc
 ./bin/quantum-ext-net --network-type $net_type -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
 ./bin/quantum-tenant-net --network-type $net_type -t admin -r provider-router -N $NAMESERVER private $CIDR_PRIV
+
+# Download images if not already present
+mkdir -vp ~/images
+[ -f ~/images/trusty-server-cloudimg-amd64-root.tar.xz ] || {
+    wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.xz
+}
+
+# Upload glance images to overcloud
+glance --os-image-api-version 1 image-create --name="trusty-server" --is-public=true --progress \
+    --container-format=bare --disk-format=raw --property hypervisor_type=lxc \
+    --property architecture=x86_64 < ~/images/trusty-server-cloudimg-amd64-root.tar.xz
 
 # Create demo/testing users, tenants and flavor
 keystone tenant-create --name demo
@@ -39,8 +58,8 @@ nova flavor-create m2.tempest 8 512 5 1
 # Gather vars for tempest template
 access=$(keystone --os-username demo --os-password pass --os-tenant-name demo ec2-credentials-create | grep access | awk '{ print $4 }')
 secret=$(keystone ec2-credentials-get --access $access | grep secret | awk '{ print $4 }')
-image_id=$(glance image-list | grep cirros | awk '{ print $2 }')
-image_alt_id=$(glance image-list | grep precise | awk '{ print $2 }')
+image_id=$(glance image-list | grep trusty-server | awk '{ print $2 }')
+image_alt_id=$(glance image-list | grep trusty-server | awk '{ print $2 }')
 ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
 router=$(neutron router-list | grep provider-router | awk '{ print $2}')
 keystone=$(juju-deployer -f keystone)
@@ -53,16 +72,10 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     -e "s/__DASHBOARD__/$dashboard/g" -e "s/__KEYSTONE__/$keystone/g" \
     -e "s/__EXT_NET__/$ext_net/g" -e "s/__PROTO__/$http/g" \
     -e "s/__SWIFT__/$SWIFT_IP/g" \
+    -e "s/__NAMESERVER__/$NAMESERVER/g" \
+    -e "s/__CIDR_PRIV__/${CIDR_PRIV////\\/}/g" \
     -e "s/__NCC__/$ncc/g" -e "s/__SECRET__/$secret/g" -e "s/__ACCESS__/$access/g" \
-    templates/tempest/tempest.conf.template > tempest.conf
-
-# Install dependencies and CLI tools
-# See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
-sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
-    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
-    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
-    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
-    openvswitch-test openvswitch-common -y
+    templates/tempest/tempest.conf.template.lxd > tempest.conf
 
 # Git tempest, place the rendered tempest template
 [ -d tempest ] || git clone https://github.com/openstack/tempest

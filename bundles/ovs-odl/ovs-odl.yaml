@@ -2,54 +2,55 @@ openstack-services:
   series: trusty
   services:
     neutron-gateway:
-      branch: lp:~sdn-charmers/charms/trusty/neutron-gateway/ovs-odl
+      branch: https://github.com/openstack/charm-neutron-gateway
       options:
         plugin: ovs-odl
         instance-mtu: 1400
     nova-compute:
-      branch: lp:~sdn-charmers/charms/trusty/nova-compute/hugepages
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: False
         manage-neutron-plugin-legacy-mode: False
     neutron-api:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       options:
-        neutron-security-groups: False
+        neutron-security-groups: True
         manage-neutron-plugin-legacy-mode: False
     neutron-api-odl:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api-odl/vpp
+      branch: https://github.com/openstack/charm-neutron-api-odl
       options:
         overlay-network-type: 'vxlan gre'
+        security-groups: True
     odl-controller:
-      branch: lp:~sdn-charmers/charms/trusty/odl-controller/trunk
+      branch: https://github.com/openstack/charm-odl-controller
       options:
         install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.2.3-Helium-SR3.tar.gz"
         http-proxy: "http://squid.internal:3128"
         https-proxy: "http://squid.internal:3128"
     openvswitch-odl:
-      branch: git+ssh://git.launchpad.net/~sdn-charmers/charms/+source/openvswitch-odl
+      branch: https://github.com/openstack/charm-openvswitch-odl
     mysql:
-      charm: cs:trusty/mysql
+      branch: lp:charms/trusty/mysql
       options:
         dataset-size: 50%
     rabbitmq-server:
-      charm: cs:trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable
     keystone:
-      charm: cs:trusty/keystone
+      branch: https://github.com/openstack/charm-keystone
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      charm: cs:trusty/openstack-dashboard
+      branch: https://github.com/openstack/charm-openstack-dashboard
     nova-cloud-controller:
-      charm: cs:trusty/nova-cloud-controller
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
     glance:
-      charm: cs:trusty/glance
+      branch: https://github.com/openstack/charm-glance
   relations:
     - ['neutron-api:neutron-plugin-api-subordinate', 'neutron-api-odl:neutron-plugin-api-subordinate']
     - ['nova-compute:neutron-plugin', 'openvswitch-odl:neutron-plugin']
@@ -74,6 +75,27 @@ openstack-services:
     - ['neutron-gateway:amqp', 'rabbitmq-server:amqp']
     - ['neutron-gateway:neutron-plugin-api', 'neutron-api:neutron-plugin-api']
     - ['neutron-gateway:quantum-network-service', 'nova-cloud-controller:quantum-network-service']
+trusty-liberty:
+  inherits: openstack-services
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-lithium:
+  inherits: trusty-liberty
+  overrides:
+    install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.3.3-Lithium-SR3.tar.gz"
+    profile: openvswitch-odl-lithium
+trusty-liberty-beryllium:
+  inherits: trusty-liberty
+  overrides:
+    install-url: "http://10.245.161.162/swift/v1/opendaylight/distribution-karaf-0.4.0-Beryllium.tar.gz"
+    profile: openvswitch-odl-beryllium
+xenial-mitaka-beryllium:
+  inherits: trusty-liberty-beryllium
+  series: xenial
+  overrides:
+    openstack-origin: distro
+    source: distro
 trusty-kilo:
   inherits: openstack-services
   overrides:
@@ -94,6 +116,9 @@ trusty-icehouse-cisco:
     nova-compute:
       options:
         hugepages: '70%'
+    neutron-api-odl:
+      options:
+        security-groups: False
   overrides:
     openstack-origin: ppa:cisco-vpp/icehouse-proposed
   relations:

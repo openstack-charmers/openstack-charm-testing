@@ -1,0 +1,39 @@
+# Ceph Availability Zones Test Bundle (for bare metal)
+#
+#   Usage example (serverstack-specific):
+#     juju bootstrap --upload-tools --constraints tags=netspaces
+#     juju-deployer -vd -c storage-ceph-az.yaml trusty
+base:
+  services:
+    ceph-osd:
+      branch: https://review.openstack.org/openstack/charm-ceph-osd#changeref=293694/4
+      num_units: 3
+# Uncomment for the required serverstack-specific constraints
+#      constraints: tags=netspaces
+      options:
+        ephemeral-unmount: /mnt
+        osd-devices: /dev/vdb /dev/sdb
+    ceph-mon:
+      branch: https://review.openstack.org/openstack/charm-ceph-mon#changeref=293982/2
+      num_units: 3
+      options:
+        customize-failure-domain: true
+      to:
+        - "lxc:ceph-osd=0"
+        - "lxc:ceph-osd=1"
+        - "lxc:ceph-osd=2"
+  relations:
+    - - "ceph-osd:mon"
+      - "ceph-mon:osd"
+precise:
+  inherits: base
+  series: precise
+trusty:
+  inherits: base
+  series: trusty
+wily:
+  inherits: base
+  series: wily
+xenial:
+  inherits: base
+  series: xenial

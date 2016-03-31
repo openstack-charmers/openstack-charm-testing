@@ -22,8 +22,8 @@ allow_tenant_reuse = true
 [compute-admin]
 [compute-feature-enabled]
 api_v3=false
-console_output=false
-resize=true
+console_output=true
+resize=false
 [dashboard]
 dashboard_url=http://__DASHBOARD__/horizon
 login_url=http://__DASHBOARD__/horizon/auth/login/
@@ -62,29 +62,24 @@ container_quotas_available = True
 [orchestration]
 instance_type = m1.small
 keypair_name = testkey
-stack_owner_role = Admin
 [scenario]
 img_dir=/home/ubuntu/images
 ssh_user=cirros
 [service_available]
-ceilometer = true
-cinder = true
+ceilometer = false
+cinder = false
 glance = true
-heat = true
+heat = false
 horizon = true
 ironic = false
 neutron = true
 nova = true
 sahara = false
-swift = true
+swift = false
 trove = false
 zaqar = false
 [stress]
 max_instances = 4
 [telemetry]
 [volume]
-storage_protocol=ceph
-backend1_name=cinder-ceph
-catalog_type = volume
 [volume-feature-enabled]
-backup=false

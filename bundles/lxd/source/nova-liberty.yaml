@@ -1,7 +1,7 @@
 repositories:
   - {name: requirements,
      repository: 'git://github.com/zulcss/requirements',
-     branch: master}
+     branch: stable/liberty}
   - {name: pylxd,
      repository: 'https://github.com/lxc/pylxd',
      branch: master}
@@ -10,7 +10,7 @@ repositories:
      branch: master}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
-     branch: master}
+     branch: stable/liberty}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128

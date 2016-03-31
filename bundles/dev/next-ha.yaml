@@ -5,10 +5,11 @@ openstack-services:
     mysql:
       num_units: 2
       charm: percona-cluster
-      branch: lp:~openstack-charmers/charms/trusty/percona-cluster/next
+      branch: https://github.com/openstack/charm-percona-cluster
       constraints: mem=1G
       options:
         dataset-size: 50%
+        max-connections: 20000
         root-password: ubuntu
         sst-password: ubuntu
         vip: 10.5.100.1
@@ -27,7 +28,7 @@ openstack-services:
         vip_cidr: 24
     ceph:
       num_units: 3
-      branch: lp:~openstack-charmers/charms/trusty/ceph/next
+      branch: https://github.com/openstack/charm-ceph
       constraints: mem=1G
       options:
         monitor-count: 3
@@ -38,7 +39,7 @@ openstack-services:
         ephemeral-unmount: /mnt
     keystone:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       constraints: mem=1G
       options:
         admin-password: openstack
@@ -51,7 +52,7 @@ openstack-services:
         corosync_key: "6aVson6XvaprzAppLB6UA4OUgZIyNtW+qVwbanQta0aLMagwbPNomTniLr3ZyVGtEL7A0c48tJvaA+lafL2HzGq+43/aKnUbG5k7d4sKaQXP/sKLhCpyj+04DddBRAVsBJ6r9tG45CGF+H+qUykL1rOT0EesZhDqBiBGrV+DXes="
     openstack-dashboard:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
       constraints: mem=1G
       options:
         vip: 10.5.103.1
@@ -62,14 +63,14 @@ openstack-services:
         corosync_key: "9aNUFk+o0Hqt/6i46ltcycMogHm+bgOkhsIwBwuXX3YQZfvioZZZqggi9R9Ccj1OqIrxLA+GTstghYcc/hjULhIl3BIX6HAdePhX7sI8khTCiPTN/w4MIy3nW1CjFaeWW31CIhrXnTcq11l0MEB3vKNlN5/b7/kqvagB6oSjw4s="
     nova-compute:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       constraints: mem=4G
       options:
         enable-live-migration: True
         enable-resize: True
     nova-cloud-controller:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: Quantum
@@ -82,13 +83,13 @@ openstack-services:
         corosync_key: "xZP7GDWV0e8Qs0GxWThXirNNYlScgi3sRTdZk/IXKDqkNFcwdCWfRQnqrHU/6mb6sz6OIoZzX2MtfMQIDcXuPqQyvKuv7YbRyGHmQwAWDUA4ed759VWAO39kHkfWp9y5RRk/wcHakTcWYMwm70upDGJEP00YT3xem3NQy27AC1w="
     neutron-gateway:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      branch: https://github.com/openstack/charm-neutron-gateway
       constraints: mem=1G
       options:
         instance-mtu: 1300
     cinder:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      branch: https://github.com/openstack/charm-cinder
       constraints: mem=1G
       options:
         block-device: "None"
@@ -101,7 +102,7 @@ openstack-services:
         corosync_key: "wllBMGAfdCsotmXGbCbJ0LhAuOPQ9ZEIIAXIWWeNLwrmC7C9jmm92RSL1kYGCRRWaL7W7AziA6aBy//rZxeZ3z0YkM0QFD+4Vg7vtM6JaBoOFlJgVd6mbYUfVbI6IMqGiUDJ8hh5sKmN7kwQLNNwASGlJiMo5s9ErWviVM6/OrQ="
     glance:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
       options:
         vip: 10.5.106.1
@@ -112,7 +113,7 @@ openstack-services:
         corosync_key: "eO34WuxbQ/FaQvYb/ffTtX+0phNfNZlmhRrC8gLYJMf/b52Ny3cRXjgp5P1lEfZFHjrhQ3lWQOqENuBVcejS1OYt574Xq2l1XLEHoEPbktovDhaS9yxIU7SYULdlx7j/BNtW7evY0pRBr23MYWEI3hETHVdtOeqgW1IB3zgoyco="
     swift-proxy:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      branch: https://github.com/openstack/charm-swift-proxy
       constraints: mem=1G
       options:
         zone-assignment: manual
@@ -125,31 +126,31 @@ openstack-services:
         corosync_mcastaddr: 226.94.1.7
         corosync_key: "9aNUFk+o0Hqt/6i46ltcycMogHm+bgOkhsIwBwuXX3YQZfvioZZZqggi9R9Ccj1OqIrxLA+GTstghYcc/hjULhIl3BIX6HAdePhX7sI8khTCiPTN/w4MIy3nW1CjFaeWW31CIhrXnTcq11l0MEB3vKNlN5/b7/kqvagB6oSjw4S="
     swift-storage-z1:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 1
         block-device: vdb
         overwrite: "true"
     swift-storage-z2:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 2
         block-device: vdb
         overwrite: "true"
     swift-storage-z3:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 3
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
+      branch: https://github.com/openstack/charm-ceilometer
       constraints: mem=1G
     ceilometer-agent:
-      branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
+      branch: https://github.com/openstack/charm-ceilometer-agent
     mongodb:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
@@ -174,7 +175,6 @@ openstack-services:
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, ceph ]
-    - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -203,7 +203,7 @@ openstack-icehouse:
   services:
     neutron-api:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
@@ -214,7 +214,7 @@ openstack-icehouse:
         corosync_mcastaddr: 226.94.1.8
         corosync_key: "JFgMRJhNfKnmBRGm+rbAwpZmd/1FX08SCzOzDg/teaVtfGf60QYBCrpRYQzjzM2f+iNpGFuYEW8fXd+Dvquns6E1v7JbSt7oPRi2DYfdXXHc3EYkhimPG7h/VvnhaabLQ5z8CuQzaVJL1Fp25n4Rs5V4d71sgE5IR0skkWC6YO8="
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
   relations:
   - [ neutron-api, mysql ]
   - [ neutron-api, rabbitmq-server ]
@@ -230,7 +230,7 @@ openstack-icehouse-msg-split:
   services:
     neutron-api:
       num_units: 2
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
@@ -241,7 +241,7 @@ openstack-icehouse-msg-split:
         corosync_mcastaddr: 226.94.1.8
         corosync_key: "JFgMRJhNfKnmBRGm+rbAwpZmd/1FX08SCzOzDg/teaVtfGf60QYBCrpRYQzjzM2f+iNpGFuYEW8fXd+Dvquns6E1v7JbSt7oPRi2DYfdXXHc3EYkhimPG7h/VvnhaabLQ5z8CuQzaVJL1Fp25n4Rs5V4d71sgE5IR0skkWC6YO8="
     neutron-openvswitch:
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
     rabbitmq-server-neutron:
       num_units: 2
       branch: lp:charms/rabbitmq-server
