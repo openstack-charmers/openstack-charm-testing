@@ -58,15 +58,6 @@ if __name__ == '__main__':
     subnet_name = "{}_subnet".format(net_name)
     cidr = args[1]
 
-
-#    auth = identity.v3.Password(
-#        user_domain_name=os.environ['OS_USER_DOMAIN_NAME'],
-#        username=os.environ['OS_USERNAME'],
-#        password=os.environ['OS_PASSWORD'],
-#        project_domain_name=os.environ['OS_PROJECT_DOMAIN_NAME'],
-#        project_name=os.environ['OS_PROJECT_NAME'],
-#        auth_url=os.environ['OS_AUTH_URL'])
-#    sess = session.Session(auth=auth)
     auth = identity.v3.Password(
         user_domain_name=os.environ['OS_USER_DOMAIN_NAME'],
         username=os.environ['OS_USERNAME'],
