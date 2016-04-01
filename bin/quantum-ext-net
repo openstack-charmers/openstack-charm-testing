@@ -72,12 +72,10 @@ if __name__ == '__main__':
                             auth_url=os.environ['OS_AUTH_URL'],
                             region_name=os.environ['OS_REGION_NAME'])
 
-    
     # Resolve tenant id
     tenant_id = None
     for tenant in [t._info for t in keystone.tenants.list()]:
-        if (tenant['name'] ==
-            (opts.tenant or os.environ['OS_TENANT_NAME'])):
+        if (tenant['name'] == (opts.tenant or os.environ['OS_TENANT_NAME'])):
             tenant_id = tenant['id']
             break  # Tenant ID found - stop looking
     if not tenant_id:
@@ -126,12 +124,10 @@ if __name__ == '__main__':
         if opts.cidr:
             subnet_msg['cidr'] = opts.cidr
         if (start_floating_ip and end_floating_ip):
-            subnet_msg['allocation_pools'] = [
-                    {
-                    'start': start_floating_ip,
-                    'end': end_floating_ip
-                    }
-             ]
+            subnet_msg['allocation_pools'] = [{
+                'start': start_floating_ip,
+                'end': end_floating_ip
+            }]
 
         logging.info('Creating new subnet for %s', net_name)
         subnet = quantum.create_subnet({'subnet': subnet_msg})['subnet']
@@ -144,8 +140,8 @@ if __name__ == '__main__':
     if len(routers['routers']) == 0:
         logging.info('Creating provider router for external network access')
         router = quantum.create_router(
-                        {'router': {'name': 'provider-router', 'tenant_id': tenant_id}}
-                        )['router']
+            {'router': {'name': 'provider-router', 'tenant_id': tenant_id}}
+        )['router']
         logging.info('New router created: %s', (router['id']))
     else:
         logging.warning('Router provider-router already exists.')
