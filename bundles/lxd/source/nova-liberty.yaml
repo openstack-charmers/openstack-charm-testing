@@ -1,10 +1,13 @@
 repositories:
   - {name: requirements,
-     repository: 'git://github.com/openstack/requirements',
+     repository: 'git://github.com/zulcss/requirements',
      branch: stable/liberty}
-  - {name: neutron,
-     repository: 'git://github.com/openstack/neutron',
-     branch: stable/liberty}
+  - {name: pylxd,
+     repository: 'https://github.com/lxc/pylxd',
+     branch: master}
+  - {name: nova-compute-lxd,
+     repository: 'https://github.com/lxc/nova-lxd',
+     branch: master}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
      branch: stable/liberty}
