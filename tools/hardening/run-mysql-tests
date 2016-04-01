@@ -11,5 +11,5 @@ juju run --unit $UNIT_TO_TEST "\
     echo 'hiotest ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-hiotest-user; \
     sudo chmod 440 /etc/sudoers.d/90-hiotest-user;"
 
-# Running a test
+# Running mysql test
 juju action do hardening-mysql-tests/0 run-test target-ip=$TARGET_IP

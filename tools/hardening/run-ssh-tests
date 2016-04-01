@@ -11,5 +11,6 @@ juju run --unit $UNIT_TO_TEST "\
     echo 'hiotest ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-hiotest-user; \
     sudo chmod 440 /etc/sudoers.d/90-hiotest-user;"
 
+# Running ssh test
 juju action do hardening-ssh-tests/0 run-test test-name=default/inspec/ target-ip=$TARGET_IP
 
