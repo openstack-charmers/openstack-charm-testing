@@ -14,13 +14,13 @@ mkdir -p ~/images
 }
 
 # Upload glance images to overcloud
-glance image-create --name="xenial-ppc64el" --is-public=true --progress \
+glance --os-image-api-version 1 image-create --name="xenial-ppc64el" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/xenial-server-cloudimg-ppc64el-disk1.img
-glance image-create --name="wily-ppc64el" --is-public=true --progress \
+glance --os-image-api-version 1 image-create --name="wily-ppc64el" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/wily-server-cloudimg-ppc64el-disk1.img
-glance image-create --name="trusty-ppc64el" --is-public=true --progress \
+glance --os-image-api-version 1 image-create --name="trusty-ppc64el" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/trusty-server-cloudimg-ppc64el-disk1.img
 
-glance image-update --property architecture=ppc64 xenial-ppc64el
-glance image-update --property architecture=ppc64 wily-ppc64el
-glance image-update --property architecture=ppc64 trusty-ppc64el
+glance --os-image-api-version 1 image-update --property architecture=ppc64 xenial-ppc64el
+glance --os-image-api-version 1 image-update --property architecture=ppc64 wily-ppc64el
+glance --os-image-api-version 1 image-update --property architecture=ppc64 trusty-ppc64el
