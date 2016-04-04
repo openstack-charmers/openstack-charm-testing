@@ -1,24 +1,26 @@
 # ppc64el-compute-x86-control PoC Test Bundle:
-#    (3) ppc64el machines:  nova-compute
-#    (7) amd64 machines:  bootstrap, network, control plane and storage services
+#    (3) ppc64el machines
 #          - includes:
-#               (1) bootstrap node (also db and network gateway)
-#               (3) swift units
-#               (3) ceph units
+#               (1) bootstrap node (also db, network gateway, and some control plane in lxc)
+#               (1) compute node
+#               (1) swift unit (also control plane in lxc)
+#               (*) no ceph (would need 3 machines for quorum)
 #               (*) control plane in lxc
 #
-# A 10-machine bare metal bundle which is appx. equivalent to "sparse/next.yaml"
+# A 3-machine bare metal bundle which is appx. equivalent to "sparse/next.yaml"
 # with some smooshing and co-location for density.  This is an EXAMPLE TEST BUNDLE.
 #
 # Usage example:
-#    juju bootstrap --constraints "arch=amd64"
-#    juju-deployer -vdc ppc64el-compute-x86-control-next.yaml trusty-liberty
+#    juju bootstrap --constraints "arch=ppc64el"
+#    juju-deployer -vdc ppc64el-next.yaml trusty-liberty
 #    ./configure-ppc64el
+#
 #
 openstack-services:
   services:
     mysql:
       branch: https://github.com/openstack/charm-percona-cluster
+      constraints: arch=ppc64el
       options:
         dataset-size: 15%
         max-connections: 20000
@@ -28,21 +30,6 @@ openstack-services:
       branch: https://github.com/openstack/charm-rabbitmq-server
       to:
         - "lxc:0"
-    ceph:
-      branch: https://github.com/openstack/charm-ceph
-      num_units: 3
-      options:
-        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
-        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
-        osd-reformat: "yes"
-    ceph-osd:
-      branch: https://github.com/openstack/charm-ceph-osd
-      options:
-        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
-        osd-reformat: "yes"
-      to:
-        - "0"
     swift-proxy:
       branch: https://github.com/openstack/charm-swift-proxy
       options:
@@ -53,20 +40,9 @@ openstack-services:
         - "lxc:0"
     swift-storage-z1:
       branch: https://github.com/openstack/charm-swift-storage
+      constraints: arch=ppc64el
       options:
         zone: 1
-        block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
-        overwrite: "true"
-    swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage
-      options:
-        zone: 2
-        block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
-        overwrite: "true"
-    swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage
-      options:
-        zone: 3
         block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
         overwrite: "true"
     keystone:
@@ -79,11 +55,11 @@ openstack-services:
     openstack-dashboard:
       branch: https://github.com/openstack/charm-openstack-dashboard
       to:
-        - "lxc:swift-storage-z2=0"
+        - "lxc:swift-storage-z1=0"
     nova-compute:
 #      branch: https://github.com/openstack/charm-nova-compute
       branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
-      num_units: 3
+      num_units: 1
       constraints: arch=ppc64el
       options:
         "cpu-mode": "host-passthrough"
@@ -97,7 +73,7 @@ openstack-services:
         network-manager: Neutron
         quantum-security-groups: "yes"
       to:
-        - "lxc:swift-storage-z3=0"
+        - "lxc:swift-storage-z1=0"
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway
       options:
@@ -110,7 +86,7 @@ openstack-services:
       options:
         neutron-security-groups: True
       to:
-        - "lxc:ceph=0"
+        - "lxc:nova-compute=0"
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
     cinder:
@@ -119,13 +95,13 @@ openstack-services:
         block-device: "None"
         glance-api-version: 2
       to:
-        - "lxc:ceph=2"
+        - "lxc:swift-storage-z1=0"
     cinder-ceph:
       branch: https://github.com/openstack/charm-cinder-ceph
     glance:
       branch: https://github.com/openstack/charm-glance
       to:
-        - "lxc:ceph=1"
+        - "lxc:swift-storage-z1=0"
     ceilometer:
       branch: https://github.com/openstack/charm-ceilometer
       to:
@@ -135,18 +111,18 @@ openstack-services:
     heat:
       branch: https://github.com/openstack/charm-heat
       to:
-        - "lxc:swift-storage-z2=0"
+        - "lxc:swift-storage-z1=0"
     mongodb:
       branch: lp:charms/trusty/mongodb
       to:
-        - "lxc:swift-storage-z3=0"
+        - "lxc:swift-storage-z1=0"
     ntp:
       branch: lp:charms/trusty/ntp
       num_units: 0
     juju-gui:
       branch: lp:charms/trusty/juju-gui
       to:
-        - "lxc:swift-storage-z3=0"
+        - "lxc:0"
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -158,23 +134,17 @@ openstack-services:
     - - nova-compute
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
-    - [ nova-compute, ceph ]
     - [ glance, mysql ]
     - [ glance, keystone ]
-    - [ glance, ceph ]
     - [ glance, cinder ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
-    - [ cinder, cinder-ceph ]
-    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
     - [ swift-proxy, swift-storage-z1 ]
-    - [ swift-proxy, swift-storage-z2 ]
-    - [ swift-proxy, swift-storage-z3 ]
     - - ceilometer
       - keystone:identity-service
     - [ ceilometer, rabbitmq-server ]
@@ -184,14 +154,10 @@ openstack-services:
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
-    - - ceph-osd:mon
-      - ceph:osd
     - - ntp:juju-info
       - nova-compute:juju-info
     - - ntp:juju-info
       - neutron-gateway:juju-info
-    - - ntp:juju-info
-      - ceph-osd:juju-info
     - [ "neutron-gateway:amqp", rabbitmq-server ]
     - [ neutron-api, mysql ]
     - [ neutron-api, rabbitmq-server ]
