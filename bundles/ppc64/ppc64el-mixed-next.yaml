@@ -1,14 +1,16 @@
-# ppc64el-compute-x86-control PoC Test Bundle:
-#    (3) ppc64el machines:  nova-compute
+# ppc64el-mixed PoC/Example Test Bundle:
+#
+#    (3) ppc64el machines:
+#          - includes:
+#            (3) nova-compute units w/ ceph
+#            (*) no control plane, no db
+#
 #    (7) amd64 machines:  bootstrap, network, control plane and storage services
 #          - includes:
-#               (1) bootstrap node (also db and network gateway)
-#               (3) swift units
-#               (3) ceph units
-#               (*) control plane in lxc
-#
-# A 10-machine bare metal bundle which is appx. equivalent to "sparse/next.yaml"
-# with some smooshing and co-location for density.  This is an EXAMPLE TEST BUNDLE.
+#            (1) bootstrap node (also db and network gateway)
+#            (3) nova-compute nodes
+#            (3) swift units
+#            (*) all control plane in lxc
 #
 # Usage example:
 #    juju bootstrap --constraints "arch=amd64"
@@ -31,15 +33,16 @@ openstack-services:
     ceph:
       branch: https://github.com/openstack/charm-ceph
       num_units: 3
+      constraints: arch=ppc64el
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
+        osd-devices: "/dev/sdc /dev/sdd /dev/sde"
         osd-reformat: "yes"
     ceph-osd:
       branch: https://github.com/openstack/charm-ceph-osd
       options:
-        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
+        osd-devices: "/dev/sdc /dev/sdd /dev/sde"
         osd-reformat: "yes"
       to:
         - "0"
@@ -80,7 +83,7 @@ openstack-services:
       branch: https://github.com/openstack/charm-openstack-dashboard
       to:
         - "lxc:swift-storage-z2=0"
-    nova-compute:
+    nova-compute-ppc64el:
 #      branch: https://github.com/openstack/charm-nova-compute
       branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
       num_units: 3
@@ -88,6 +91,15 @@ openstack-services:
       options:
         "cpu-mode": "host-passthrough"
         "ppc64-cpu-smt-state": "off"
+        "enable-live-migration": true
+        "enable-resize": true
+        "migration-auth-type": ssh
+    nova-compute-amd64:
+#      branch: https://github.com/openstack/charm-nova-compute
+      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
+      num_units: 3
+      constraints: arch=amd64
+      options:
         "enable-live-migration": true
         "enable-resize": true
         "migration-auth-type": ssh
@@ -110,7 +122,7 @@ openstack-services:
       options:
         neutron-security-groups: True
       to:
-        - "lxc:ceph=0"
+        - "lxc:swift-storage-z1=0"
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
     cinder:
@@ -119,13 +131,13 @@ openstack-services:
         block-device: "None"
         glance-api-version: 2
       to:
-        - "lxc:ceph=2"
+        - "lxc:swift-storage-z2=0"
     cinder-ceph:
       branch: https://github.com/openstack/charm-cinder-ceph
     glance:
       branch: https://github.com/openstack/charm-glance
       to:
-        - "lxc:ceph=1"
+        - "lxc:swift-storage-z1=0"
     ceilometer:
       branch: https://github.com/openstack/charm-ceilometer
       to:
@@ -153,12 +165,18 @@ openstack-services:
     - [ nova-cloud-controller, rabbitmq-server ]
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
-    - [ nova-compute, nova-cloud-controller ]
-    - [ nova-compute, mysql ]
-    - - nova-compute
+    - [ nova-compute-ppc64el, nova-cloud-controller ]
+    - [ nova-compute-amd64, nova-cloud-controller ]
+    - [ nova-compute-ppc64el, mysql ]
+    - [ nova-compute-amd64, mysql ]
+    - - nova-compute-ppc64el
       - rabbitmq-server:amqp
-    - [ nova-compute, glance ]
-    - [ nova-compute, ceph ]
+    - - nova-compute-amd64
+      - rabbitmq-server:amqp
+    - [ nova-compute-ppc64el, glance ]
+    - [ nova-compute-amd64, glance ]
+    - [ nova-compute-ppc64el, ceph ]
+    - [ nova-compute-amd64, ceph ]
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
@@ -179,7 +197,8 @@ openstack-services:
       - keystone:identity-service
     - [ ceilometer, rabbitmq-server ]
     - [ ceilometer, mongodb ]
-    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, nova-compute-ppc64el ]
+    - [ ceilometer-agent, nova-compute-amd64 ]
     - [ ceilometer-agent, ceilometer ]
     - [ heat, mysql ]
     - [ heat, keystone ]
@@ -187,7 +206,9 @@ openstack-services:
     - - ceph-osd:mon
       - ceph:osd
     - - ntp:juju-info
-      - nova-compute:juju-info
+      - nova-compute-ppc64el:juju-info
+    - - ntp:juju-info
+      - nova-compute-amd64:juju-info
     - - ntp:juju-info
       - neutron-gateway:juju-info
     - - ntp:juju-info
@@ -199,7 +220,8 @@ openstack-services:
     - [ neutron-api, neutron-openvswitch ]
     - [ neutron-api, keystone ]
     - [ neutron-api, neutron-gateway ]
-    - [ neutron-openvswitch, nova-compute ]
+    - [ neutron-openvswitch, nova-compute-ppc64el ]
+    - [ neutron-openvswitch, nova-compute-amd64 ]
     - [ neutron-openvswitch, rabbitmq-server ]
 # kilo
 trusty-kilo:
