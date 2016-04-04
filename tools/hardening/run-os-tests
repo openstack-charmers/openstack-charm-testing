@@ -1,0 +1,4 @@
+#!/bin/bash -eu
+
+# Running os test
+juju action do hardening-os-tests/0 run-test test=default
