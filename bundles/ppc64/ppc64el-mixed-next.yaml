@@ -85,7 +85,8 @@ openstack-services:
         - "lxc:swift-storage-z2=0"
     nova-compute-ppc64el:
 #      branch: https://github.com/openstack/charm-nova-compute
-      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
+#      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
+      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=301312/1
       num_units: 3
       constraints: arch=ppc64el
       options:
@@ -96,7 +97,8 @@ openstack-services:
         "migration-auth-type": ssh
     nova-compute-amd64:
 #      branch: https://github.com/openstack/charm-nova-compute
-      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
+#      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
+      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=301312/1
       num_units: 3
       constraints: arch=amd64
       options:
