@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# Download LX images and add to glance
+# Download LXD images and add to glance
 
 # Download images if not already present
 mkdir -p ~/images
@@ -7,7 +7,7 @@ mkdir -p ~/images
 	wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.gz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.gz
 }
 
-sudo images-lxd-convert.sh ~/images/trusty-server-cloudimg-amd64-root.tar.gz \
+sudo images_lxd_convert.sh ~/images/trusty-server-cloudimg-amd64-root.tar.gz \
 	~/images/trusty-server-cloudimg-amd64-lxd.tar.gz
 
 # Upload glance images to overcloud
