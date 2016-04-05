@@ -43,4 +43,3 @@ glance --os-image-api-version 1 image-update --property architecture=x86_64 wily
 glance --os-image-api-version 1 image-update --property architecture=x86_64 trusty
 glance --os-image-api-version 1 image-update --property architecture=x86_64 precise
 glance --os-image-api-version 1 image-update --property architecture=x86_64 cirros
-
