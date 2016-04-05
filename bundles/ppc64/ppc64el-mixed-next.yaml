@@ -37,7 +37,8 @@ openstack-services:
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        # Older Power8 unit presents disks as dm-N
+        # Older Power8 unit presents disks as dm-N and sdX will be "in use"
+        ignore-device-errors: True
         osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/dm-0 /dev/dm-1 /dev/dm-2 /dev/dm-3 /dev/dm-4 /dev/dm-5 /dev/dm-6 /dev/dm-7"
         osd-reformat: "yes"
       to:
