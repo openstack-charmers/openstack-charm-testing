@@ -90,6 +90,7 @@ openstack-services:
         block-device: /dev/vdb
         ephemeral-unmount: /mnt
         storage-type: lvm
+        overwrite: "true"
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
