@@ -41,9 +41,9 @@ openstack-services:
         osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf"
         osd-reformat: "yes"
       to:
-        - "nova-compute=0"
-        - "nova-compute=1"
-        - "nova-compute=2"
+        - "nova-compute-amd64=0"
+        - "nova-compute-amd64=1"
+        - "nova-compute-amd64=2"
     ceph-osd:
       branch: https://github.com/openstack/charm-ceph-osd
       options:
