@@ -2,13 +2,15 @@
 #
 #    (3) ppc64el machines:
 #          - includes:
-#            (3) nova-compute units w/ ceph
+#            (3) dedicated nova-compute units
+#            (*) no ceph, as the unpredictable multipath device
+#                  names are currently prohibitive to automation
 #            (*) no control plane, no db
 #
 #    (7) amd64 machines:  bootstrap, network, control plane and storage services
 #          - includes:
 #            (1) bootstrap node (also db and network gateway)
-#            (3) nova-compute nodes
+#            (3) nova-compute nodes (with ceph)
 #            (3) swift units
 #            (*) all control plane in lxc
 #
@@ -33,24 +35,19 @@ openstack-services:
     ceph:
       branch: https://github.com/openstack/charm-ceph
       num_units: 3
-      constraints: arch=ppc64el
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        # Older Power8 unit presents disks as dm-N and sdX will be "in use"
-        ignore-device-errors: True
-        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/dm-0 /dev/dm-2 /dev/dm-3 /dev/dm-6 /dev/dm-7"
+        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf"
         osd-reformat: "yes"
       to:
-        - "nova-compute-ppc64el=0"
-        - "nova-compute-ppc64el=1"
-        - "nova-compute-ppc64el=2"
+        - "nova-compute=0"
+        - "nova-compute=1"
+        - "nova-compute=2"
     ceph-osd:
       branch: https://github.com/openstack/charm-ceph-osd
       options:
-        # Older Power8 unit presents disks as dm-N and sdX will be "in use"
-        ignore-device-errors: True
-        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/dm-0 /dev/dm-2 /dev/dm-3 /dev/dm-6 /dev/dm-7"
+        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf"
         osd-reformat: "yes"
       to:
         - "0"
