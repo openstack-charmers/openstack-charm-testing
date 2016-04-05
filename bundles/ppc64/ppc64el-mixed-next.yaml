@@ -90,8 +90,9 @@ openstack-services:
       num_units: 3
       constraints: arch=ppc64el
       options:
-        "cpu-mode": "host-passthrough"
-        "ppc64-cpu-smt-state": "off"
+# Updated charm should just DTRT with arch detection.
+#        "cpu-mode": "host-passthrough"
+#        "ppc64-cpu-smt-state": "off"
         "enable-live-migration": true
         "enable-resize": true
         "migration-auth-type": ssh
