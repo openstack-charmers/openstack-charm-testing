@@ -37,12 +37,18 @@ openstack-services:
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        osd-devices: "/dev/sdc /dev/sdd /dev/sde"
+        # Older Power8 unit presents disks as dm-N
+        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/dm-0 /dev/dm-1 /dev/dm-2 /dev/dm-3 /dev/dm-4 /dev/dm-5 /dev/dm-6 /dev/dm-7"
         osd-reformat: "yes"
+      to:
+        - "nova-compute-ppc64el=0"
+        - "nova-compute-ppc64el=1"
+        - "nova-compute-ppc64el=2"
     ceph-osd:
       branch: https://github.com/openstack/charm-ceph-osd
       options:
-        osd-devices: "/dev/sdc /dev/sdd /dev/sde"
+        # Older Power8 unit presents disks as dm-N
+        osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/dm-0 /dev/dm-1 /dev/dm-2 /dev/dm-3 /dev/dm-4 /dev/dm-5 /dev/dm-6 /dev/dm-7"
         osd-reformat: "yes"
       to:
         - "0"
@@ -90,20 +96,9 @@ openstack-services:
       num_units: 3
       constraints: arch=ppc64el
       options:
-# Updated charm should just DTRT with arch detection.
-#        "cpu-mode": "host-passthrough"
-#        "ppc64-cpu-smt-state": "off"
         "enable-live-migration": true
         "enable-resize": true
         "migration-auth-type": ssh
-
-# Invert this so N-C leads, and Ceph lands on N-C units.
-      to:
-        - "ceph=0"
-        - "ceph=1"
-        - "ceph=2"
-
-
     nova-compute-amd64:
 #      branch: https://github.com/openstack/charm-nova-compute
 #      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
