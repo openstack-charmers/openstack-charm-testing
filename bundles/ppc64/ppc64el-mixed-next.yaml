@@ -96,6 +96,14 @@ openstack-services:
         "enable-live-migration": true
         "enable-resize": true
         "migration-auth-type": ssh
+
+# Invert this so N-C leads, and Ceph lands on N-C units.
+      to:
+        - "ceph=0"
+        - "ceph=1"
+        - "ceph=2"
+
+
     nova-compute-amd64:
 #      branch: https://github.com/openstack/charm-nova-compute
 #      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
