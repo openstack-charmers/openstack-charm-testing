@@ -11,7 +11,9 @@
 #            (3) swift units
 #            (*) all control plane in lxc
 #
-# Usage example:
+# See the demo script in this repo for a detailed process.
+#
+# Basic usage example:
 #    juju bootstrap --constraints "arch=amd64"
 #    juju-deployer -vdc ppc64el-compute-x86-control-next.yaml trusty-liberty
 #    ./configure-ppc64el

@@ -1,16 +1,19 @@
-# ppc64el-compute-x86-control PoC Test Bundle:
+# ppc64el PoC/Example Test Bundle
 #    (3) ppc64el machines
 #          - includes:
 #               (1) bootstrap node (also db, network gateway, and some control plane in lxc)
-#               (1) compute node
-#               (1) swift unit (also control plane in lxc)
+#               (1) dedicated compute node
+#               (1) swift unit (remainder of control plane in lxc)
 #               (*) no ceph (would need 3 machines for quorum)
 #               (*) control plane in lxc
 #
-# A 3-machine bare metal bundle which is appx. equivalent to "sparse/next.yaml"
-# with some smooshing and co-location for density.  This is an EXAMPLE TEST BUNDLE.
+#     Glance is backed by swift.
 #
-# Usage example:
+#     Cinder has a disk of its own.
+#
+#     See the demo script in this repo for a detailed process.
+#
+# Basic usage example:
 #    juju bootstrap --constraints "arch=ppc64el"
 #    juju-deployer -vdc ppc64el-next.yaml trusty-liberty
 #    ./configure-ppc64el
@@ -33,7 +36,7 @@ openstack-services:
       branch: https://github.com/openstack/charm-swift-proxy
       options:
         zone-assignment: manual
-        replicas: 3
+        replicas: 1
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
       to:
         - "lxc:0"
@@ -42,7 +45,7 @@ openstack-services:
       constraints: arch=ppc64el
       options:
         zone: 1
-        block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
+        block-device: "/dev/sdc /dev/sdd"
         overwrite: "true"
     keystone:
       branch: https://github.com/openstack/charm-keystone
@@ -84,13 +87,13 @@ openstack-services:
       options:
         neutron-security-groups: True
       to:
-        - "lxc:nova-compute=0"
+        - "lxc:swift-storage-z1=0"
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
     cinder:
       branch: https://github.com/openstack/charm-cinder
       options:
-        block-device: "None"
+        block-device: "/dev/sde"
         glance-api-version: 2
       to:
         - "lxc:swift-storage-z1=0"
@@ -135,6 +138,7 @@ openstack-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, cinder ]
+    - [ glance, swift-proxy ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
