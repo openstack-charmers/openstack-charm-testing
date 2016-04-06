@@ -27,15 +27,15 @@ mkdir -vp ~/images
 }
 
 # Upload glance images to overcloud
-glance --os-image-api-version image-create --name="xenial" --is-public=true --progress \
+glance --os-image-api-version 1 image-create --name="xenial" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/xenial-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version image-create --name="wily" --is-public=true --progress \
+glance --os-image-api-version 1 image-create --name="wily" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/wily-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version image-create --name="trusty" --is-public=true --progress \
+glance --os-image-api-version 1 image-create --name="trusty" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/trusty-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version image-create --name="precise" --is-public=true --progress \
+glance --os-image-api-version 1 image-create --name="precise" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/precise-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version image-create --name="cirros" --is-public=true  --progress \
+glance --os-image-api-version 1 image-create --name="cirros" --is-public=true  --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/cirros-0.3.4-x86_64-disk.img
 
 glance --os-image-api-version 1 image-update --property architecture=x86_64 xenial
