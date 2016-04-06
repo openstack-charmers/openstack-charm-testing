@@ -40,7 +40,7 @@ net_type=${1:-"gre"}
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     unset OS_DEFAULT_DOMAIN OS_PROJECT_NAME OS_IDENTITY_API_VERSION OS_PROJECT_DOMAIN_NAME
-	source unset_all
+	source novarc_unset_all
     source ~/novarc
     ./bin/post-deploy-config neutron-gateway
 fi

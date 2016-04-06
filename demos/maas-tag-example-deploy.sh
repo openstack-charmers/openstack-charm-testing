@@ -49,6 +49,7 @@ time juju-deployer -v -c bundles/dev/11-default.yaml -d trusty-kilo
 # Wait for hooks and relations
 # ============================
 #   * Alternatively, watch juju debug-log for hooks and relations to settle.
+# TODO:  use juju-wait here instead of a fixed sleep time
 sleep 120
 
 

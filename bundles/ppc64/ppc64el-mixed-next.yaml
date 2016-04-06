@@ -19,6 +19,10 @@
 #    juju-deployer -vdc ppc64el-compute-x86-control-next.yaml trusty-liberty
 #    ./configure-ppc64el
 #
+# NOTE:  This deployment does not place ceph on ppc64el machines because one of the
+#   three machines in the test lab uses multipath and:
+#   Bug #1567036: disk device naming is unpredictable on multipath systems
+#   https://launchpad.net/bugs/1567036
 openstack-services:
   services:
     mysql:
