@@ -1,12 +1,17 @@
 #!/bin/bash -e
 #
-# Mixed Architecture Ubuntu OpenStack Validation Example:  ppc64el + x86_64
+# Ubuntu OpenStack Validation Example:  ppc64el
 # ============================================================================
 #
-# Requires at least 7 amd64 nodes and at least 3 ppc64el nodes already
-#   commissioned and ready in MAAS.
+# Requires at least 3 ppc64el nodes already commissioned and ready in MAAS.
 #
 # The ppc64el machines should be set to HWE-W kernel in the MAAS UI.
+#
+# Ceph is excluded as three additional ppc64el machines would be necessary.
+#
+# For deployment outside the Canonical OpenStack Engineering lab,
+#   adjust IP settings in "~/tools/openstack-charm-testing/profiles/configure-ppc64el"
+#   to fit the network environment.
 #
 # Necessary preparation for this script:
 #   mkdir -vp ~/tools
@@ -16,18 +21,6 @@
 #   bzr branch lp:juju-wait
 #   cd openstack-charm-testing
 #
-# For deployment outside the Canonical OpenStack Engineering lab,
-#   adjust IP settings in "~/tools/openstack-charm-testing/profiles/configure-ppc64el"
-#   to fit the network environment.
-#
-# NOTE:  This validation is blocked on:
-#   Bug #1566994: nova-scheduler not honoring glance image architecture properties
-#   https://launchpad.net/bugs/1566994
-#
-# NOTE:  This deployment does not place ceph on ppc64el machines because one of the
-#   three machines in the test lab uses multipath and:
-#   Bug #1567036: disk device naming is unpredictable on multipath systems
-#   https://launchpad.net/bugs/1567036
 # ============================================================================
 
 
@@ -48,8 +41,8 @@ function f_query_and_save_cloud_diags_info(){
 
 
 # The bundle to deploy
-BUNDLE="$HOME/tools/openstack-charm-testing/bundles/ppc64/ppc64el-mixed-next.yaml"
-EXPECTED_HYPERVISORS="6"
+BUNDLE="$HOME/tools/openstack-charm-testing/bundles/ppc64/ppc64el-next.yaml"
+EXPECTED_HYPERVISORS="1"
 
 # The combo to deploy (Liberty or later recommended)
 TARGET="trusty-liberty"
@@ -76,7 +69,7 @@ $CONSTRAINER -yd -i $BUNDLE -o $BUNDLE_TMP --constraints $INJECT_TAGS -e $SUBORD
 
 # Bootstrap on x86
 juju switch maas-trusty
-juju bootstrap --constraints "arch=amd64 ${INJECT_TAGS}"
+juju bootstrap --constraints "arch=ppc64el ${INJECT_TAGS}"
 
 # Deploy
 juju-deployer -v -c $BUNDLE_TMP $TARGET
@@ -87,9 +80,6 @@ $JUJU_WAIT
 # Configure neutron, add images, install CLI tools,
 # add security groups, tune flavors and quotas
 ./configure ppc64el
-
-# Also add amd64 images
-tools/images_amd64.sh
 
 # Source the OpenStack credentials
 . $OCT/novarc
@@ -113,14 +103,10 @@ fi
 tools/instance_launch.sh 2 trusty-ppc64el
 tools/instance_launch.sh 2 wily-ppc64el
 tools/instance_launch.sh 2 xenial-ppc64el
-tools/instance_launch.sh 2 trusty
-tools/instance_launch.sh 2 wily
-tools/instance_launch.sh 2 xenial
 
 # Optionally check cirros images (no SSH via key, un/pw only)
 #   FYI, cirros default login:  cirros  cubswin:)
 #   tools/instance_launch.sh 2 cirros-ppc64el
-#   tools/instance_launch.sh 2 cirros
 
 # Assign floating IP addresses to all instances
 tools/float_all.sh

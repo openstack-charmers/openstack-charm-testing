@@ -1,11 +1,8 @@
-# ppc64el-mixed PoC/Example Test Bundle:
-#
+# ppc64el + x86_64 Mixed Architecture PoC/Example Test Bundle
 #    (3) ppc64el machines:
 #          - includes:
 #            (3) dedicated nova-compute units
-#            (*) no ceph, as the unpredictable multipath device
-#                  names are currently prohibitive to automation
-#            (*) no control plane, no db
+#            (*) no control plane, no db, no ceph, no swift
 #
 #    (7) amd64 machines:  bootstrap, network, control plane and storage services
 #          - includes:

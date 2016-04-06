@@ -15,7 +15,6 @@
 #    juju-deployer -vdc ppc64el-next.yaml trusty-liberty
 #    ./configure-ppc64el
 #
-#
 openstack-services:
   services:
     mysql:
