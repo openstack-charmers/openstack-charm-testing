@@ -70,7 +70,7 @@ $CONSTRAINER -yd -i $BUNDLE -o $BUNDLE_TMP --constraints $INJECT_TAGS -e $SUBORD
 # Bootstrap on ppc64el
 # Pin to a specific machine which has lower resources
 juju switch maas-trusty
-# juju bootstrap --constraints "arch=ppc64el ${INJECT_TAGS},node-11c03686-9d7f-11e4-91da-d4bed9a84493"
+juju bootstrap --constraints "arch=ppc64el ${INJECT_TAGS},node-11c03686-9d7f-11e4-91da-d4bed9a84493"
 
 # Deploy
 juju-deployer -v -c $BUNDLE_TMP $TARGET
