@@ -68,7 +68,7 @@ openstack-services:
     nova-compute:
 #      branch: https://github.com/openstack/charm-nova-compute
 #      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
-      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=301312/1
+      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=301312/2
       num_units: 1
       constraints: arch=ppc64el
       options:
