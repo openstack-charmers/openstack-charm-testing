@@ -1,10 +1,5 @@
 #!/bin/bash -e
 #
-# NOTE:  This WIP bundle is blocked (not functional) on swift due to:
-#   Bug #1567198: get_device_blkid (swift-storage-relation-joined hook) failure when inspecting in-use block devices
-#   https://launchpad.net/bugs/1567198
-#
-#
 # Ubuntu OpenStack Validation Example:  ppc64el
 # ============================================================================
 #
