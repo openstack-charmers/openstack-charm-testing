@@ -1,5 +1,10 @@
 #!/bin/bash -e
 #
+# NOTE:  This WIP bundle is blocked (not functional) on swift due to:
+#   Bug #1567198: get_device_blkid (swift-storage-relation-joined hook) failure when inspecting in-use block devices
+#   https://launchpad.net/bugs/1567198
+#
+#
 # Ubuntu OpenStack Validation Example:  ppc64el
 # ============================================================================
 #
@@ -70,7 +75,7 @@ $CONSTRAINER -yd -i $BUNDLE -o $BUNDLE_TMP --constraints $INJECT_TAGS -e $SUBORD
 # Bootstrap on ppc64el
 # Pin to a specific machine which has lower resources
 juju switch maas-trusty
-juju bootstrap --constraints "arch=ppc64el ${INJECT_TAGS},node-11c03686-9d7f-11e4-91da-d4bed9a84493"
+# juju bootstrap --constraints "arch=ppc64el ${INJECT_TAGS},node-11c03686-9d7f-11e4-91da-d4bed9a84493"
 
 # Deploy
 juju-deployer -v -c $BUNDLE_TMP $TARGET

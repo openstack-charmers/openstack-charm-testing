@@ -1,10 +1,10 @@
-# ppc64el PoC/Example Test Bundle
+# WIP EXPERIMENTAL - ppc64el PoC/Example Test Bundle
 #    (3) ppc64el machines
 #          - includes:
 #               (1) bootstrap node (also db, network gateway, and some control plane in lxc)
 #               (1) dedicated compute node
 #               (1) swift unit (remainder of control plane in lxc)
-#               (*) no ceph (would need 3 machines for quorum)
+#               (*) no ceph (would need 3 machines for quorum - 4 total machines)
 #               (*) control plane in lxc
 #
 #     Glance is backed by swift.
@@ -18,14 +18,19 @@
 #    juju-deployer -vdc ppc64el-next.yaml trusty-liberty
 #    ./configure-ppc64el
 #
+# NOTE:  This WIP bundle is blocked (not functional) on swift due to:
+#   Bug #1567198: get_device_blkid (swift-storage-relation-joined hook) failure when inspecting in-use block devices
+#   https://launchpad.net/bugs/1567198
 openstack-services:
   services:
     mysql:
-      branch: https://github.com/openstack/charm-percona-cluster
-      constraints: arch=ppc64el
+      branch: lp:charms/trusty/mysql
+#      branch: https://github.com/openstack/charm-percona-cluster
       options:
         dataset-size: 15%
         max-connections: 20000
+#        root-password: ubuntutesting
+#        sst-password: ubuntutesting
       to:
         - "lxc:0"
     rabbitmq-server:
@@ -45,7 +50,7 @@ openstack-services:
       constraints: arch=ppc64el
       options:
         zone: 1
-        block-device: "/dev/sdc /dev/sdd"
+        block-device: "/dev/sdc"
         overwrite: "true"
     keystone:
       branch: https://github.com/openstack/charm-keystone
@@ -93,7 +98,7 @@ openstack-services:
     cinder:
       branch: https://github.com/openstack/charm-cinder
       options:
-        block-device: "/dev/sde"
+        block-device: "/dev/sdd"
         glance-api-version: 2
       to:
         - "lxc:swift-storage-z1=0"
@@ -206,9 +211,9 @@ trusty-liberty-staging:
 wily-liberty:
   inherits: openstack-services
   series: wily
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
+#  services:
+#    mysql:
+#      branch: lp:charms/trusty/mysql
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
@@ -234,9 +239,9 @@ trusty-mitaka-staging:
 xenial-mitaka:
   inherits: openstack-services
   series: xenial
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
+#  services:
+#    mysql:
+#      branch: lp:charms/trusty/mysql
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
