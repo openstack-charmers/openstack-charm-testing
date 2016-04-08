@@ -42,7 +42,7 @@ function f_query_and_save_cloud_diags_info(){
 
 # The bundle to deploy
 BUNDLE="$HOME/tools/openstack-charm-testing/bundles/ppc64/ppc64el-next.yaml"
-EXPECTED_HYPERVISORS="1"
+EXPECTED_HYPERVISORS="2"
 
 # The combo to deploy (Liberty or later recommended)
 TARGET="trusty-liberty"

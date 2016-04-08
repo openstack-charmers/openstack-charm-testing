@@ -11,7 +11,9 @@
 #            (3) swift units
 #            (*) all control plane in lxc
 #
-# See the demo script in this repo for a detailed process.
+#     The neutron-gateway node requires 2 NICs wired to the same L2 network.
+#
+#     See the demo script in this repo for a detailed process.
 #
 # Basic usage example:
 #    juju bootstrap --constraints "arch=amd64"
@@ -92,9 +94,7 @@ openstack-services:
       to:
         - "lxc:swift-storage-z2=0"
     nova-compute-ppc64el:
-#      branch: https://github.com/openstack/charm-nova-compute
-#      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
-      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=301312/2
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
       constraints: arch=ppc64el
       options:
@@ -102,9 +102,7 @@ openstack-services:
         "enable-resize": true
         "migration-auth-type": ssh
     nova-compute-amd64:
-#      branch: https://github.com/openstack/charm-nova-compute
-#      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
-      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=301312/2
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
       constraints: arch=amd64
       options:

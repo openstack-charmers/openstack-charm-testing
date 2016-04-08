@@ -7,9 +7,7 @@
 #               (*) no swift (see note)
 #               (*) control plane in lxc
 #
-#     Glance is backed by ???????????.
-#
-#     Cinder has a disk of its own.
+#     The neutron-gateway node requires 2 NICs wired to the same L2 network.
 #
 #     See the demo script in this repo for a detailed process.
 #
@@ -55,6 +53,7 @@ openstack-services:
     keystone:
       branch: https://github.com/openstack/charm-keystone
       options:
+        debug: true
         admin-password: openstack
         admin-token: ubuntutesting
       to:
@@ -66,18 +65,18 @@ openstack-services:
 #        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=0"
     nova-compute:
-#      branch: https://github.com/openstack/charm-nova-compute
-#      branch: https://github.com/ryan-beisner/charm-nova-compute-ppc64el;ppc64el-smt
-      branch: https://review.openstack.org/openstack/charm-nova-compute#changeref=301312/2
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 2
       constraints: arch=ppc64el
       options:
+        debug: true
         "enable-live-migration": true
         "enable-resize": true
         "migration-auth-type": ssh
     nova-cloud-controller:
       branch: https://github.com/openstack/charm-nova-cloud-controller
       options:
+        debug: true
         network-manager: Neutron
         quantum-security-groups: "yes"
       to:
@@ -86,6 +85,7 @@ openstack-services:
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway
       options:
+        debug: true
         ext-port: eth1
         instance-mtu: 1300
       to:
@@ -93,6 +93,7 @@ openstack-services:
     neutron-api:
       branch: https://github.com/openstack/charm-neutron-api
       options:
+        debug: true
         neutron-security-groups: True
       to:
 #        - "lxc:swift-storage-z1=0"
@@ -102,6 +103,7 @@ openstack-services:
     cinder:
       branch: https://github.com/openstack/charm-cinder
       options:
+        debug: true
         block-device: "/dev/sdd"
         glance-api-version: 2
       to:
@@ -111,6 +113,8 @@ openstack-services:
       branch: https://github.com/openstack/charm-cinder-ceph
     glance:
       branch: https://github.com/openstack/charm-glance
+      options:
+        debug: true
       to:
 #        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
