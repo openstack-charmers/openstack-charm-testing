@@ -48,7 +48,6 @@ openstack-services:
       branch: https://github.com/openstack/charm-nova-cloud-controller
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
     glance:
       branch: https://github.com/openstack/charm-glance
   relations:
