@@ -36,7 +36,6 @@ openstack-services:
       constraints: mem=1G
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
         ram-allocation-ratio: 5.0
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway
@@ -192,7 +191,7 @@ openstack-mitaka-git:
       options:
         openstack-origin-git: include-file://nova-mitaka.yaml
 xenial-mitaka:
-  inherits: openstack-master-git
+  inherits: openstack-mitaka-git
   series: xenial
   services:
     mysql:
