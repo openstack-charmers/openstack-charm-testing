@@ -191,7 +191,7 @@ openstack-mitaka-git:
       options:
         openstack-origin-git: include-file://nova-mitaka.yaml
 xenial-mitaka:
-  inherits: openstack-master-git
+  inherits: openstack-mitaka-git
   series: xenial
   services:
     mysql:
