@@ -55,7 +55,6 @@ openstack-services:
       constraints: mem=1G
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
         harden: "os ssh apache"
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway
