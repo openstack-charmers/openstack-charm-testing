@@ -1,5 +1,12 @@
 #!/bin/bash -e
 #
+#
+# NOTE:
+# This is a temporary near-duplicate of ppc64el-next.yaml to work around the fact that
+# the ppc64el machines in the engineering lab only have 1 NIC connected.  When that
+# is resolved, this bundle and script will disappear.
+#
+#
 # Ubuntu OpenStack Validation Example:  ppc64el
 # ============================================================================
 #
@@ -41,7 +48,7 @@ function f_query_and_save_cloud_diags_info(){
 
 
 # The bundle to deploy
-BUNDLE="$HOME/tools/openstack-charm-testing/bundles/ppc64/ppc64el-next.yaml"
+BUNDLE="$HOME/tools/openstack-charm-testing/bundles/ppc64/ppc64el-alt-next.yaml"
 EXPECTED_HYPERVISORS="2"
 
 # The combo to deploy (Liberty or later recommended)

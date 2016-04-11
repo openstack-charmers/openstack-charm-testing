@@ -90,7 +90,6 @@ openstack-services:
       branch: https://github.com/openstack/charm-nova-cloud-controller;stable
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
       to:
         - "lxc:0"
     neutron-gateway:

@@ -78,7 +78,6 @@ openstack-services:
       options:
         debug: true
         network-manager: Neutron
-        quantum-security-groups: "yes"
       to:
 #        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=0"
