@@ -40,7 +40,7 @@ net_type=${1:-"gre"}
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     unset OS_DEFAULT_DOMAIN OS_PROJECT_NAME OS_IDENTITY_API_VERSION OS_PROJECT_DOMAIN_NAME
-	source unset_all
+	source novarc_unset_all
     source ~/novarc
     ./bin/post-deploy-config neutron-gateway
 fi
@@ -64,8 +64,8 @@ secret=$(openstack ec2 credentials show $access  | awk '/secret/ {print $4}')
 source novarcv3_project 
 # Download images if not already present
 mkdir -vp ~/images
+upload_image cloudimages xenial xenial-server-cloudimg-amd64-disk1.img
 upload_image cloudimages wily wily-server-cloudimg-amd64-disk1.img
-upload_image cloudimages vivid vivid-server-cloudimg-amd64-disk1.img
 upload_image cloudimages trusty trusty-server-cloudimg-amd64-disk1.img
 upload_image cloudimages precise precise-server-cloudimg-amd64-disk1.img
 upload_image swift cirros cirros-0.3.4-x86_64-disk.img
