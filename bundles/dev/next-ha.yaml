@@ -73,8 +73,7 @@ openstack-services:
       branch: https://github.com/openstack/charm-nova-cloud-controller
       constraints: mem=1G
       options:
-        network-manager: Quantum
-        quantum-security-groups: "yes"
+        network-manager: Neutron
         vip: 10.5.104.1
     nova-cloud-controller-hacluster:
       branch: lp:~openstack-charmers/charms/trusty/hacluster/next

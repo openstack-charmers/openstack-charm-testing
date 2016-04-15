@@ -100,7 +100,6 @@ two-smoosh:
       options:
         "network-manager": Neutron
         "openstack-origin": "cloud:trusty-juno"
-        "quantum-security-groups": "yes"
       annotations:
         "gui-x": "0"
         "gui-y": "500"
