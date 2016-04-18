@@ -86,7 +86,7 @@ openstack-services:
     lxd:
       branch: https://github.com/openstack/charm-lxd
       options:
-        block-device: /dev/vdb
+        block-devices: /dev/vdb
         ephemeral-unmount: /mnt
         storage-type: lvm
         overwrite: "true"
