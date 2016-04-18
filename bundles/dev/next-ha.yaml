@@ -263,7 +263,7 @@ openstack-icehouse-msg-split:
   - [ neutron-api, neutron-api-hacluster ]
 # icehouse
 precise-icehouse:
-  inherits: openstack-singlerabbit
+  inherits: openstack-icehouse
   series: precise
   overrides:
     openstack-origin: cloud:precise-icehouse
