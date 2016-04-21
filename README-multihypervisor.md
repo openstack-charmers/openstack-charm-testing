@@ -13,7 +13,7 @@ cd ~/./tools/openstack-charm-testing
 ### Deploy
 Bootstrap, then deploy Wily + Liberty.
 ```
-juju-deployer -vdB -c bundles/multi-hypervisor/default.yaml wily-liberty
+juju-deployer -vdB -c bundles/multi-hypervisor/default.yaml xenial-mitaka
 ```
 
 ### Configure 

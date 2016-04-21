@@ -24,7 +24,8 @@ net_type=${1:-"gre"}
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     source ~/novarc
-    ./bin/post-deploy-config neutron-gateway
+    # ens6 is a brittle hack for late-landing Xenial net dev name change
+    ./bin/post-deploy-config neutron-gateway ens6
 fi
 
 # Configure neutron networking on overcloud
