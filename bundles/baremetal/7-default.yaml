@@ -86,7 +86,6 @@ openstack-services:
       branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.04
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
       to:
         - "lxc:swift-storage-z3=0"
     neutron-gateway:

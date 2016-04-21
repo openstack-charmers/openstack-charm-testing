@@ -44,7 +44,6 @@ openstack-services:
       constraints: mem=1G
       options:
         network-manager: Quantum
-        quantum-security-groups: "yes"
     neutron-api:
       branch: lp:~gnuoy/charms/trusty/neutron-api/neutron-refactor
       constraints: mem=1G

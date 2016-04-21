@@ -42,7 +42,6 @@ openstack-services:
       options:
         network-manager: Neutron
         quantum-plugin: nsx
-        quantum-security-groups: "yes"
     cinder:
       branch: https://github.com/openstack/charm-cinder;stable/16.04
       constraints: mem=1G

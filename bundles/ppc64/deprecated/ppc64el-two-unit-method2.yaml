@@ -99,7 +99,6 @@ two-smoosh-ppc64compute:
       num_units: 1
       options:
         "network-manager": Neutron
-        "quantum-security-groups": "yes"
       annotations:
         "gui-x": "0"
         "gui-y": "500"

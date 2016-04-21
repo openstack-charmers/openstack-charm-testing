@@ -36,7 +36,6 @@ openstack-services:
       constraints: mem=1G
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
         ram-allocation-ratio: 5.0
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway;stable/16.04
