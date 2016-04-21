@@ -86,7 +86,7 @@ openstack-services:
     lxd:
       branch: https://github.com/openstack/charm-lxd
       options:
-        block-device: /dev/vdb
+        block-devices: /dev/vdb
         ephemeral-unmount: /mnt
         storage-type: lvm
         overwrite: "true"
@@ -157,6 +157,15 @@ wily-liberty:
   series: wily
 wily-liberty-proposed:
   inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# Mitaka
+xenial-mitaka:
+  inherits: openstack-icehouse
+  series: xenial
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
   overrides:
     source: proposed
     openstack-origin: distro-proposed
