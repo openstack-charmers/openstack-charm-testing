@@ -173,7 +173,7 @@ openstack-icehouse-msg-split:
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
     rabbitmq-server-neutron:
-      branch: https://github.com/openstack/charm-rabbitmq-server;stable
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       constraints: mem=1G
   relations:
   - [ neutron-api, mysql ]

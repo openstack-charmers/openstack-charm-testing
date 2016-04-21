@@ -36,7 +36,7 @@ openstack-services:
   services:
     # Co-located
     neutron-gateway:
-      branch: https://github.com/openstack/charm-neutron-gateway;stable
+      branch: https://github.com/openstack/charm-neutron-gateway;stable/16.04
       constraints: "tags=gateway arch=amd64"
       options:
         ext-port: eth1
@@ -45,7 +45,7 @@ openstack-services:
         - "0"
     # Machines
     ceph:
-      branch: https://github.com/openstack/charm-ceph;stable
+      branch: https://github.com/openstack/charm-ceph;stable/16.04
       num_units: 3
       constraints: "tags=storage,^object_storage arch=amd64"
       options:
@@ -54,28 +54,28 @@ openstack-services:
         osd-devices: /dev/vdb /dev/sdb
         osd-reformat: "yes"
     swift-storage-z1:
-      branch: https://github.com/openstack/charm-swift-storage;stable
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.04
       constraints: "tags=object_zone_1 arch=amd64"
       options:
         zone: 1
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage;stable
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.04
       constraints: "tags=object_zone_2 arch=amd64"
       options:
         zone: 2
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage;stable
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.04
       constraints: "tags=object_zone_3 arch=amd64"
       options:
         zone: 3
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     nova-compute:
-      branch: https://github.com/openstack/charm-nova-compute;stable
+      branch: https://github.com/openstack/charm-nova-compute;stable/16.04
       num_units: 3
       constraints: "tags=compute arch=amd64"
       options:
@@ -83,7 +83,7 @@ openstack-services:
         enable-resize: True
         migration-auth-type: ssh
     mysql:
-      branch: https://github.com/openstack/charm-percona-cluster;stable
+      branch: https://github.com/openstack/charm-percona-cluster;stable/16.04
       constraints: "tags=database arch=amd64"
       options:
         dataset-size: 50%
@@ -94,7 +94,7 @@ openstack-services:
       to:
         - "lxc:0"
     swift-proxy:
-      branch: https://github.com/openstack/charm-swift-proxy;stable
+      branch: https://github.com/openstack/charm-swift-proxy;stable/16.04
       options:
         zone-assignment: manual
         replicas: 3
@@ -102,50 +102,50 @@ openstack-services:
       to:
         - "lxc:0"
     heat:
-      branch: https://github.com/openstack/charm-heat;stable
+      branch: https://github.com/openstack/charm-heat;stable/16.04
       to:
         - "lxc:ceph=0"
     ceilometer:
-      branch: https://github.com/openstack/charm-ceilometer;stable
+      branch: https://github.com/openstack/charm-ceilometer;stable/16.04
       to:
         - "lxc:ceph=0"
     openstack-dashboard:
-      branch: https://github.com/openstack/charm-openstack-dashboard;stable
+      branch: https://github.com/openstack/charm-openstack-dashboard;stable/16.04
       to:
         - "lxc:ceph=1"
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api;stable
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
       options:
         neutron-security-groups: True
       to:
         - "lxc:ceph=1"
     glance:
-      branch: https://github.com/openstack/charm-glance;stable
+      branch: https://github.com/openstack/charm-glance;stable/16.04
       to:
         - "lxc:ceph=2"
     cinder:
-      branch: https://github.com/openstack/charm-cinder;stable
+      branch: https://github.com/openstack/charm-cinder;stable/16.04
       options:
         block-device: "None"
         glance-api-version: 2
       to:
         - "lxc:ceph=2"
     keystone:
-      branch: https://github.com/openstack/charm-keystone;stable
+      branch: https://github.com/openstack/charm-keystone;stable/16.04
       options:
         admin-password: openstack
         admin-token: ubuntutesting
       to:
         - "lxc:swift-storage-z1=0"
     nova-cloud-controller:
-      branch: https://github.com/openstack/charm-nova-cloud-controller;stable
+      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.04
       options:
         network-manager: Neutron
         quantum-security-groups: "yes"
       to:
         - "lxc:swift-storage-z2=0"
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server;stable
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       to:
         - "lxc:swift-storage-z3=0"
     mongodb:
@@ -154,11 +154,11 @@ openstack-services:
         - "lxc:mysql"
     # Subordinates
     cinder-ceph:
-      branch: https://github.com/openstack/charm-cinder-ceph;stable
+      branch: https://github.com/openstack/charm-cinder-ceph;stable/16.04
     ceilometer-agent:
-      branch: https://github.com/openstack/charm-ceilometer-agent;stable
+      branch: https://github.com/openstack/charm-ceilometer-agent;stable/16.04
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch;stable
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
     ntp:
       branch: lp:charms/trusty/ntp
       num_units: 0
