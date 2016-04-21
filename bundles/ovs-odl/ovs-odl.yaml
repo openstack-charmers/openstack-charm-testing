@@ -36,7 +36,7 @@ openstack-services:
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server;stable
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
     keystone:
       branch: https://github.com/openstack/charm-keystone
       options:

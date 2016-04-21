@@ -6,7 +6,6 @@ openstack-services:
       constraints: mem=1G
       options:
         network-manager: Quantum
-        quantum-security-groups: "yes"
         region: cell2
         verbose: True
         debug: True
