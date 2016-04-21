@@ -105,6 +105,9 @@ tools/instance_launch.sh 2 trusty-ppc64el
 tools/instance_launch.sh 2 wily-ppc64el
 tools/instance_launch.sh 2 xenial-ppc64el
 
+# Delay for instances
+sleep 120
+
 # Optionally check cirros images (no SSH via key, un/pw only)
 #   FYI, cirros default login:  cirros  cubswin:)
 #   tools/instance_launch.sh 2 cirros-ppc64el

@@ -9,7 +9,7 @@
 #
 #     The neutron-gateway node requires 2 NICs wired to the same L2 network.
 #
-#     See the demo script in this repo for a detailed process.
+#     See the demos/ppc64el-next.sh script in this repo for a detailed process.
 #
 # Basic usage example:
 #    juju bootstrap --constraints "arch=ppc64el"
@@ -23,10 +23,12 @@ openstack-services:
   services:
     mysql:
       branch: lp:charms/trusty/mysql
+# PXC not in use, pending resolution of https://bugs.launchpad.net/bugs/1570678
 #      branch: https://github.com/openstack/charm-percona-cluster
       options:
         dataset-size: 15%
         max-connections: 20000
+# PXC not in use, pending resolution of https://bugs.launchpad.net/bugs/1570678
 #        root-password: ubuntutesting
 #        sst-password: ubuntutesting
       to:
@@ -35,21 +37,6 @@ openstack-services:
       branch: https://github.com/openstack/charm-rabbitmq-server
       to:
         - "lxc:0"
-#    swift-proxy:
-#      branch: https://github.com/openstack/charm-swift-proxy
-#      options:
-#        zone-assignment: manual
-#        replicas: 1
-#        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
-#      to:
-#        - "lxc:0"
-#    swift-storage-z1:
-#      branch: https://github.com/openstack/charm-swift-storage
-#      constraints: arch=ppc64el
-#      options:
-#        zone: 1
-#        block-device: "/dev/sdc"
-#        overwrite: "true"
     keystone:
       branch: https://github.com/openstack/charm-keystone
       options:
@@ -57,12 +44,10 @@ openstack-services:
         admin-password: openstack
         admin-token: ubuntutesting
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=0"
     openstack-dashboard:
       branch: https://github.com/openstack/charm-openstack-dashboard
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=0"
     nova-compute:
       branch: https://github.com/openstack/charm-nova-compute
@@ -79,7 +64,6 @@ openstack-services:
         debug: true
         network-manager: Neutron
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=0"
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway
@@ -95,7 +79,6 @@ openstack-services:
         debug: true
         neutron-security-groups: True
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=0"
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
@@ -106,7 +89,6 @@ openstack-services:
         block-device: "/dev/sdd"
         glance-api-version: 2
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
     cinder-ceph:
       branch: https://github.com/openstack/charm-cinder-ceph
@@ -115,24 +97,20 @@ openstack-services:
       options:
         debug: true
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
     ceilometer:
       branch: https://github.com/openstack/charm-ceilometer
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
     ceilometer-agent:
       branch: https://github.com/openstack/charm-ceilometer-agent
     heat:
       branch: https://github.com/openstack/charm-heat
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
     mongodb:
       branch: lp:charms/trusty/mongodb
       to:
-#        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
     ntp:
       branch: lp:charms/trusty/ntp
@@ -155,15 +133,12 @@ openstack-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, cinder ]
-#    - [ glance, swift-proxy ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
-#    - [ swift-proxy, keystone ]
-#    - [ swift-proxy, swift-storage-z1 ]
     - - ceilometer
       - keystone:identity-service
     - [ ceilometer, rabbitmq-server ]
@@ -223,9 +198,6 @@ trusty-liberty-staging:
 wily-liberty:
   inherits: openstack-services
   series: wily
-#  services:
-#    mysql:
-#      branch: lp:charms/trusty/mysql
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
@@ -251,9 +223,6 @@ trusty-mitaka-staging:
 xenial-mitaka:
   inherits: openstack-services
   series: xenial
-#  services:
-#    mysql:
-#      branch: lp:charms/trusty/mysql
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
