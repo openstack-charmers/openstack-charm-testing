@@ -49,7 +49,7 @@ openstack-services:
     lxd:
       branch: lp:~openstack-charmers-next/charms/trusty/lxd/trunk
       options:
-        block-device: /dev/vdb
+        block-devices: /dev/vdb
         ephemeral-unmount: /mnt
         storage-type: lvm
         overwrite: "true"
