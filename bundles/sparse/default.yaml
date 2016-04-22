@@ -9,6 +9,8 @@ openstack-services:
       options:
         dataset-size: 50%
         max-connections: 20000
+#        root-password: changeme
+#        sst-password: changeme
     rabbitmq-server:
       branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       constraints: mem=1G
@@ -186,7 +188,7 @@ openstack-icehouse-msg-split:
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # icehouse
 precise-icehouse:
-  inherits: openstack-singlerabbit
+  inherits: openstack-icehouse
   series: precise
   services:
     mysql:
@@ -226,31 +228,6 @@ trusty-icehouse-trunk:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
     offline-compression: "no"
-# juno
-trusty-juno:
-  inherits: openstack-icehouse
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-juno
-    source: cloud:trusty-juno
-trusty-juno-proposed:
-  inherits: trusty-juno
-  overrides:
-    openstack-origin: cloud:trusty-juno/proposed
-    source: cloud:trusty-juno/proposed
-trusty-juno-staging:
-  inherits: trusty-juno
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/juno-staging
-    source: ppa:ubuntu-cloud-archive/juno-staging
-utopic-juno:
-  inherits: openstack-icehouse
-  series: utopic
-utopic-juno-proposed:
-  inherits: utopic-juno
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
 # kilo
 trusty-kilo:
   inherits: openstack-icehouse
@@ -268,20 +245,6 @@ trusty-kilo-staging:
   overrides:
     openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
     source: ppa:ubuntu-cloud-archive/kilo-staging
-vivid-kilo:
-  inherits: openstack-icehouse
-  series: vivid
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-vivid-kilo-proposed:
-  inherits: vivid-kilo
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
 # liberty
 trusty-liberty:
   inherits: openstack-icehouse
@@ -302,9 +265,6 @@ trusty-liberty-staging:
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
@@ -330,12 +290,8 @@ trusty-mitaka-staging:
 xenial-mitaka:
   inherits: openstack-icehouse
   series: xenial
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-
