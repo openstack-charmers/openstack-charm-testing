@@ -5,7 +5,7 @@ openstack-services:
   services:
     mysql:
       branch: https://github.com/openstack/charm-percona-cluster;stable/16.04
-      constraints: mem=1G
+      constraints: mem=4G
       options:
         dataset-size: 50%
         max-connections: 20000
