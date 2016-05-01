@@ -32,7 +32,7 @@
 ceph-cluster:
   services:
     ceph:
-#      branch: lp:~openstack-charmers/charms/trusty/ceph/next
+#      branch: https://github.com/openstack/charm-ceph
 #      branch: lp:~1chb1n/charms/trusty/ceph/next.1601-test-update1
       branch: lp:~chris.macnaughton/charms/trusty/ceph/add-infernalis
       constraints: mem=1G
@@ -46,7 +46,7 @@ ceph-cluster:
         ephemeral-unmount: /mnt
         osd-devices: /dev/vdb /srv/ceph
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       constraints: mem=1G
       options:
         admin-password: 'openstack'
@@ -59,17 +59,17 @@ ceph-cluster:
       options:
         dataset-size: '50%'
     rabbitmq-server:
-#      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+#      branch: https://github.com/openstack/charm-rabbitmq-server
       branch: lp:~1chb1n/charms/trusty/rabbitmq-server/next-ch-sync-mitaka-uca
       constraints: mem=1G
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       constraints: mem=1G
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
     cinder:
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      branch: https://github.com/openstack/charm-cinder
       constraints: mem=1G
       options:
         block-device: None

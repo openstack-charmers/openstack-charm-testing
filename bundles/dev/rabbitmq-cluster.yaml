@@ -14,13 +14,13 @@
 openstack-services:
   services:
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: https://github.com/openstack/charm-rabbitmq-server
       num_units: 3
       options:
         min-cluster-size: 3
         max-cluster-tries: 10
     cinder:
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      branch: https://github.com/openstack/charm-cinder
     nrpe:
       branch: lp:charms/trusty/nrpe
   relations:

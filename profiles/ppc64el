@@ -2,6 +2,13 @@
 # An experimental configuration script for configuring a ppc64el OpenStack test cloud.
 # Useful in manual deployment testing.
 
+# Install CLI tools
+sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
+    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
+    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
+    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
+    openvswitch-test openvswitch-common python-openstackclient -y
+
 # Set "dellstack" network parameters, if not already set.  Adjust to fit your environment.
 [[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
 [[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
@@ -25,9 +32,8 @@ keystone tenant-create --name alt_demo || :
 keystone user-create --name alt_demo --tenant alt_demo --pass secret --enabled true --email alt_demo@dev.null || :
 keystone user-role-add --user alt_demo --role Member --tenant alt_demo || :
 
-# Install dependencies and CLI tools
-sudo apt-get install python-cinderclient python-glanceclient python-heatclient \
-    python-keystoneclient python-neutronclient python-novaclient python-swiftclient python-ceilometerclient -y
+# Install monitoring, probing and troubleshooting tools on all units
+juju run --all "sudo apt-get install htop atop nload iptraf nmap multitail iperf pastebinit stress sysstat -y"
 
 # Load images into glance
 tools/images_ppc64el.sh
@@ -38,6 +44,3 @@ tools/sec_groups.sh
 # Tune for higher-density testing
 tools/flavor_shrink.sh
 tools/quota_million.sh
-
-# Temporary workaround: libvirt and nova conf patches and mods, specific to ppc64el
-tools/ppc64el-post-deploy-patches.sh

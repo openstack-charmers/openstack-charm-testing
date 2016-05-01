@@ -16,7 +16,7 @@ sudo apt-get install git testrepository subunit python-nose python-lxml python-b
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.5.150.0:10.5.200.254"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.160.2"
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
-[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.160.50"
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.161.162"
 
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}
@@ -24,7 +24,8 @@ net_type=${1:-"gre"}
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     source ~/novarc
-    ./bin/post-deploy-config neutron-gateway
+    # ens6 is a brittle hack for late-landing Xenial net dev name change
+    ./bin/post-deploy-config neutron-gateway ens6
 fi
 
 # Configure neutron networking on overcloud
@@ -46,7 +47,7 @@ glance --os-image-api-version 1 image-create --name="trusty-disk1.img" --is-publ
     --container-format=bare --disk-format=qcow2 --property hypervisor_type=qemu \
     --property architecture=x86_64 < ~/images/trusty-server-cloudimg-amd64-disk1.img
 glance --os-image-api-version 1 image-create --name="trusty-root.tar.xz" --is-public=true --progress \
-    --container-format=bare --disk-format=root-tar --property hypervisor_type=lxc \
+    --container-format=bare --disk-format=raw --property hypervisor_type=lxc \
     --property architecture=x86_64 < ~/images/trusty-server-cloudimg-amd64-root.tar.xz
 
 # Create demo/testing users, tenants and flavor

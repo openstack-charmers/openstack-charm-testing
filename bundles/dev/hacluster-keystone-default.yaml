@@ -28,7 +28,7 @@ hacluster-keystone:
         debug: 'true'
         netmtu: 1300
     keystone:
-      branch: lp:charms/trusty/keystone
+      branch: https://github.com/openstack/charm-keystone;stable/16.04
       num_units: 3
       admin-password: 'openstack'
       admin-token: 'ubuntutesting'

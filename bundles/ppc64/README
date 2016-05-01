@@ -8,7 +8,7 @@ Differentiating bundle naming and purposes:
   PowerKVM        Power7 or 8 box with IBM's fedora-based host operating system.
                   ie. "cutting"
 
-  ppc64el         Power8 box with Ubuntu as the host operating system.
+  ppc64el         Power8 boxes with Ubuntu as the host operating system.
                   ie. "gregory"
 
-Also see comments in each bundle.
+Also see comments in each bundle, as well as examples in the demo dir.

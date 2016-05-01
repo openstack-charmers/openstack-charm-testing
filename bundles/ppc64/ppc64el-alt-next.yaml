@@ -1,0 +1,269 @@
+# NOTE:
+# This is a temporary near-duplicate of ppc64el-next.yaml to work around the fact that
+# the ppc64el machines in the engineering lab only have 1 NIC connected.  When that
+# is resolved, this bundle will disappear.
+#
+#
+# WIP EXPERIMENTAL - ppc64el PoC/Example Test Bundle
+#    (1) x86 machine
+#          - includes:
+#               (1) bootstrap node (with network gateway)
+#    (3) ppc64el machines
+#          - includes:
+#               (3) compute nodes (with control plane)
+#               (*) no ceph (would need 3 machines for quorum - 4 total machines)
+#               (*) no swift (see note)
+#               (*) control plane in lxc
+#
+#     The neutron-gateway node requires 2 NICs wired to the same L2 network.
+#
+#     See the demo script in this repo for a detailed process.
+#
+# Basic usage example:
+#    juju bootstrap --constraints "arch=ppc64el"
+#    juju-deployer -vdc ppc64el-next.yaml trusty-liberty
+#    ./configure-ppc64el
+#
+# NOTE:  This WIP bundle has swift temporarily removed until the following is addressed:
+#   Bug #1567198: get_device_blkid (swift-storage-relation-joined hook) failure when inspecting in-use block devices
+#   https://launchpad.net/bugs/1567198
+openstack-services:
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+#      branch: https://github.com/openstack/charm-percona-cluster
+      options:
+        dataset-size: 15%
+        max-connections: 20000
+#        root-password: ubuntutesting
+#        sst-password: ubuntutesting
+      to:
+        - "lxc:nova-compute=0"
+    rabbitmq-server:
+      branch: https://github.com/openstack/charm-rabbitmq-server
+      to:
+        - "lxc:nova-compute=1"
+#    swift-proxy:
+#      branch: https://github.com/openstack/charm-swift-proxy
+#      options:
+#        zone-assignment: manual
+#        replicas: 1
+#        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+#      to:
+#        - "lxc:0"
+#    swift-storage-z1:
+#      branch: https://github.com/openstack/charm-swift-storage
+#      constraints: arch=ppc64el
+#      options:
+#        zone: 1
+#        block-device: "/dev/sdc"
+#        overwrite: "true"
+    keystone:
+      branch: https://github.com/openstack/charm-keystone
+      options:
+        debug: true
+        admin-password: openstack
+        admin-token: ubuntutesting
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=0"
+    openstack-dashboard:
+      branch: https://github.com/openstack/charm-openstack-dashboard
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=0"
+    nova-compute:
+      branch: https://github.com/openstack/charm-nova-compute
+      num_units: 2
+      constraints: arch=ppc64el cpu-cores=160  # Pin to the 2 machines without multipath storage
+      options:
+        debug: true
+        "enable-live-migration": true
+        "enable-resize": true
+        "migration-auth-type": ssh
+    nova-cloud-controller:
+      branch: https://github.com/openstack/charm-nova-cloud-controller
+      options:
+        debug: true
+        network-manager: Neutron
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=0"
+    neutron-gateway:
+      branch: https://github.com/openstack/charm-neutron-gateway
+      options:
+        debug: true
+        ext-port: eth1
+        instance-mtu: 1300
+      to:
+        - "0"
+    neutron-api:
+      branch: https://github.com/openstack/charm-neutron-api
+      options:
+        debug: true
+        neutron-security-groups: True
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=0"
+    neutron-openvswitch:
+      branch: https://github.com/openstack/charm-neutron-openvswitch
+    cinder:
+      branch: https://github.com/openstack/charm-cinder
+      options:
+        debug: true
+        block-device: "/dev/sdd"
+        glance-api-version: 2
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=1"
+    cinder-ceph:
+      branch: https://github.com/openstack/charm-cinder-ceph
+    glance:
+      branch: https://github.com/openstack/charm-glance
+      options:
+        debug: true
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=1"
+    ceilometer:
+      branch: https://github.com/openstack/charm-ceilometer
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=1"
+    ceilometer-agent:
+      branch: https://github.com/openstack/charm-ceilometer-agent
+    heat:
+      branch: https://github.com/openstack/charm-heat
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=1"
+    mongodb:
+      branch: lp:charms/trusty/mongodb
+      to:
+#        - "lxc:swift-storage-z1=0"
+        - "lxc:nova-compute=1"
+    ntp:
+      branch: lp:charms/trusty/ntp
+      num_units: 0
+    juju-gui:
+      branch: lp:charms/trusty/juju-gui
+      to:
+        - "lxc:nova-compute=0"
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, cinder ]
+#    - [ glance, swift-proxy ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ openstack-dashboard, keystone ]
+#    - [ swift-proxy, keystone ]
+#    - [ swift-proxy, swift-storage-z1 ]
+    - - ceilometer
+      - keystone:identity-service
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
+    - - ntp:juju-info
+      - nova-compute:juju-info
+    - - ntp:juju-info
+      - neutron-gateway:juju-info
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+    - [ neutron-api, mysql ]
+    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, nova-cloud-controller ]
+    - [ neutron-api, neutron-openvswitch ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-gateway ]
+    - [ neutron-openvswitch, nova-compute ]
+    - [ neutron-openvswitch, rabbitmq-server ]
+# kilo
+trusty-kilo:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+# liberty
+trusty-liberty:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
+wily-liberty:
+  inherits: openstack-services
+  series: wily
+#  services:
+#    mysql:
+#      branch: lp:charms/trusty/mysql
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
+trusty-mitaka:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: openstack-services
+  series: xenial
+#  services:
+#    mysql:
+#      branch: lp:charms/trusty/mysql
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed

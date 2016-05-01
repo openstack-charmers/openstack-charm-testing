@@ -1,16 +1,20 @@
 #!/bin/bash -e
-# Download LX images and add to glance
+# Download LXD images and add to glance
 
 # Download images if not already present
-mkdir -p ~/images
-[ -f ~/images/trusty-server-cloudimg-amd64-root.tar.gz  ] || {
-	wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.gz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.gz
+mkdir -vp ~/images
+[ -f ~/images/trusty-server-cloudimg-amd64-root.tar.xz ] || {
+    wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.xz
+}
+[ -f ~/images/xenial-server-cloudimg-amd64-root.tar.xz ] || {
+    wget -O ~/images/xenial-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-root.tar.xz
 }
 
-sudo images-lxd-convert.sh ~/images/trusty-server-cloudimg-amd64-root.tar.gz \
-	~/images/trusty-server-cloudimg-amd64-lxd.tar.gz
-
 # Upload glance images to overcloud
-glance image-create --name="trusty-lxd-amd64" --is-public=true --progress \
-	 --container-format=bare --disk-format=qcow2 <  ~/images/trusty-server-cloudimg-amd64-lxd.tar.gz
+glance --os-image-api-version 1 image-create --name="trusty-lxd" --is-public=true --progress \
+    --container-format=bare --disk-format=raw --property hypervisor_type=lxc \
+    --property architecture=x86_64 < ~/images/trusty-server-cloudimg-amd64-root.tar.xz
 
+glance --os-image-api-version 1 image-create --name="xenial-lxd" --is-public=true --progress \
+    --container-format=bare --disk-format=raw --property hypervisor_type=lxc \
+    --property architecture=x86_64 < ~/images/xenial-server-cloudimg-amd64-root.tar.xz

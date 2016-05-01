@@ -1,11 +1,11 @@
 # basic openstack deployment using released charms
 # based on charmstore bundle https://jujucharms.com/u/openstack-charmers/openstack/
 # UOSCI relies on this for OS-on-OS deployment testing
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/heat/next
+# fyi not used:  branch: https://github.com/openstack/charm-swift-proxy
+# fyi not used:  branch: https://github.com/openstack/charm-swift-storage
+# fyi not used:  branch: https://github.com/openstack/charm-ceilometer
+# fyi not used:  branch: https://github.com/openstack/charm-ceilometer-agent
+# fyi not used:  branch: https://github.com/openstack/charm-heat
 # fyi not used:  branch: lp:charms/trusty/mongodb
 basic: 
   series: trusty
@@ -86,7 +86,6 @@ basic:
       options: 
         "network-manager": Neutron
         "openstack-origin": "cloud:trusty-juno"
-        "quantum-security-groups": "yes"
       annotations: 
         "gui-x": "0"
         "gui-y": "500"

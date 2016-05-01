@@ -1,5 +1,5 @@
 #!/bin/bash
-# A common combo of post-deployment routines
+# A common combo of post-deployment routines in test environments
 . novarc
 ./tools/flavor_shrink.sh
 ./tools/quota_million.sh

@@ -44,7 +44,6 @@ openstack-services:
       constraints: mem=1G
       options:
         network-manager: Quantum
-        quantum-security-groups: "yes"
     neutron-api:
       branch: lp:~gnuoy/charms/trusty/neutron-api/neutron-refactor
       constraints: mem=1G
@@ -130,7 +129,6 @@ openstack-services:
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, ceph ]
-    - [ neutron-gateway, mysql ]
     - - rabbitmq-server-nova
       - neutron-gateway:amqp-nova
     - - rabbitmq-server-neutron

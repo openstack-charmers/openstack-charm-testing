@@ -6,24 +6,24 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/trusty/percona-cluster
+      branch: https://github.com/openstack/charm-percona-cluster;stable/16.04
       options:
         dataset-size: 75%
       to:
         - "lxc:0"
     rabbitmq-server:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       to:
         - "lxc:0"
     keystone:
-      branch: lp:charms/trusty/keystone
+      branch: https://github.com/openstack/charm-keystone;stable/16.04
       options:
         admin-password: openstack
         admin-token: ubuntutesting
       to:
         - "lxc:0"
     openstack-dashboard:
-      branch: lp:charms/trusty/openstack-dashboard
+      branch: https://github.com/openstack/charm-openstack-dashboard;stable/16.04
       constraints: mem=1G
       to:
         - "lxc:0"
@@ -37,10 +37,9 @@ openstack-services:
       to:
         - "lxc:0"
     nova-cloud-controller:
-      branch: lp:charms/trusty/nova-cloud-controller
+      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.04
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
       to:
         - "lxc:0"
     neutron-gateway:
@@ -50,7 +49,7 @@ openstack-services:
         instance-mtu: 1300
         ext-port: "eth1"
     glance:
-      branch: lp:charms/trusty/glance
+      branch: https://github.com/openstack/charm-glance;stable/16.04
       to:
         - "lxc:0"
   relations:
@@ -65,7 +64,6 @@ openstack-services:
     - [ nova-compute-power, glance ]
     - [ glance, mysql ]
     - [ glance, keystone ]
-    - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
 openstack-singlerabbit:
@@ -76,7 +74,7 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
       constraints: mem=1G
       options:
         neutron-security-groups: True
@@ -93,14 +91,14 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:charms/trusty/neutron-openvswitch
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
     rabbitmq-server-neutron:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       constraints: mem=1G
   relations:
   - [ neutron-api, mysql ]
@@ -114,27 +112,6 @@ openstack-icehouse-msg-split:
   - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
   - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # icehouse
-precise-icehouse:
-  inherits: openstack-icehouse
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-updates/icehouse
-precise-icehouse-proposed:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: cloud:precise-icehouse/proposed
-    source: cloud:precise-updates/icehouse
-precise-icehouse-staging:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
-    source: ppa:ubuntu-cloud-archive/icehouse-staging
-precise-icehouse-trunk:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
 trusty-icehouse:
   inherits: openstack-icehouse
   series: trusty

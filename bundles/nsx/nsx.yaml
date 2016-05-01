@@ -7,10 +7,10 @@ openstack-services:
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       constraints: mem=1G
     ceph:
-      branch: lp:charms/trusty/ceph
+      branch: https://github.com/openstack/charm-ceph;stable/16.04
       constraints: mem=1G
       num_units: 3
       options:
@@ -21,41 +21,40 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: lp:charms/trusty/keystone
+      branch: https://github.com/openstack/charm-keystone;stable/16.04
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: lp:charms/trusty/openstack-dashboard
+      branch: https://github.com/openstack/charm-openstack-dashboard;stable/16.04
       constraints: mem=1G
     nova-compute:
-      branch: lp:charms/trusty/nova-compute
+      branch: https://github.com/openstack/charm-nova-compute;stable/16.04
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: True
         enable-resize: True
     nova-cloud-controller:
-      branch: lp:charms/trusty/nova-cloud-controller
+      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.04
       constraints: mem=4G
       options:
         network-manager: Neutron
         quantum-plugin: nsx
-        quantum-security-groups: "yes"
     cinder:
-      branch: lp:charms/trusty/cinder
+      branch: https://github.com/openstack/charm-cinder;stable/16.04
       constraints: mem=1G
       options:
         block-device: "None"
         glance-api-version: 2
     cinder-ceph:
-      branch: lp:charms/trusty/cinder-ceph
+      branch: https://github.com/openstack/charm-cinder-ceph;stable/16.04
     glance:
       constraints: mem=1G
-      branch: lp:charms/trusty/glance
+      branch: https://github.com/openstack/charm-glance;stable/16.04
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
       constraints: mem=1G
       options:
         neutron-plugin: nsx
@@ -65,7 +64,7 @@ openstack-services:
         nsx-tz-uuid: 18aeea23-77f5-46f5-8e63-42d2998d9245
         nsx-l3-uuid: f5c3aa06-8bf3-4344-ab5d-9f8d1c718245
     neutron-gateway:
-      branch: lp:charms/trusty/neutron-gateway
+      branch: https://github.com/openstack/charm-neutron-gateway;stable/16.04
       constraints: mem=1G
       options:
         plugin: nsx
@@ -103,7 +102,6 @@ openstack-services:
     - [ neutron-api, neutron-gateway ]
     - - neutron-gateway:amqp
       - rabbitmq-server:amqp
-    - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ nsx-transport-node, neutron-gateway ]
     - [ nsx-transport-node, nova-compute ]

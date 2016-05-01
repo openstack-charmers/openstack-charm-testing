@@ -1,0 +1,16 @@
+repositories:
+  - {name: requirements,
+     repository: 'git://github.com/zulcss/requirements',
+     branch: stable/mitaka}
+  - {name: pylxd,
+     repository: 'https://github.com/lxc/pylxd',
+     branch: master}
+  - {name: nova-compute-lxd,
+     repository: 'https://github.com/lxc/nova-lxd',
+     branch: stable/mitaka}
+  - {name: nova,
+     repository: 'git://github.com/openstack/nova',
+     branch: stable/mitaka}
+directory: /mnt/openstack-git
+http_proxy: http://squid.internal:3128
+https_proxy: http://squid.internal:3128

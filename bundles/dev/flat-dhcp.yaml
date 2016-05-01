@@ -23,7 +23,7 @@ three-smoosh-flat:
 #      to:
 #        - "lxc:0"
     keystone:
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       num_units: 1
       options:
         "admin-password": openstack
@@ -37,7 +37,7 @@ three-smoosh-flat:
       to:
         - "lxc:0"
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       constraints: mem=8G
       num_units: 1
       options:
@@ -49,27 +49,27 @@ three-smoosh-flat:
 #        bridge-netmask: 10.245.175.254
         flat-interface: eth1
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       num_units: 1
       to:
         - "lxc:0"
     nova-cloud-controller:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       num_units: 1
       options:
         network-manager: FlatDHCPManager
     openstack-dashboard:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
       num_units: 1
       to:
         - "lxc:0"
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: https://github.com/openstack/charm-rabbitmq-server
       num_units: 1
       to:
         - "lxc:0"
     cinder:
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      branch: https://github.com/openstack/charm-cinder
       num_units: 1
       options:
         "block-device": /dev/sdb /dev/vdb

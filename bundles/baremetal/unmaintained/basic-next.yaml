@@ -1,17 +1,17 @@
 # basic openstack deployment using development ("next") charms
 # based on charmstore bundle https://jujucharms.com/u/openstack-charmers/openstack/
 # UOSCI relies on this for OS-on-OS deployment testing
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/ceilometer/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/ceilometer-agent/next
-# fyi not used:  branch: lp:~openstack-charmers/charms/trusty/heat/next
+# fyi not used:  branch: https://github.com/openstack/charm-swift-proxy
+# fyi not used:  branch: https://github.com/openstack/charm-swift-storage
+# fyi not used:  branch: https://github.com/openstack/charm-ceilometer
+# fyi not used:  branch: https://github.com/openstack/charm-ceilometer-agent
+# fyi not used:  branch: https://github.com/openstack/charm-heat
 # fyi not used:  branch: lp:charms/trusty/mongodb
 basic:
   series: trusty
   services: 
     keystone: 
-      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+      branch: https://github.com/openstack/charm-keystone
       num_units: 1
       options: 
         "admin-password": openstack
@@ -22,7 +22,7 @@ basic:
       to: 
         - "lxc:nova-compute=0"
     "neutron-gateway": 
-      branch: lp:~openstack-charmers/charms/trusty/neutron-gateway/next
+      branch: https://github.com/openstack/charm-neutron-gateway
       num_units: 1
       options: 
         "ext-port": eth1
@@ -33,7 +33,7 @@ basic:
       to: 
         - "0"
     "neutron-api": 
-      branch: lp:~openstack-charmers/charms/trusty/neutron-api/next
+      branch: https://github.com/openstack/charm-neutron-api
       num_units: 1
       options: 
         "neutron-security-groups": true
@@ -44,7 +44,7 @@ basic:
       to: 
         - "lxc:nova-compute=0"
     "neutron-openvswitch": 
-      branch: lp:~openstack-charmers/charms/trusty/neutron-openvswitch/next
+      branch: https://github.com/openstack/charm-neutron-openvswitch
       num_units: 0
       annotations: 
         "gui-x": "250"
@@ -60,7 +60,7 @@ basic:
       to: 
         - "lxc:0"
     "nova-compute": 
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
       options: 
         "enable-live-migration": true
@@ -71,7 +71,7 @@ basic:
         "gui-x": "250"
         "gui-y": "250"
     glance: 
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       num_units: 1
       options: 
         "openstack-origin": "cloud:trusty-juno"
@@ -81,19 +81,18 @@ basic:
       to: 
         - "lxc:nova-compute=1"
     "nova-cloud-controller": 
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       num_units: 1
       options: 
         "network-manager": Neutron
         "openstack-origin": "cloud:trusty-juno"
-        "quantum-security-groups": "yes"
       annotations: 
         "gui-x": "0"
         "gui-y": "500"
       to: 
         - "lxc:nova-compute=2"
     "openstack-dashboard": 
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
       num_units: 1
       options: 
         "openstack-origin": "cloud:trusty-juno"
@@ -103,7 +102,7 @@ basic:
       to: 
         - "lxc:nova-compute=1"
     "rabbitmq-server": 
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: https://github.com/openstack/charm-rabbitmq-server
       num_units: 1
       annotations: 
         "gui-x": "500"
@@ -111,7 +110,7 @@ basic:
       to: 
         - "lxc:0"
     cinder: 
-      branch: lp:~openstack-charmers/charms/trusty/cinder/next
+      branch: https://github.com/openstack/charm-cinder
       num_units: 1
       options: 
         "block-device": None
@@ -123,13 +122,13 @@ basic:
       to: 
         - "lxc:nova-compute=2"
     "cinder-ceph": 
-      branch: lp:~openstack-charmers/charms/trusty/cinder-ceph/next
+      branch: https://github.com/openstack/charm-cinder-ceph
       num_units: 0
       annotations: 
         "gui-x": "750"
         "gui-y": "250"
     ceph: 
-      branch: lp:~openstack-charmers/charms/trusty/ceph/next
+      branch: https://github.com/openstack/charm-ceph
       num_units: 3
       options: 
         fsid: "5a791d94-980b-11e4-b6f6-3c970e8b1cf7"
@@ -145,7 +144,7 @@ basic:
         - "nova-compute=1"
         - "nova-compute=2"
     "ceph-osd": 
-      branch: lp:~openstack-charmers/charms/trusty/ceph-osd/next
+      branch: https://github.com/openstack/charm-ceph-osd
       num_units: 1
       options: 
         "osd-devices": /dev/sdb

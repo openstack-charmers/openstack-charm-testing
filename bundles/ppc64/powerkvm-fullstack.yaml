@@ -55,25 +55,25 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/trusty/percona-cluster
+      branch: https://github.com/openstack/charm-percona-cluster;stable/16.04
       options:
         dataset-size: 75%
         max-connections: 20000
       to:
         - "lxc:0"
     rabbitmq-server:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       to:
         - "lxc:0"
     keystone:
-      branch: lp:charms/trusty/keystone
+      branch: https://github.com/openstack/charm-keystone;stable/16.04
       options:
         admin-password: openstack
         admin-token: ubuntutesting
       to:
         - "lxc:0"
     openstack-dashboard:
-      branch: lp:charms/trusty/openstack-dashboard
+      branch: https://github.com/openstack/charm-openstack-dashboard;stable/16.04
       constraints: mem=1G
       to:
         - "lxc:0"
@@ -87,14 +87,13 @@ openstack-services:
       to:
         - "lxc:0"
     nova-cloud-controller:
-      branch: lp:charms/trusty/nova-cloud-controller
+      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.04
       options:
         network-manager: Neutron
-        quantum-security-groups: "yes"
       to:
         - "lxc:0"
     neutron-gateway:
-      branch: lp:charms/trusty/neutron-gateway
+      branch: https://github.com/openstack/charm-neutron-gateway;stable/16.04
       constraints: arch=amd64
       options:
         instance-mtu: 1300
@@ -102,11 +101,11 @@ openstack-services:
       to:
           - "0"
     glance:
-      branch: lp:charms/trusty/glance
+      branch: https://github.com/openstack/charm-glance;stable/16.04
       to:
         - "lxc:0"
     ceph:
-      branch: lp:charms/trusty/ceph
+      branch: https://github.com/openstack/charm-ceph;stable/16.04
       num_units: 3
       constraints: mem=1G arch=amd64
       options:
@@ -117,7 +116,7 @@ openstack-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     swift-proxy:
-      branch: lp:charms/trusty/swift-proxy
+      branch: https://github.com/openstack/charm-swift-proxy;stable/16.04
       constraints: mem=1G arch=amd64
       options:
         zone-assignment: manual
@@ -126,21 +125,21 @@ openstack-services:
       to:
         - "lxc:0"
     swift-storage-z1:
-      branch: lp:charms/trusty/swift-storage
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.04
       constraints: mem=1G arch=amd64
       options:
         zone: 1
         block-device: /dev/sdb /dev/vdb
         overwrite: "true"
     swift-storage-z2:
-      branch: lp:charms/trusty/swift-storage
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.04
       constraints: mem=1G arch=amd64
       options:
         zone: 2
         block-device: /dev/sdb /dev/vdb
         overwrite: "true"
     swift-storage-z3:
-      branch: lp:charms/trusty/swift-storage
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.04
       constraints: mem=1G arch=amd64
       options:
         zone: 3
@@ -159,7 +158,6 @@ openstack-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph]
-    - [ neutron-gateway, mysql ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -174,7 +172,7 @@ openstack-icehouse:
   inherits: openstack-singlerabbit
   services:
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
       constraints: mem=1G
       options:
         neutron-security-groups: True
@@ -191,14 +189,14 @@ openstack-icehouse-msg-split:
   inherits: openstack-services
   services:
     neutron-api:
-      branch: lp:charms/trusty/neutron-api
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
       constraints: mem=1G
       options:
         neutron-security-groups: True
     neutron-openvswitch:
-      branch: lp:charms/trusty/neutron-openvswitch
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
     rabbitmq-server-neutron:
-      branch: lp:charms/trusty/rabbitmq-server
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       constraints: mem=1G
   relations:
   - [ neutron-api, mysql ]

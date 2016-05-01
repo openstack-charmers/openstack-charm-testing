@@ -30,8 +30,8 @@ juju-deployer --bootstrap -c default.yaml -d trusty-juno
 targets exist for most combinations, e.g.:
 
    trusty-icehouse
-   trusty-juno-proposed
-   vivid-kilo
+   trusty-mitaka-proposed
+   xenial-mitaka
 
 
 configure
@@ -40,7 +40,7 @@ configure
 To configure serverstack run:
 	./configure
 
-To configure profiles 'dellstack, stsstack, ppc64el, kernelstack, multihypervisor', run:
+To configure profiles 'dellstack, stsstack, ppc64el, kernelstack, lxd, multihypervisor', run:
 	./configure <profile>
 
 These "configure" scripts:
@@ -74,16 +74,6 @@ NOTES:
 
  * Some failures are to be expected, depending on deployment environment (firewall, proxy
    restrictions, capacity, etc.).
-
- * As of 1/9/2014, tempest smoke failure norms on serverstack were:
-    p-i-next: 5
-    t-i-next: 5
-    t-j-next: 6
-    u-j-next: 6
-    p-i: 6
-    t-i: 5
-    t-j: 4
-    u-j: 8
 
 
 test - tempest full
@@ -134,14 +124,14 @@ nova hypervisor-list && glance image-list && keystone token-get
 # launch some amd64 instances
 ./tools/instance_launch.sh 2 cirros
 ./tools/instance_launch.sh 2 trusty
-./tools/instance_launch.sh 2 vivid
+./tools/instance_launch.sh 2 xenial
 
 # optionally add ppc64el images
 ./tools/images_ppc64el.sh
 
 # optionally launch ppc64el instances
 ./tools/instance_launch.sh 2 trusty-ppc64el
-./tools/instance_launch.sh 2 vivid-ppc64el
+./tools/instance_launch.sh 2 xenial-ppc64el
 
 # give floating IPs to all instances
 ./tools/float_all.sh

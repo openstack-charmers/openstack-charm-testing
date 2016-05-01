@@ -25,10 +25,10 @@ openstack-services:
       options:
         dataset-size: 50%
     rabbitmq-server:
-      branch: lp:~openstack-charmers/charms/trusty/rabbitmq-server/next
+      branch: https://github.com/openstack/charm-rabbitmq-server
       constraints: mem=1G
     keystone:
-#      branch: lp:~openstack-charmers/charms/trusty/keystone/next
+#      branch: https://github.com/openstack/charm-keystone
 # logging template fix for keystone/next
       branch: lp:~1chb1n/charms/trusty/keystone/essex-revival
       constraints: mem=1G
@@ -36,46 +36,46 @@ openstack-services:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: lp:~openstack-charmers/charms/trusty/openstack-dashboard/next
+      branch: https://github.com/openstack/charm-openstack-dashboard
       constraints: mem=1G
     nova-compute:
-      branch: lp:~openstack-charmers/charms/trusty/nova-compute/next
+      branch: https://github.com/openstack/charm-nova-compute
       num_units: 3
       constraints: mem=4G
       options:
         enable-live-migration: True
         enable-resize: True
     nova-cloud-controller:
-      branch: lp:~openstack-charmers/charms/trusty/nova-cloud-controller/next
+      branch: https://github.com/openstack/charm-nova-cloud-controller
       constraints: mem=1G
       options:
         network-manager: FlatDHCPManager
     glance:
-      branch: lp:~openstack-charmers/charms/trusty/glance/next
+      branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
     swift-proxy:
-      branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
+      branch: https://github.com/openstack/charm-swift-proxy
       constraints: mem=1G
       options:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
     swift-storage-z1:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 1
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z2:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 2
         block-device: /dev/vdb /dev/sdb
         overwrite: "true"
     swift-storage-z3:
-      branch: lp:~openstack-charmers/charms/trusty/swift-storage/next
+      branch: https://github.com/openstack/charm-swift-storage
       constraints: mem=1G
       options:
         zone: 3
