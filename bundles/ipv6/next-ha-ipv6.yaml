@@ -124,6 +124,16 @@ openstack-services:
       branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
       options:
          debug: true
+    ceph-radosgw:
+      #branch: lp:~openstack-charmers/charms/trusty/ceph-radosgw/next
+      branch: lp:~hopem/charms/trusty/ceph-radosgw/lp1513524
+      constraints: mem=1G
+      num_units: 3
+      options:
+        loglevel: 20
+        vip: '2001:db8:0:1:d0cf:528c:23eb:5008'
+    ceph-radosgw-hacluster:
+      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
     swift-proxy:
       branch: lp:~openstack-charmers/charms/trusty/swift-proxy/next
       constraints: mem=1G
@@ -175,6 +185,8 @@ openstack-services:
     - [ cinder, cinder-hacluster ]
     - [ swift-proxy, swift-hacluster ]
     - [ mysql, mysql-hacluster ]
+    - [ keystone, ceph-radosgw ]
+    - [ ceph-radosgw, ceph-radosgw-hacluster ]
     - [ ceph, ceph-osd ]
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -207,6 +219,7 @@ openstack-services:
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
+    - [ ceph, ceph-radosgw ]
 openstack-singlerabbit:
   inherits: openstack-services
   relations:
