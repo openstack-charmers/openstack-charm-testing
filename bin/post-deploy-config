@@ -15,17 +15,16 @@ if net_id:
 else:
     # Preserve existing default behavior (eg. manual testing)
     net_name = os.environ['OS_USERNAME'] + '_admin_net'
-    print 'Using default network name: {}'.format(net_name)
+    print('Using default network name: {}'.format(net_name))
     for line in cmd_out.split('\n'):
         if net_name in line:
             net_id = line.split('|')[1].replace(' ', '')
 
 service = sys.argv[1]
 
+ext_port = 'eth1'
 if len(sys.argv) >= 3:
     ext_port = sys.argv[2]
-else:
-    ext_port = 'eth1'
 
 service_config = yaml.load(
     subprocess.check_output(['juju', 'status', service])
@@ -37,8 +36,10 @@ for machine in service_config['machines']:
 
 if len(uuids) > 0:
     for uuid in uuids:
+        print("Attaching interface to instance {}".format(uuid))
         subprocess.check_call(
             ['nova', 'interface-attach', '--net-id', net_id, uuid]
         )
 
-subprocess.check_call(['juju', 'set', service, 'ext-port='.format(ext_port)])
+print("Setting ext-port configuration on neutron-gateway to {}".format(ext_port))
+subprocess.check_call(['juju', 'set', service, 'ext-port={}'.format(ext_port)])
