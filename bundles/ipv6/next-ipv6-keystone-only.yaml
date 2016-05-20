@@ -1,0 +1,140 @@
+# vim: set ts=2 et:
+# deployer bundle for development ('next') charms
+# UOSCI relies on this for OS-on-OS deployment testing
+openstack-services:
+  services:
+    mysql:
+      branch: https://github.com/openstack/charm-percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+#        root-password: changeme
+#        sst-password: changeme
+    keystone:
+      branch: https://github.com/openstack/charm-keystone
+      constraints: mem=1G
+      options:
+        debug: True
+        verbose: True
+        admin-password: openstack
+        admin-token: ubuntutesting
+  overrides:
+    prefer-ipv6: true
+  relations:
+    - [ keystone, mysql ]
+openstack-singlerabbit:
+  inherits: openstack-services
+openstack-icehouse:
+  inherits: openstack-singlerabbit
+openstack-icehouse-msg-split:
+  inherits: openstack-services
+# icehouse
+precise-icehouse:
+  inherits: openstack-icehouse
+  series: precise
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+  overrides:
+    openstack-origin: cloud:precise-icehouse
+    source: cloud:precise-icehouse
+precise-icehouse-proposed:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: cloud:precise-icehouse/proposed
+    source: cloud:precise-updates/icehouse
+precise-icehouse-staging:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
+    source: ppa:ubuntu-cloud-archive/icehouse-staging
+precise-icehouse-trunk:
+  inherits: precise-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+trusty-icehouse:
+  inherits: openstack-icehouse
+  series: trusty
+trusty-icehouse-msg-split:
+  inherits: openstack-icehouse-msg-split
+  series: trusty
+trusty-icehouse-proposed:
+  inherits: trusty-icehouse
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+trusty-icehouse-trunk:
+  inherits: trusty-icehouse
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
+    source: ppa:openstack-ubuntu-testing/icehouse
+    offline-compression: "no"
+# kilo
+trusty-kilo:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+trusty-kilo-staging:
+  inherits: trusty-kilo
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
+    source: ppa:ubuntu-cloud-archive/kilo-staging
+# liberty
+trusty-liberty:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+trusty-liberty-staging:
+  inherits: trusty-liberty
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
+    source: ppa:ubuntu-cloud-archive/liberty-staging
+wily-liberty:
+  inherits: openstack-icehouse
+  series: wily
+wily-liberty-proposed:
+  inherits: wily-liberty
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# mitaka
+trusty-mitaka:
+  inherits: openstack-icehouse
+  series: trusty
+  overrides:
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+trusty-mitaka-staging:
+  inherits: trusty-mitaka
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
+    source: ppa:ubuntu-cloud-archive/mitaka-staging
+xenial-mitaka:
+  inherits: openstack-icehouse
+  series: xenial
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
