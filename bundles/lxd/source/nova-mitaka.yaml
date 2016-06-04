@@ -11,6 +11,6 @@ repositories:
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
      branch: stable/mitaka}
-directory: /mnt/openstack-git
+directory: /home/ubuntu/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128
