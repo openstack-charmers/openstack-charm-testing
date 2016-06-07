@@ -295,3 +295,38 @@ xenial-mitaka-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+# newton
+xenial-newton:
+  inherits: openstack-icehouse
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-newton
+    source: cloud:xenial-newton
+xenial-newton-proposed:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: cloud:xenial-newton/proposed
+    source: cloud:xenial-newton/proposed
+xenial-newton-staging:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
+    source: ppa:ubuntu-cloud-archive/newton-staging
+xenial-newton-branch:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/newton
+    source: ppa:openstack-ubuntu-testing/newton
+yakkety-newton:
+  inherits: openstack-icehouse
+  series: yakkety
+yakkety-newton-proposed:
+  inherits: yakkety-newton
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+yakkety-newton-branch:
+  inherits: yakkety-newton
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/newton
+    source: ppa:openstack-ubuntu-testing/newton
