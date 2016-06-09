@@ -171,9 +171,6 @@ openstack-services:
 precise-icehouse:
   inherits: openstack-services-legacy
   series: precise
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
   overrides:
     openstack-origin: cloud:precise-icehouse
     source: cloud:precise-icehouse
