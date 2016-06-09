@@ -9,8 +9,6 @@ openstack-services:
       options:
         dataset-size: 50%
         max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
     rabbitmq-server:
       branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       constraints: mem=1G
@@ -214,6 +212,11 @@ precise-icehouse-trunk:
 trusty-icehouse:
   inherits: openstack-icehouse
   series: trusty
+  services:
+    mysql:
+      options:
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 trusty-icehouse-msg-split:
   inherits: openstack-icehouse-msg-split
   series: trusty
@@ -235,6 +238,11 @@ trusty-kilo:
   overrides:
     openstack-origin: cloud:trusty-kilo
     source: cloud:trusty-kilo
+  services:
+    mysql:
+      options:
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 trusty-kilo-proposed:
   inherits: trusty-kilo
   overrides:
@@ -252,6 +260,11 @@ trusty-liberty:
   overrides:
     openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
+  services:
+    mysql:
+      options:
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 trusty-liberty-proposed:
   inherits: trusty-liberty
   overrides:
@@ -265,6 +278,11 @@ trusty-liberty-staging:
 wily-liberty:
   inherits: openstack-icehouse
   series: wily
+  services:
+    mysql:
+      options:
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
@@ -277,6 +295,11 @@ trusty-mitaka:
   overrides:
     openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
+  services:
+    mysql:
+      options:
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 trusty-mitaka-proposed:
   inherits: trusty-mitaka
   overrides:
@@ -290,6 +313,11 @@ trusty-mitaka-staging:
 xenial-mitaka:
   inherits: openstack-icehouse
   series: xenial
+  services:
+    mysql:
+      options:
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
