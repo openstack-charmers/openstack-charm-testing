@@ -52,6 +52,13 @@ openstack-services:
       constraints: mem=1G
       options:
         instance-mtu: 1300
+    neutron-api:
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
     cinder:
       branch: https://github.com/openstack/charm-cinder;stable/16.04
       options:
@@ -139,53 +146,15 @@ openstack-services:
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
-openstack-singlerabbit:
-  inherits: openstack-services
-  relations:
     - [ "neutron-gateway:amqp", rabbitmq-server ]
-openstack-icehouse:
-  inherits: openstack-singlerabbit
-  services:
-    neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
-      constraints: mem=1G
-      options:
-        neutron-security-groups: True
-    neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
-  relations:
-  - [ neutron-api, mysql ]
-  - [ neutron-api, rabbitmq-server ]
-  - [ neutron-api, nova-cloud-controller ]
-  - [ neutron-api, neutron-openvswitch ]
-  - [ neutron-api, keystone ]
-  - [ neutron-api, neutron-gateway ]
-  - [ neutron-openvswitch, nova-compute ]
-  - [ neutron-openvswitch, rabbitmq-server ]
-openstack-icehouse-msg-split:
-  inherits: openstack-services
-  services:
-    neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
-      constraints: mem=1G
-      options:
-        neutron-security-groups: True
-    neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
-    rabbitmq-server-neutron:
-      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
-      constraints: mem=1G
-  relations:
-  - [ neutron-api, mysql ]
-  - [ neutron-api, rabbitmq-server-neutron ]
-  - [ neutron-api, nova-cloud-controller ]
-  - [ neutron-api, neutron-openvswitch ]
-  - [ neutron-api, keystone ]
-  - [ neutron-api, neutron-gateway ]
-  - [ neutron-openvswitch, nova-compute ]
-  - [ neutron-openvswitch, rabbitmq-server-neutron ]
-  - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
-  - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
+    - [ neutron-api, mysql ]
+    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, nova-cloud-controller ]
+    - [ neutron-api, neutron-openvswitch ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-gateway ]
+    - [ neutron-openvswitch, nova-compute ]
+    - [ neutron-openvswitch, rabbitmq-server ]
 # icehouse
 precise-icehouse:
   inherits: openstack-icehouse
@@ -213,9 +182,6 @@ precise-icehouse-trunk:
     source: ppa:openstack-ubuntu-testing/icehouse
 trusty-icehouse:
   inherits: openstack-icehouse
-  series: trusty
-trusty-icehouse-msg-split:
-  inherits: openstack-icehouse-msg-split
   series: trusty
 trusty-icehouse-proposed:
   inherits: trusty-icehouse

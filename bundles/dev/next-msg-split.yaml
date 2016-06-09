@@ -1,6 +1,6 @@
-# vim: set ts=2 et:
-# deployer bundle for development ('next') charms
-# UOSCI relies on this for OS-on-OS deployment testing
+# Copied to dev bundle to preserve msg splits for future use, as
+# msg split inheritance is removed from the next/defaul sparse
+# bundles to simplify them.
 openstack-services:
   services:
     mysql:
@@ -52,13 +52,6 @@ openstack-services:
       constraints: mem=1G
       options:
         instance-mtu: 1300
-    neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
-      constraints: mem=1G
-      options:
-        neutron-security-groups: True
-    neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch
     cinder:
       branch: https://github.com/openstack/charm-cinder
       options:
@@ -146,15 +139,53 @@ openstack-services:
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
+openstack-singlerabbit:
+  inherits: openstack-services
+  relations:
     - [ "neutron-gateway:amqp", rabbitmq-server ]
-    - [ neutron-api, mysql ]
-    - [ neutron-api, rabbitmq-server ]
-    - [ neutron-api, nova-cloud-controller ]
-    - [ neutron-api, neutron-openvswitch ]
-    - [ neutron-api, keystone ]
-    - [ neutron-api, neutron-gateway ]
-    - [ neutron-openvswitch, nova-compute ]
-    - [ neutron-openvswitch, rabbitmq-server ]
+openstack-icehouse:
+  inherits: openstack-singlerabbit
+  services:
+    neutron-api:
+      branch: https://github.com/openstack/charm-neutron-api
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: https://github.com/openstack/charm-neutron-openvswitch
+  relations:
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
+  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-openvswitch, rabbitmq-server ]
+openstack-icehouse-msg-split:
+  inherits: openstack-services
+  services:
+    neutron-api:
+      branch: https://github.com/openstack/charm-neutron-api
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: https://github.com/openstack/charm-neutron-openvswitch
+    rabbitmq-server-neutron:
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
+      constraints: mem=1G
+  relations:
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server-neutron ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
+  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-openvswitch, rabbitmq-server-neutron ]
+  - [ "neutron-gateway:amqp-nova", rabbitmq-server ]
+  - [ "neutron-gateway:amqp", rabbitmq-server-neutron ]
 # icehouse
 precise-icehouse:
   inherits: openstack-icehouse
@@ -182,6 +213,9 @@ precise-icehouse-trunk:
     source: ppa:openstack-ubuntu-testing/icehouse
 trusty-icehouse:
   inherits: openstack-icehouse
+  series: trusty
+trusty-icehouse-msg-split:
+  inherits: openstack-icehouse-msg-split
   series: trusty
 trusty-icehouse-proposed:
   inherits: trusty-icehouse
