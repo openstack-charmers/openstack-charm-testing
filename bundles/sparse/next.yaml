@@ -3,14 +3,6 @@
 # UOSCI relies on this for OS-on-OS deployment testing
 openstack-services:
   services:
-    mysql:
-      branch: https://github.com/openstack/charm-percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
     rabbitmq-server:
       branch: https://github.com/openstack/charm-rabbitmq-server
       constraints: mem=1G
@@ -155,9 +147,29 @@ openstack-services:
     - [ neutron-api, neutron-gateway ]
     - [ neutron-openvswitch, nova-compute ]
     - [ neutron-openvswitch, rabbitmq-server ]
+openstack-services-mysql:
+  inherits: openstack-services
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+openstack-services-pxc:
+  inherits: openstack-services
+  services:
+    mysql:
+      branch: https://github.com/openstack/charm-percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 # icehouse
 precise-icehouse:
-  inherits: openstack-services
+  inherits: openstack-services-mysql
   series: precise
   services:
     mysql:
@@ -181,7 +193,7 @@ precise-icehouse-trunk:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
 trusty-icehouse:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: trusty
 trusty-icehouse-proposed:
   inherits: trusty-icehouse
@@ -196,7 +208,7 @@ trusty-icehouse-trunk:
     offline-compression: "no"
 # kilo
 trusty-kilo:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-kilo
@@ -213,7 +225,7 @@ trusty-kilo-staging:
     source: ppa:ubuntu-cloud-archive/kilo-staging
 # liberty
 trusty-liberty:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-liberty
@@ -229,7 +241,7 @@ trusty-liberty-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
     source: ppa:ubuntu-cloud-archive/liberty-staging
 wily-liberty:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: wily
 wily-liberty-proposed:
   inherits: wily-liberty
@@ -238,7 +250,7 @@ wily-liberty-proposed:
     openstack-origin: distro-proposed
 # mitaka
 trusty-mitaka:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
@@ -254,7 +266,7 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: xenial
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
@@ -263,7 +275,7 @@ xenial-mitaka-proposed:
     openstack-origin: distro-proposed
 # newton
 xenial-newton:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-newton
@@ -284,7 +296,7 @@ xenial-newton-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/newton
     source: ppa:openstack-ubuntu-testing/newton
 yakkety-newton:
-  inherits: openstack-services
+  inherits: openstack-services-pxc
   series: yakkety
 yakkety-newton-proposed:
   inherits: yakkety-newton
