@@ -6,15 +6,9 @@ import os
 import sys
 
 from neutronclient.v2_0 import client as ne_client
-from keystoneclient.v2_0 import client as ks_client
 from novaclient import client as no_client
 
 if __name__ == '__main__':
-    keystone = ks_client.Client(username=os.environ['OS_USERNAME'],
-                                password=os.environ['OS_PASSWORD'],
-                                tenant_name=os.environ['OS_TENANT_NAME'],
-                                auth_url=os.environ['OS_AUTH_URL'],
-                                region_name=os.environ['OS_REGION_NAME'])
     neutron = ne_client.Client(username=os.environ['OS_USERNAME'],
                                password=os.environ['OS_PASSWORD'],
                                tenant_name=os.environ['OS_TENANT_NAME'],
