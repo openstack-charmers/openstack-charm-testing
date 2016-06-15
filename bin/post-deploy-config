@@ -57,9 +57,9 @@ if __name__ == '__main__':
             result = server.interface_attach(port_id=None,
                                              net_id=net_id,
                                              fixed_ip=None).to_dict()
-            ext_port.append(result['mac_addr'])
+            ext_port.append("br-ex:{}".format(result['mac_addr']))
 
     ports = " ".join(ext_port)
     print("Setting ext-port configuration on {} to {}".format(service, ports))
-    subprocess.check_call(['juju', 'set', service, 'ext-port={}'.format(ports)])
+    subprocess.check_call(['juju', 'set', service, 'data-port={}'.format(ports)])
 
