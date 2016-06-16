@@ -88,7 +88,7 @@ openstack-services:
       options:
         block-device: /dev/vdb
         ephemeral-unmount: /mnt
-        storage-type: lvm
+        storage-type: zfs
         overwrite: "true"
   relations:
     - [ keystone, mysql ]
