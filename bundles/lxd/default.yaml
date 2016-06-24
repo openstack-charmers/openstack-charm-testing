@@ -1,15 +1,8 @@
 # vim: set ts=2 et:
-# deployer bundle for development (stable/trunk) charms
+# deployer bundle for stable charms
 # UOSCI relies on this for OS-on-OS deployment testing
-openstack-services:
+base-services:
   services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-      #https://github.com/openstack/charm-percona-cluster
-      constraints: mem=1G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
     rabbitmq-server:
       branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.04
       constraints: mem=1G
@@ -36,12 +29,18 @@ openstack-services:
       constraints: mem=1G
       options:
         network-manager: Neutron
-        ram-allocation-ratio: 5.0
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway;stable/16.04
       constraints: mem=1G
       options:
         instance-mtu: 1300
+    neutron-api:
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+    neutron-openvswitch:
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
     glance:
       branch: https://github.com/openstack/charm-glance;stable/16.04
       constraints: mem=1G
@@ -97,15 +96,14 @@ openstack-services:
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
     - [ nova-compute, nova-cloud-controller ]
-    - [ nova-compute, lxd ]
     - [ nova-compute, mysql ]
+    - [ nova-compute, lxd ]
     - - nova-compute
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, rabbitmq-server ]
-    - [ glance, swift-proxy ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -121,41 +119,47 @@ openstack-services:
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
-openstack-singlerabbit:
-  inherits: openstack-services
-  relations:
     - [ "neutron-gateway:amqp", rabbitmq-server ]
-openstack-icehouse:
-  inherits: openstack-singlerabbit
+    - [ neutron-api, mysql ]
+    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, nova-cloud-controller ]
+    - [ neutron-api, neutron-openvswitch ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-gateway ]
+    - [ neutron-openvswitch, nova-compute ]
+    - [ neutron-openvswitch, rabbitmq-server ]
+openstack-services-legacy:
+  inherits: base-services
   services:
-    neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api;stable/16.04
-      constraints: mem=1G
+    mysql:
+      branch: lp:charms/trusty/mysql
+      constraints: mem=2G
       options:
-        neutron-security-groups: True
-    neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.04
-  relations:
-  - [ neutron-api, mysql ]
-  - [ neutron-api, rabbitmq-server ]
-  - [ neutron-api, nova-cloud-controller ]
-  - [ neutron-api, neutron-openvswitch ]
-  - [ neutron-api, keystone ]
-  - [ neutron-api, neutron-gateway ]
-  - [ neutron-openvswitch, nova-compute ]
-  - [ neutron-openvswitch, rabbitmq-server ]
-# Liberty
+        dataset-size: 50%
+        max-connections: 20000
+openstack-services:
+  inherits: base-services
+  services:
+    mysql:
+      branch: https://github.com/openstack/charm-percona-cluster;stable/16.04
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
+# liberty
 wily-liberty:
-  inherits: openstack-icehouse
+  inherits: openstack-services
   series: wily
 wily-liberty-proposed:
   inherits: wily-liberty
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-# Mitaka
+# mitaka
 xenial-mitaka:
-  inherits: openstack-icehouse
+  inherits: openstack-services
   series: xenial
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
