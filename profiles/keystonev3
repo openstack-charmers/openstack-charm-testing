@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 function upload_image {
     src=$1
@@ -40,13 +40,14 @@ net_type=${1:-"gre"}
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     unset OS_DEFAULT_DOMAIN OS_PROJECT_NAME OS_IDENTITY_API_VERSION OS_PROJECT_DOMAIN_NAME
-	source novarc_unset_all
+    source novarc_unset_all
     source ~/novarc
     ./bin/post-deploy-config neutron-gateway
 fi
+
 # Configure neutron networking on overcloud
 source novarcv3_domain
-./bin/neutron-ext-net-ksv3 --project admin --network-type $net_type -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
+./bin/neutron-ext-net-ksv3 --project admin --network-type flat -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
 ./bin/neutron-tenant-net-ksv3 --project admin --network-type $net_type -r provider-router -N $NAMESERVER private $CIDR_PRIV
 ext_net=$(openstack network list | awk '/ext_net/ {print $2}')
 
