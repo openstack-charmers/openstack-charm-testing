@@ -1,0 +1,6 @@
+#!/bin/bash
+export OS_USERNAME=admin
+export OS_PASSWORD=openstack
+export OS_TENANT_NAME=admin
+export OS_REGION_NAME=RegionOne
+export OS_AUTH_URL=${OS_AUTH_PROTOCOL:-http}://[2001:db8:0:1:d0cf:528c:23eb:5001]:5000/v2.0
