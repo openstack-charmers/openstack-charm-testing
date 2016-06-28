@@ -36,7 +36,7 @@ base-services:
         admin-token: ubuntutesting
         vip: '2001:db8:0:1:d0cf:528c:23eb:5001'
     keystone-hacluster:
-      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch:  https://github.com/openstack/charm-hacluster
       options:
         debug: True
     openstack-dashboard:
@@ -46,7 +46,7 @@ base-services:
       options:
         vip: '2001:db8:0:1:d0cf:528c:23eb:5005'
     openstack-dashboard-hacluster:
-      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch:  https://github.com/openstack/charm-hacluster
       options:
          debug: True
     nova-compute:
@@ -70,7 +70,7 @@ base-services:
         network-manager: Neutron
         ha-mcastport: 5500
     nova-hacluster:
-      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch:  https://github.com/openstack/charm-hacluster
       options:
          debug: true
     neutron-gateway:
@@ -95,7 +95,7 @@ base-services:
         vip: '2001:db8:0:1:d0cf:528c:23eb:5006'
         prefer-ipv6: true
     neutron-hacluster:
-      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch:  https://github.com/openstack/charm-hacluster
       options:
          debug: true
          corosync_transport: 'unicast'
@@ -118,7 +118,7 @@ base-services:
     cinder-ceph:
       branch: https://github.com/openstack/charm-cinder-ceph
     cinder-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
     glance:
       branch: https://github.com/openstack/charm-glance
       num_units: 3
@@ -128,7 +128,7 @@ base-services:
         verbose: True
         vip: '2001:db8:0:1:d0cf:528c:23eb:5004'
     glance-hacluster:
-      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch:  https://github.com/openstack/charm-hacluster
       options:
          debug: True
     ceph-radosgw:
@@ -139,7 +139,7 @@ base-services:
         loglevel: 20
         vip: '2001:db8:0:1:d0cf:528c:23eb:5008'
     ceph-radosgw-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
     swift-proxy:
       branch: https://github.com/openstack/charm-swift-proxy
       constraints: mem=1G
@@ -150,7 +150,7 @@ base-services:
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
         vip: '2001:db8:0:1:d0cf:528c:23eb:5007'
     swift-hacluster:
-      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch:  https://github.com/openstack/charm-hacluster
       options:
          debug: true
     swift-storage-z1:
@@ -260,7 +260,7 @@ openstack-services:
         vip: '2001:db8:0:1:d0cf:528c:23eb:5000'
         vip_cidr: 64
     mysql-hacluster:
-      branch:  lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch:  https://github.com/openstack/charm-hacluster
       options:
         debug: true
 # icehouse
