@@ -1,12 +1,12 @@
 repositories:
   - {name: requirements,
-     repository: 'git://github.com/zulcss/requirements',
+     repository: 'git://github.com/openstack/requirements',
      branch: master}
   - {name: pylxd,
      repository: 'https://github.com/lxc/pylxd',
      branch: master}
   - {name: nova-compute-lxd,
-     repository: 'https://github.com/lxc/nova-lxd',
+     repository: 'https://github.com/openstack/nova-lxd',
      branch: master}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
