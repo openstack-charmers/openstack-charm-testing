@@ -4,10 +4,10 @@ repositories:
      branch: stable/kilo}
   - {name: neutron,
      repository: 'git://github.com/openstack/neutron',
-     branch: stable/kilo}
+     branch: kilo-eol}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
-     branch: stable/kilo}
+     branch: kilo-eol}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128

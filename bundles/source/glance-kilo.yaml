@@ -4,7 +4,8 @@ repositories:
      branch: stable/kilo}
   - {name: glance,
      repository: 'git://github.com/openstack/glance',
-     branch: stable/kilo}
+     branch: kilo-eol}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128
+use_constraints: false

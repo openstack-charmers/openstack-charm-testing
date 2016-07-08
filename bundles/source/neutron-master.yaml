@@ -2,6 +2,9 @@ repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
      branch: master}
+  - {name: nova,
+     repository: 'git://github.com/openstack/nova',
+     branch: master}
   - {name: neutron-fwaas,
      repository: 'git://github.com/openstack/neutron-fwaas',
      branch: master}
