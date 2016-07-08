@@ -1,0 +1,244 @@
+# vim: set ts=2 et:
+# deployer bundle for development ('next') charms
+# UOSCI relies on this for OS-on-OS deployment testing
+base-services:
+  services:
+    rabbitmq-server:
+      branch: https://github.com/openstack/charm-rabbitmq-server
+      constraints: mem=1G
+    ceph:
+      branch: https://github.com/openstack/charm-ceph
+      num_units: 3
+      constraints: mem=1G
+      options:
+        monitor-count: 3
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        osd-devices: /dev/vdb
+        osd-reformat: "yes"
+        ephemeral-unmount: /mnt
+    keystone:
+      branch: https://github.com/openstack/charm-keystone
+      constraints: mem=1G
+      options:
+        admin-password: openstack
+        admin-token: ubuntutesting
+    openstack-dashboard:
+      branch: https://github.com/openstack/charm-openstack-dashboard
+      constraints: mem=1G
+    nova-compute:
+      branch: https://github.com/openstack/charm-nova-compute
+      num_units: 3
+      constraints: mem=4G
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+    nova-cloud-controller:
+      branch: https://github.com/openstack/charm-nova-cloud-controller
+      constraints: mem=1G
+      options:
+        network-manager: Neutron
+    neutron-gateway:
+      branch: https://github.com/openstack/charm-neutron-gateway
+      constraints: mem=1G
+      options:
+        instance-mtu: 1300
+        bridge-mappings: physnet1:br-ex
+    neutron-api:
+      branch: https://github.com/openstack/charm-neutron-api
+      constraints: mem=1G
+      options:
+        neutron-security-groups: True
+        flat-network-providers: physnet1
+    neutron-openvswitch:
+      branch: https://github.com/openstack/charm-neutron-openvswitch
+    cinder:
+      branch: https://github.com/openstack/charm-cinder
+      options:
+        block-device: "None"
+        glance-api-version: 2
+      constraints: mem=1G
+#    cinder-ceph:
+#      branch: https://github.com/openstack/charm-cinder-ceph
+    glance:
+      branch: https://github.com/openstack/charm-glance
+      constraints: mem=1G
+    swift-proxy:
+      branch: https://github.com/openstack/charm-swift-proxy
+      constraints: mem=1G
+      options:
+        zone-assignment: manual
+        replicas: 3
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+    swift-storage-z1:
+      branch: https://github.com/openstack/charm-swift-storage
+      constraints: mem=1G
+      options:
+        zone: 1
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z2:
+      branch: https://github.com/openstack/charm-swift-storage
+      constraints: mem=1G
+      options:
+        zone: 2
+        block-device: vdb
+        overwrite: "true"
+    swift-storage-z3:
+      branch: https://github.com/openstack/charm-swift-storage
+      constraints: mem=1G
+      options:
+        zone: 3
+        block-device: vdb
+        overwrite: "true"
+    ceilometer:
+      branch: https://github.com/openstack/charm-ceilometer
+      constraints: mem=1G
+    ceilometer-agent:
+      branch: https://github.com/openstack/charm-ceilometer-agent
+    heat:
+      branch: https://github.com/openstack/charm-heat
+    mongodb:
+      branch: lp:charms/trusty/mongodb
+      constraints: mem=1G
+  relations:
+    - [ keystone, mysql ]
+    - [ nova-cloud-controller, mysql ]
+    - [ nova-cloud-controller, rabbitmq-server ]
+    - [ nova-cloud-controller, glance ]
+    - [ nova-cloud-controller, keystone ]
+    - [ nova-compute, nova-cloud-controller ]
+    - [ nova-compute, mysql ]
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - [ nova-compute, glance ]
+    - [ nova-compute, ceph ]
+    - [ glance, mysql ]
+    - [ glance, keystone ]
+    - [ glance, ceph ]
+    - [ glance, cinder ]
+    - [ glance, rabbitmq-server ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
+#    - [ cinder, cinder-ceph ]
+#    - [ cinder-ceph, ceph ]
+    - [ neutron-gateway, nova-cloud-controller ]
+    - [ openstack-dashboard, keystone ]
+    - [ swift-proxy, keystone ]
+    - [ swift-proxy, swift-storage-z1 ]
+    - [ swift-proxy, swift-storage-z2 ]
+    - [ swift-proxy, swift-storage-z3 ]
+    - - ceilometer
+      - keystone:identity-service
+    - [ ceilometer, rabbitmq-server ]
+    - [ ceilometer, mongodb ]
+    - [ ceilometer-agent, nova-compute ]
+    - [ ceilometer-agent, ceilometer ]
+    - [ heat, mysql ]
+    - [ heat, keystone ]
+    - [ heat, rabbitmq-server ]
+    - [ "neutron-gateway:amqp", rabbitmq-server ]
+    - [ neutron-api, mysql ]
+    - [ neutron-api, rabbitmq-server ]
+    - [ neutron-api, nova-cloud-controller ]
+    - [ neutron-api, neutron-openvswitch ]
+    - [ neutron-api, keystone ]
+    - [ neutron-api, neutron-gateway ]
+    - [ neutron-openvswitch, nova-compute ]
+    - [ neutron-openvswitch, rabbitmq-server ]
+openstack-services:
+  inherits: base-services
+  services:
+    mysql:
+      branch: https://github.com/openstack/charm-percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
+# kilo
+trusty-kilo:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin-git: kilo
+    openstack-origin: cloud:trusty-kilo
+    source: cloud:trusty-kilo
+trusty-kilo-proposed:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin-git: kilo
+    openstack-origin: cloud:trusty-kilo/proposed
+    source: cloud:trusty-kilo/proposed
+# liberty
+trusty-liberty:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin-git: liberty
+    openstack-origin: cloud:trusty-liberty
+    source: cloud:trusty-liberty
+trusty-liberty-proposed:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin-git: liberty
+    openstack-origin: cloud:trusty-liberty/proposed
+    source: cloud:trusty-liberty/proposed
+wily-liberty:
+  inherits: openstack-services
+  series: wily
+  overrides:
+    openstack-origin-git: liberty
+# mitaka
+trusty-mitaka:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin-git: mitaka
+    openstack-origin: cloud:trusty-mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin-git: mitaka
+    openstack-origin: cloud:trusty-mitaka/proposed
+    source: cloud:trusty-mitaka/proposed
+xenial-mitaka:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin-git: mitaka
+# master
+xenial-master:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin-git: master
+    openstack-origin: cloud:xenial-newton
+    source: cloud:xenial-newton
+xenial-master-proposed:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin-git: master
+    openstack-origin: cloud:xenial-newton/proposed
+    source: cloud:xenial-newton/proposed
+yakkety-master:
+  inherits: openstack-services
+  series: yakkety
+  overrides:
+    openstack-origin-git: master
+yakkety-master-proposed:
+  inherits: openstack-services
+  series: yakkety
+  overrides:
+    openstack-origin-git: master
+    openstack-origin: distro-proposed
+    source: proposed
