@@ -2,18 +2,21 @@ repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
      branch: stable/kilo}
+  - {name: nova,
+     repository: 'git://github.com/openstack/nova',
+     branch: kilo-eol}
   - {name: neutron-fwaas,
      repository: 'git://github.com/openstack/neutron-fwaas',
-     branch: stable/kilo}
+     branch: kilo-eol}
   - {name: neutron-lbaas,
      repository: 'git://github.com/openstack/neutron-lbaas',
-     branch: stable/kilo}
+     branch: kilo-eol}
   - {name: neutron-vpnaas,
      repository: 'git://github.com/openstack/neutron-vpnaas',
-     branch: stable/kilo}
+     branch: kilo-eol}
   - {name: neutron,
      repository: 'git://github.com/openstack/neutron',
-     branch: stable/kilo}
+     branch: kilo-eol}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128

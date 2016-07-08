@@ -4,7 +4,7 @@ repositories:
      branch: stable/kilo}
   - {name: horizon,
      repository: 'git://github.com/openstack/horizon',
-     branch: stable/kilo}
+     branch: kilo-eol}
 directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128

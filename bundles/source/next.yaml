@@ -332,6 +332,6 @@ yakkety-master:
 yakkety-master-proposed:
   inherits: openstack-master-git
   series: yakkety
-  services:
+  overrides:
     source: proposed
     openstack-origin: distro-proposed
