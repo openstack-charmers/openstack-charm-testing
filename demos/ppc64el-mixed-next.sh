@@ -54,7 +54,6 @@ EXPECTED_HYPERVISORS="6"
 # The combo to deploy (Liberty or later recommended)
 TARGET="trusty-liberty"
 #TARGET="trusty-mitaka-proposed"
-#TARGET="wily-liberty"
 #TARGET="xenial-mitaka-proposed"
 
 # MAAS tags to inject into the bundle.  This is specific
@@ -111,10 +110,8 @@ fi
 
 # Launch instances (The ssh key will be saved to ~/testkey.pem)
 tools/instance_launch.sh 2 trusty-ppc64el
-tools/instance_launch.sh 2 wily-ppc64el
 tools/instance_launch.sh 2 xenial-ppc64el
 tools/instance_launch.sh 2 trusty
-tools/instance_launch.sh 2 wily
 tools/instance_launch.sh 2 xenial
 
 # Optionally check cirros images (no SSH via key, un/pw only)

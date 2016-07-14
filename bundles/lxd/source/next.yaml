@@ -144,27 +144,6 @@ openstack-icehouse:
   - [ neutron-api, neutron-gateway ]
   - [ neutron-openvswitch, nova-compute ]
   - [ neutron-openvswitch, rabbitmq-server ]
-# liberty
-openstack-liberty-git:
-  inherits: openstack-icehouse
-  services:
-    nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-liberty.yaml
-wily-liberty:
-  inherits: openstack-liberty-git
-  series: wily
-wily-liberty-proposed:
-  inherits: wily-liberty
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-trusty-liberty:
-  inherits: openstack-liberty-git
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-liberty
-    source: cloud:trusty-liberty
 # master
 openstack-master-git:
   inherits: openstack-icehouse

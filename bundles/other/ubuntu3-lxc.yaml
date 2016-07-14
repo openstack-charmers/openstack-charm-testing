@@ -27,12 +27,6 @@ u3lxc:
 trusty:
   inherits: u3lxc
   series: trusty
-utopic:
+xenial:
   inherits: u3lxc
-  series: utopic
-vivid:
-  inherits: u3lxc
-  series: vivid
-wily:
-  inherits: u3lxc
-  series: wily
+  series: xenial

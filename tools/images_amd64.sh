@@ -9,9 +9,6 @@ mkdir -vp ~/images
 [ -f ~/images/xenial-server-cloudimg-amd64-disk1.img ] || {
     wget -O ~/images/xenial-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
 }
-[ -f ~/images/wily-server-cloudimg-amd64-disk1.img ] || {
-    wget -O ~/images/wily-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/wily/current/wily-server-cloudimg-amd64-disk1.img
-}
 [ -f ~/images/trusty-server-cloudimg-amd64-disk1.img ] || {
     wget -O ~/images/trusty-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
 }
@@ -29,8 +26,6 @@ mkdir -vp ~/images
 # Upload glance images to overcloud
 glance --os-image-api-version 1 image-create --name="xenial" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/xenial-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version 1 image-create --name="wily" --is-public=true --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/wily-server-cloudimg-amd64-disk1.img
 glance --os-image-api-version 1 image-create --name="trusty" --is-public=true --progress \
     --container-format=bare --disk-format=qcow2 < ~/images/trusty-server-cloudimg-amd64-disk1.img
 glance --os-image-api-version 1 image-create --name="precise" --is-public=true --progress \
@@ -39,7 +34,6 @@ glance --os-image-api-version 1 image-create --name="cirros" --is-public=true  -
     --container-format=bare --disk-format=qcow2 < ~/images/cirros-0.3.4-x86_64-disk.img
 
 glance --os-image-api-version 1 image-update --property architecture=x86_64 xenial
-glance --os-image-api-version 1 image-update --property architecture=x86_64 wily
 glance --os-image-api-version 1 image-update --property architecture=x86_64 trusty
 glance --os-image-api-version 1 image-update --property architecture=x86_64 precise
 glance --os-image-api-version 1 image-update --property architecture=x86_64 cirros

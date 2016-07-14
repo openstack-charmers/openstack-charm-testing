@@ -175,11 +175,6 @@ trusty-liberty-proposed:
     openstack-origin-git: liberty
     openstack-origin: cloud:trusty-liberty/proposed
     source: cloud:trusty-liberty/proposed
-wily-liberty:
-  inherits: openstack-services
-  series: wily
-  overrides:
-    openstack-origin-git: liberty
 # mitaka
 trusty-mitaka:
   inherits: openstack-services

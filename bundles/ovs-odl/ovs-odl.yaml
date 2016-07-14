@@ -99,10 +99,6 @@ trusty-kilo:
   inherits: openstack-services
   overrides:
     openstack-origin: cloud:trusty-kilo
-trusty-juno:
-  inherits: openstack-services
-  overrides:
-    openstack-origin: cloud:trusty-juno
 trusty-icehouse:
   inherits: openstack-services
 trusty-icehouse-cisco:

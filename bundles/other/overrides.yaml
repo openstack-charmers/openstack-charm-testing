@@ -18,9 +18,6 @@ trusty:
 vivid:
   inherits: base
   series: vivid
-wily:
-  inherits: base
-  series: wily
 alt:
   inherits: base
   services:
@@ -36,18 +33,6 @@ alt:
 trusty-alt:
   inherits: alt
   series: trusty
-  overrides:
-    dataset-size: 55%
-    max-connections: 5005
-vivid-alt:
-  inherits: alt
-  series: vivid
-  overrides:
-    dataset-size: 55%
-    max-connections: 5005
-wily-alt:
-  inherits: alt
-  series: wily
   overrides:
     dataset-size: 55%
     max-connections: 5005

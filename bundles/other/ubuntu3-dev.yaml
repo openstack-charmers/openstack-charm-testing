@@ -24,12 +24,6 @@ precise:
 trusty:
   inherits: u3
   series: trusty
-utopic:
+xenial:
   inherits: u3
-  series: utopic
-vivid:
-  inherits: u3
-  series: vivid
-wily:
-  inherits: u3
-  series: wily
+  series: xenial

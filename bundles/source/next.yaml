@@ -280,9 +280,6 @@ trusty-liberty-proposed:
   overrides:
     openstack-origin: cloud:trusty-liberty/proposed
     source: cloud:trusty-liberty/proposed
-wily-liberty:
-  inherits: openstack-liberty-git
-  series: wily
 # master
 openstack-master-git:
   inherits: openstack-services

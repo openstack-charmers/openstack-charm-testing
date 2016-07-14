@@ -188,17 +188,6 @@ trusty-liberty-staging:
   overrides:
     openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
     source: ppa:ubuntu-cloud-archive/liberty-staging
-wily-liberty:
-  inherits: openstack-services
-  series: wily
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-wily-liberty-proposed:
-  inherits: wily-liberty
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
 # mitaka
 trusty-mitaka:
   inherits: openstack-services

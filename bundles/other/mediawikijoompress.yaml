@@ -44,12 +44,3 @@ mediawikijoompress:
 trusty:
   inherits: mediawikijoompress
   series: trusty
-utopic:
-  inherits: mediawikijoompress
-  series: utopic
-vivid:
-  inherits: mediawikijoompress
-  series: vivid
-wily:
-  inherits: mediawikijoompress
-  series: wily
