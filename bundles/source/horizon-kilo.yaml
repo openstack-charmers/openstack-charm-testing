@@ -9,3 +9,4 @@ directory: /mnt/openstack-git
 http_proxy: http://squid.internal:3128
 https_proxy: http://squid.internal:3128
 use_constraints: false
+release: kilo

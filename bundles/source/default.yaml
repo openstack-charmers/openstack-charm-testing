@@ -225,7 +225,6 @@ precise-icehouse:
     mysql:
       branch: lp:charms/trusty/mysql
   overrides:
-    openstack-origin: cloud:precise-icehouse
     source: cloud:precise-icehouse
 trusty-icehouse:
   inherits: openstack-icehouse-git
@@ -265,7 +264,6 @@ trusty-juno:
   inherits: openstack-juno-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-juno
     source: cloud:trusty-juno
 utopic-juno:
   inherits: openstack-juno-git
@@ -305,13 +303,11 @@ trusty-kilo:
   inherits: openstack-kilo-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-kilo
     source: cloud:trusty-kilo
 trusty-kilo-proposed:
   inherits: openstack-kilo-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
     source: cloud:trusty-kilo/proposed
 vivid-kilo:
   inherits: openstack-kilo-git
@@ -354,13 +350,11 @@ trusty-liberty:
   inherits: openstack-liberty-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
 trusty-liberty-proposed:
   inherits: openstack-liberty-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-liberty/proposed
     source: cloud:trusty-liberty/proposed
 # master
 openstack-master-git:
@@ -397,13 +391,11 @@ trusty-master:
   inherits: openstack-master-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
 trusty-master-proposed:
   inherits: openstack-master-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-mitaka/proposed
     source: cloud:trusty-mitaka/proposed
 xenial-master:
   inherits: openstack-master-git

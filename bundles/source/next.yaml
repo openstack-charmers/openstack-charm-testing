@@ -229,13 +229,11 @@ trusty-kilo:
   inherits: openstack-kilo-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-kilo
     source: cloud:trusty-kilo
 trusty-kilo-proposed:
   inherits: openstack-kilo-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
     source: cloud:trusty-kilo/proposed
 # liberty
 openstack-liberty-git:
@@ -272,13 +270,11 @@ trusty-liberty:
   inherits: openstack-liberty-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
 trusty-liberty-proposed:
   inherits: openstack-liberty-git
   series: trusty
   overrides:
-    openstack-origin: cloud:trusty-liberty/proposed
     source: cloud:trusty-liberty/proposed
 # master
 openstack-master-git:
@@ -315,13 +311,11 @@ xenial-master:
   inherits: openstack-master-git
   series: xenial
   overrides:
-    openstack-origin: cloud:xenial-newton
     source: cloud:xenial-newton
 xenial-master-proposed:
   inherits: openstack-master-git
   series: xenial
   overrides:
-    openstack-origin: cloud:xenial-newton/proposed
     source: cloud:xenial-newton/proposed
 yakkety-master:
   inherits: openstack-master-git
@@ -331,4 +325,3 @@ yakkety-master-proposed:
   series: yakkety
   overrides:
     source: proposed
-    openstack-origin: distro-proposed

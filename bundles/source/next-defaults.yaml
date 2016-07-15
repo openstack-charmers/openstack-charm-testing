@@ -166,14 +166,12 @@ trusty-liberty:
   series: trusty
   overrides:
     openstack-origin-git: liberty
-    openstack-origin: cloud:trusty-liberty
     source: cloud:trusty-liberty
 trusty-liberty-proposed:
   inherits: openstack-services
   series: trusty
   overrides:
     openstack-origin-git: liberty
-    openstack-origin: cloud:trusty-liberty/proposed
     source: cloud:trusty-liberty/proposed
 # mitaka
 trusty-mitaka:
@@ -181,14 +179,12 @@ trusty-mitaka:
   series: trusty
   overrides:
     openstack-origin-git: mitaka
-    openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
 trusty-mitaka-proposed:
   inherits: openstack-services
   series: trusty
   overrides:
     openstack-origin-git: mitaka
-    openstack-origin: cloud:trusty-mitaka/proposed
     source: cloud:trusty-mitaka/proposed
 xenial-mitaka:
   inherits: openstack-services
@@ -201,14 +197,12 @@ xenial-master:
   series: xenial
   overrides:
     openstack-origin-git: master
-    openstack-origin: cloud:xenial-newton
     source: cloud:xenial-newton
 xenial-master-proposed:
   inherits: openstack-services
   series: xenial
   overrides:
     openstack-origin-git: master
-    openstack-origin: cloud:xenial-newton/proposed
     source: cloud:xenial-newton/proposed
 yakkety-master:
   inherits: openstack-services
@@ -220,5 +214,4 @@ yakkety-master-proposed:
   series: yakkety
   overrides:
     openstack-origin-git: master
-    openstack-origin: distro-proposed
     source: proposed
