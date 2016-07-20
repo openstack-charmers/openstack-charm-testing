@@ -2,6 +2,9 @@ repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
      branch: stable/liberty}
+  - {name: networking-hyperv,
+     repository: 'git://github.com/openstack/networking-hyperv',
+     branch: stable/liberty}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
      branch: stable/liberty}

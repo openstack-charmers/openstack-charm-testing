@@ -2,6 +2,9 @@ repositories:
   - {name: requirements,
      repository: 'git://github.com/openstack/requirements',
      branch: stable/kilo}
+  - {name: networking-hyperv,
+     repository: 'git://github.com/openstack/networking-hyperv',
+     branch: kilo-eol}
   - {name: nova,
      repository: 'git://github.com/openstack/nova',
      branch: kilo-eol}
