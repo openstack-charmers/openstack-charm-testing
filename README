@@ -62,11 +62,11 @@ test - tempest smoke
 
 ```
 cd tempest
-sudo apt-get install python-virtualenv libffi-dev libssl-dev -y
+sudo apt-get install python-dev python-virtualenv libffi-dev libssl-dev libyaml-dev -y
 virtualenv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/pip install python-ceilometerclient python-cinderclient python-glanceclient python-heatclient \
-    python-keystoneclient python-neutronclient python-novaclient python-swiftclient python-openstackclient
+    python-keystoneclient python-neutronclient python-novaclient python-swiftclient python-openstackclient pytz
 ./run_tempest.sh -V --smoke
 ```
 
