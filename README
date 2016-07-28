@@ -61,6 +61,7 @@ test - tempest smoke
 ====================
 
 ```
+juju action do heat/0 domain-setup # Manual action required to configure heat permissions
 cd tempest
 sudo apt-get install python-dev python-virtualenv libffi-dev libssl-dev libyaml-dev -y
 virtualenv .venv
