@@ -44,11 +44,13 @@ base-services:
       constraints: mem=1G
       options:
         instance-mtu: 1300
+        bridge-mappings: physnet1:br-ex
     neutron-api:
       branch: https://github.com/openstack/charm-neutron-api;stable/16.07
       constraints: mem=1G
       options:
         neutron-security-groups: True
+        flat-network-providers: physnet1
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.07
     cinder:
