@@ -251,21 +251,21 @@ trusty-icehouse-ha:
     keystone:
       num_units: 3
     keystone-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     cinder:
       num_units: 3
     cinder-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     glance:
       num_units: 3
     glance-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
@@ -274,42 +274,42 @@ trusty-icehouse-ha:
     mysql:
       num_units: 3
     mysql-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     nova-cloud-controller:
       num_units: 3
     nova-cc-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     neutron-api:
       num_units: 3
     neutron-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     openstack-dashboard:
       num_units: 3
     dashboard-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     swift-proxy:
       num_units: 3
     swift-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     ceilometer:
       num_units: 3
     ceilometer-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
@@ -370,21 +370,21 @@ trusty-juno-ha:
     keystone:
       num_units: 3
     keystone-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     cinder:
       num_units: 3
     cinder-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     glance:
       num_units: 3
     glance-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
@@ -393,42 +393,42 @@ trusty-juno-ha:
     mysql:
       num_units: 3
     mysql-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     nova-cloud-controller:
       num_units: 3
     nova-cc-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     neutron-api:
       num_units: 3
     neutron-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     openstack-dashboard:
       num_units: 3
     dashboard-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     swift-proxy:
       num_units: 3
     swift-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3
     ceilometer:
       num_units: 3
     ceilometer-hacluster:
-      branch: lp:~openstack-charmers/charms/trusty/hacluster/next
+      branch: https://github.com/openstack/charm-hacluster
       options:
         corosync_transport: unicast
         cluster_count: 3

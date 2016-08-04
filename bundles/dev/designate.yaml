@@ -1,6 +1,4 @@
 # vim: set ts=2 et:
-# deployer bundle for development ('next') charms
-# UOSCI relies on this for OS-on-OS deployment testing
 openstack-services:
   services:
     mysql:
@@ -102,16 +100,16 @@ openstack-services:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
     designate:
-      branch: lp:~openstack-charmers/charms/trusty/designate/next
+      branch: https://github.com/openstack/charm-designate
       options:
-        verbose: true 
-        debug: true 
+        verbose: true
+        debug: true
         nova-domain: 'serverstack.ubuntu.com.'
         neutron-domain: 'serverstack.ubuntu.com.'
         nova-domain-email: 'bob@serverstack.ubuntu.com'
         neutron-domain-email: 'bob@serverstack.ubuntu.com'
     designate-bind:
-      branch: lp:~openstack-charmers/charms/trusty/designate-bind/next
+      branch: https://github.com/openstack/charm-designate-bind
     neutron-api:
       branch: https://github.com/openstack/charm-neutron-api
       constraints: mem=1G

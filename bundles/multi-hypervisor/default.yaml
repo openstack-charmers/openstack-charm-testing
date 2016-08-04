@@ -47,7 +47,7 @@ openstack-services:
       options:
         virt-type: lxd
     lxd:
-      branch: lp:~openstack-charmers-next/charms/trusty/lxd/trunk
+      branch: https://github.com/openstack/charm-lxd;stable/16.07
       options:
         block-devices: /dev/vdb
         ephemeral-unmount: /mnt
