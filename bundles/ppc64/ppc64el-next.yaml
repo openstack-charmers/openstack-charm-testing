@@ -24,7 +24,7 @@ openstack-services:
     mysql:
       branch: lp:charms/trusty/mysql
 # PXC not in use, pending resolution of https://bugs.launchpad.net/bugs/1570678
-#      branch: https://github.com/openstack/charm-percona-cluster
+#      charm: cs:~openstack-charmers-next/xenial/percona-cluster
       options:
         dataset-size: 15%
         max-connections: 20000
@@ -34,11 +34,11 @@ openstack-services:
       to:
         - "lxc:0"
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server
+      charm: cs:~openstack-charmers-next/xenial/rabbitmq-server
       to:
         - "lxc:0"
     keystone:
-      branch: https://github.com/openstack/charm-keystone
+      charm: cs:~openstack-charmers-next/xenial/keystone
       options:
         debug: true
         admin-password: openstack
@@ -46,11 +46,11 @@ openstack-services:
       to:
         - "lxc:nova-compute=0"
     openstack-dashboard:
-      branch: https://github.com/openstack/charm-openstack-dashboard
+      charm: cs:~openstack-charmers-next/xenial/openstack-dashboard
       to:
         - "lxc:nova-compute=0"
     nova-compute:
-      branch: https://github.com/openstack/charm-nova-compute
+      charm: cs:~openstack-charmers-next/xenial/nova-compute
       num_units: 2
       constraints: arch=ppc64el
       options:
@@ -59,31 +59,32 @@ openstack-services:
         "enable-resize": true
         "migration-auth-type": ssh
     nova-cloud-controller:
-      branch: https://github.com/openstack/charm-nova-cloud-controller
+      charm: cs:~openstack-charmers-next/xenial/nova-cloud-controller
       options:
         debug: true
         network-manager: Neutron
       to:
         - "lxc:nova-compute=0"
     neutron-gateway:
-      branch: https://github.com/openstack/charm-neutron-gateway
+      charm: cs:~openstack-charmers-next/xenial/neutron-gateway
       options:
         debug: true
-        ext-port: eth1
         instance-mtu: 1300
+        bridge-mappings: physnet1:br-ex
       to:
         - "0"
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
+      charm: cs:~openstack-charmers-next/xenial/neutron-api
       options:
         debug: true
-        neutron-security-groups: True
+        neutron-security-groups: true
+        flat-network-providers: physnet1
       to:
         - "lxc:nova-compute=0"
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch
+      charm: cs:~openstack-charmers-next/xenial/neutron-openvswitch
     cinder:
-      branch: https://github.com/openstack/charm-cinder
+      charm: cs:~openstack-charmers-next/xenial/cinder
       options:
         debug: true
         block-device: "/dev/sdd"
@@ -91,21 +92,21 @@ openstack-services:
       to:
         - "lxc:nova-compute=1"
     cinder-ceph:
-      branch: https://github.com/openstack/charm-cinder-ceph
+      charm: cs:~openstack-charmers-next/xenial/cinder-ceph
     glance:
-      branch: https://github.com/openstack/charm-glance
+      charm: cs:~openstack-charmers-next/xenial/glance
       options:
         debug: true
       to:
         - "lxc:nova-compute=1"
     ceilometer:
-      branch: https://github.com/openstack/charm-ceilometer
+      charm: cs:~openstack-charmers-next/xenial/ceilometer
       to:
         - "lxc:nova-compute=1"
     ceilometer-agent:
-      branch: https://github.com/openstack/charm-ceilometer-agent
+      charm: cs:~openstack-charmers-next/xenial/ceilometer-agent
     heat:
-      branch: https://github.com/openstack/charm-heat
+      charm: cs:~openstack-charmers-next/xenial/heat
       to:
         - "lxc:nova-compute=1"
     mongodb:

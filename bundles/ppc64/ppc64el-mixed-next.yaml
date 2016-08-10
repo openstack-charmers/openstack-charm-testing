@@ -27,18 +27,18 @@
 openstack-services:
   services:
     mysql:
-      branch: https://github.com/openstack/charm-percona-cluster
+      charm: cs:~openstack-charmers-next/xenial/percona-cluster
       options:
         dataset-size: 15%
         max-connections: 20000
       to:
         - "lxc:0"
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server
+      charm: cs:~openstack-charmers-next/xenial/rabbitmq-server
       to:
         - "lxc:0"
     ceph:
-      branch: https://github.com/openstack/charm-ceph
+      charm: cs:~openstack-charmers-next/xenial/ceph
       num_units: 3
       options:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
@@ -50,14 +50,14 @@ openstack-services:
         - "nova-compute-amd64=1"
         - "nova-compute-amd64=2"
     ceph-osd:
-      branch: https://github.com/openstack/charm-ceph-osd
+      charm: cs:~openstack-charmers-next/xenial/ceph-osd
       options:
         osd-devices: "/dev/sdb /dev/sdc /dev/sdd /dev/sde /dev/sdf"
         osd-reformat: "yes"
       to:
         - "0"
     swift-proxy:
-      branch: https://github.com/openstack/charm-swift-proxy
+      charm: cs:~openstack-charmers-next/xenial/swift-proxy
       options:
         zone-assignment: manual
         replicas: 3
@@ -65,36 +65,36 @@ openstack-services:
       to:
         - "lxc:0"
     swift-storage-z1:
-      branch: https://github.com/openstack/charm-swift-storage
+      charm: cs:~openstack-charmers-next/xenial/swift-storage
       options:
         zone: 1
         block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
         overwrite: "true"
     swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage
+      charm: cs:~openstack-charmers-next/xenial/swift-storage
       options:
         zone: 2
         block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
         overwrite: "true"
     swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage
+      charm: cs:~openstack-charmers-next/xenial/swift-storage
       options:
         zone: 3
         block-device: "/dev/sdb /dev/sdc /dev/sdd /dev/sde"
         overwrite: "true"
     keystone:
-      branch: https://github.com/openstack/charm-keystone
+      charm: cs:~openstack-charmers-next/xenial/keystone
       options:
         admin-password: openstack
         admin-token: ubuntutesting
       to:
         - "lxc:swift-storage-z1=0"
     openstack-dashboard:
-      branch: https://github.com/openstack/charm-openstack-dashboard
+      charm: cs:~openstack-charmers-next/xenial/openstack-dashboard
       to:
         - "lxc:swift-storage-z2=0"
     nova-compute-ppc64el:
-      branch: https://github.com/openstack/charm-nova-compute
+      charm: cs:~openstack-charmers-next/xenial/nova-compute
       num_units: 3
       constraints: arch=ppc64el
       options:
@@ -102,7 +102,7 @@ openstack-services:
         "enable-resize": true
         "migration-auth-type": ssh
     nova-compute-amd64:
-      branch: https://github.com/openstack/charm-nova-compute
+      charm: cs:~openstack-charmers-next/xenial/nova-compute
       num_units: 3
       constraints: arch=amd64
       options:
@@ -110,47 +110,47 @@ openstack-services:
         "enable-resize": true
         "migration-auth-type": ssh
     nova-cloud-controller:
-      branch: https://github.com/openstack/charm-nova-cloud-controller
+      charm: cs:~openstack-charmers-next/xenial/nova-cloud-controller
       options:
         network-manager: Neutron
       to:
         - "lxc:swift-storage-z3=0"
     neutron-gateway:
-      branch: https://github.com/openstack/charm-neutron-gateway
+      charm: cs:~openstack-charmers-next/xenial/neutron-gateway
       options:
         ext-port: eth1
         instance-mtu: 1300
       to:
         - "0"
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
+      charm: cs:~openstack-charmers-next/xenial/neutron-api
       options:
         neutron-security-groups: True
       to:
         - "lxc:swift-storage-z1=0"
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch
+      charm: cs:~openstack-charmers-next/xenial/neutron-openvswitch
     cinder:
-      branch: https://github.com/openstack/charm-cinder
+      charm: cs:~openstack-charmers-next/xenial/cinder
       options:
         block-device: "None"
         glance-api-version: 2
       to:
         - "lxc:swift-storage-z2=0"
     cinder-ceph:
-      branch: https://github.com/openstack/charm-cinder-ceph
+      charm: cs:~openstack-charmers-next/xenial/cinder-ceph
     glance:
-      branch: https://github.com/openstack/charm-glance
+      charm: cs:~openstack-charmers-next/xenial/glance
       to:
         - "lxc:swift-storage-z1=0"
     ceilometer:
-      branch: https://github.com/openstack/charm-ceilometer
+      charm: cs:~openstack-charmers-next/xenial/ceilometer
       to:
         - "lxc:swift-storage-z1=0"
     ceilometer-agent:
-      branch: https://github.com/openstack/charm-ceilometer-agent
+      charm: cs:~openstack-charmers-next/xenial/ceilometer-agent
     heat:
-      branch: https://github.com/openstack/charm-heat
+      charm: cs:~openstack-charmers-next/xenial/heat
       to:
         - "lxc:swift-storage-z2=0"
     mongodb:
