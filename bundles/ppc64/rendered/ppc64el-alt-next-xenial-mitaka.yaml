@@ -129,14 +129,15 @@ services:
     charm: cs:~openstack-charmers-next/xenial/neutron-api
     options:
       debug: true
+      flat-network-providers: physnet1
       neutron-security-groups: true
     to:
     - lxc:nova-compute=0
   neutron-gateway:
     charm: cs:~openstack-charmers-next/xenial/neutron-gateway
     options:
+      bridge-mappings: physnet1:br-ex
       debug: true
-      ext-port: eth1
       instance-mtu: 1300
     to:
     - '0'

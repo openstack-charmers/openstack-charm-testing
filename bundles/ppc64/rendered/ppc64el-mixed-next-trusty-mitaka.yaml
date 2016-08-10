@@ -191,6 +191,7 @@ services:
   neutron-api:
     charm: cs:~openstack-charmers-next/xenial/neutron-api
     options:
+      flat-network-providers: physnet1
       neutron-security-groups: true
       openstack-origin: cloud:trusty-mitaka
     to:
@@ -198,7 +199,7 @@ services:
   neutron-gateway:
     charm: cs:~openstack-charmers-next/xenial/neutron-gateway
     options:
-      ext-port: eth1
+      bridge-mappings: physnet1:br-ex
       instance-mtu: 1300
       openstack-origin: cloud:trusty-mitaka
     to:
