@@ -123,6 +123,7 @@ base-services:
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
+    - [ cinder, ceph ]
 #    - [ cinder, cinder-ceph ]
 #    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, nova-cloud-controller ]
