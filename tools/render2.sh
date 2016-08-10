@@ -38,10 +38,10 @@ RENDER_DIR="$(dirname "$SRC_BUNDLE")/rendered"
 [[ ! -d "$RENDER_DIR" ]] && mkdir -vp $RENDER_DIR
 
 for COMBO in $COMBOS; do
-  # Reduce bundle to once specific inheritance target
+  # Reduce bundle to one specific inheritance target
   OUT_FILE="$RENDER_DIR/$(basename $SRC_BUNDLE .yaml)-$COMBO.yaml"
   $HOME/tools/bot-control/tools/bundle-reducer -y -i $SRC_BUNDLE -o $OUT_FILE -t $COMBO
 
-  # Add warning comment to top of all rendered files
+  # Add warning comment to the top of all rendered files
   sed -i "1i${WARNING_TXT}" $OUT_FILE
 done

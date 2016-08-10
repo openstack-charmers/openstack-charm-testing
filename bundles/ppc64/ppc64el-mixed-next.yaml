@@ -118,14 +118,15 @@ openstack-services:
     neutron-gateway:
       charm: cs:~openstack-charmers-next/xenial/neutron-gateway
       options:
-        ext-port: eth1
         instance-mtu: 1300
+        bridge-mappings: physnet1:br-ex
       to:
         - "0"
     neutron-api:
       charm: cs:~openstack-charmers-next/xenial/neutron-api
       options:
         neutron-security-groups: True
+        flat-network-providers: physnet1
       to:
         - "lxc:swift-storage-z1=0"
     neutron-openvswitch:
