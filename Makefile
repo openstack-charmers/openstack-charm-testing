@@ -1,6 +1,6 @@
 #!/usr/bin/make
 
-render: render-ppc64 render-metal render-sparse render-multihv render-dfs
+render: render-ppc64 render-metal render-sparse render-multihv render-lxd render-dfs
 
 render-ppc64:
 	@./tools/render2.sh bundles/ppc64/*yaml
