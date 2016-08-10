@@ -1,2 +1,0 @@
-#!/bin/bash
-./tools/render2.sh bundles/ppc64/*yaml
