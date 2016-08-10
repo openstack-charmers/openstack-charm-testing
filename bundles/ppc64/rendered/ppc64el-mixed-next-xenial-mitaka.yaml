@@ -155,7 +155,7 @@ services:
     to:
     - lxc:swift-storage-z2=0
   juju-gui:
-    branch: lp:charms/trusty/juju-gui
+    charm: cs:trusty/juju-gui
     to:
     - lxc:swift-storage-z3=0
   keystone:
@@ -166,12 +166,11 @@ services:
     to:
     - lxc:swift-storage-z1=0
   mongodb:
-    branch: lp:charms/trusty/mongodb
+    charm: cs:trusty/mongodb
     to:
     - lxc:swift-storage-z3=0
   mysql:
-    branch: lp:charms/trusty/mysql
-    charm: cs:~openstack-charmers-next/xenial/percona-cluster
+    charm: cs:trusty/mysql
     options:
       dataset-size: 15%
       max-connections: 20000
@@ -216,7 +215,7 @@ services:
       enable-resize: true
       migration-auth-type: ssh
   ntp:
-    branch: lp:charms/trusty/ntp
+    charm: cs:trusty/ntp
     num_units: 0
   openstack-dashboard:
     charm: cs:~openstack-charmers-next/xenial/openstack-dashboard

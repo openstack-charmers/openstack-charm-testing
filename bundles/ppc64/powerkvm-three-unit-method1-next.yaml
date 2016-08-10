@@ -260,7 +260,7 @@ powerkvm-smash:
       to:
         - "lxc:0"
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      charm: cs:trusty/mongodb
       annotations:
         "gui-x": "1000"
         "gui-y": "750"

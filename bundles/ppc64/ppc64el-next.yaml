@@ -22,7 +22,7 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/trusty/mysql
+      charm: cs:trusty/mysql
 # PXC not in use, pending resolution of https://bugs.launchpad.net/bugs/1570678
 #      charm: cs:~openstack-charmers-next/xenial/percona-cluster
       options:
@@ -110,14 +110,14 @@ openstack-services:
       to:
         - "lxc:nova-compute=1"
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      charm: cs:trusty/mongodb
       to:
         - "lxc:nova-compute=1"
     ntp:
-      branch: lp:charms/trusty/ntp
+      charm: cs:trusty/ntp
       num_units: 0
     juju-gui:
-      branch: lp:charms/trusty/juju-gui
+      charm: cs:trusty/juju-gui
       to:
         - "lxc:0"
   relations:

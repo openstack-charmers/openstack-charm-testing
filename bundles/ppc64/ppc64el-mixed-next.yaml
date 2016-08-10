@@ -155,14 +155,14 @@ openstack-services:
       to:
         - "lxc:swift-storage-z2=0"
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      charm: cs:trusty/mongodb
       to:
         - "lxc:swift-storage-z3=0"
     ntp:
-      branch: lp:charms/trusty/ntp
+      charm: cs:trusty/ntp
       num_units: 0
     juju-gui:
-      branch: lp:charms/trusty/juju-gui
+      charm: cs:trusty/juju-gui
       to:
         - "lxc:swift-storage-z3=0"
   relations:
@@ -285,7 +285,7 @@ xenial-mitaka:
   series: xenial
   services:
     mysql:
-      branch: lp:charms/trusty/mysql
+      charm: cs:trusty/mysql
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:

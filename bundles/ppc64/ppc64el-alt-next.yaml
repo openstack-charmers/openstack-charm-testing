@@ -30,7 +30,7 @@
 openstack-services:
   services:
     mysql:
-      branch: lp:charms/trusty/mysql
+      charm: cs:trusty/mysql
 #      charm: cs:~openstack-charmers-next/xenial/percona-cluster
       options:
         dataset-size: 15%
@@ -139,15 +139,15 @@ openstack-services:
 #        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      charm: cs:trusty/mongodb
       to:
 #        - "lxc:swift-storage-z1=0"
         - "lxc:nova-compute=1"
     ntp:
-      branch: lp:charms/trusty/ntp
+      charm: cs:trusty/ntp
       num_units: 0
     juju-gui:
-      branch: lp:charms/trusty/juju-gui
+      charm: cs:trusty/juju-gui
       to:
         - "lxc:nova-compute=0"
   relations:
@@ -251,7 +251,7 @@ xenial-mitaka:
   series: xenial
 #  services:
 #    mysql:
-#      branch: lp:charms/trusty/mysql
+#      charm: cs:trusty/mysql
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:

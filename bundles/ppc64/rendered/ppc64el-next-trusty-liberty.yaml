@@ -108,7 +108,7 @@ services:
     to:
     - lxc:nova-compute=1
   juju-gui:
-    branch: lp:charms/trusty/juju-gui
+    charm: cs:trusty/juju-gui
     to:
     - lxc:0
   keystone:
@@ -121,13 +121,13 @@ services:
     to:
     - lxc:nova-compute=0
   mongodb:
-    branch: lp:charms/trusty/mongodb
+    charm: cs:trusty/mongodb
     options:
       source: cloud:trusty-liberty
     to:
     - lxc:nova-compute=1
   mysql:
-    branch: lp:charms/trusty/mysql
+    charm: cs:trusty/mysql
     options:
       dataset-size: 15%
       max-connections: 20000
@@ -173,7 +173,7 @@ services:
       migration-auth-type: ssh
       openstack-origin: cloud:trusty-liberty
   ntp:
-    branch: lp:charms/trusty/ntp
+    charm: cs:trusty/ntp
     num_units: 0
   openstack-dashboard:
     charm: cs:~openstack-charmers-next/xenial/openstack-dashboard
