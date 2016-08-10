@@ -13,17 +13,17 @@ bundle.  The source bundle must use "charm: cs:foo" (not branch: foo).
 New/updated bundles will be written/overwritten to a "rendered" subdir.
 
   Syntax:
-    ./render-2.sh <bundle> <optional space-separated list of combos>
+    ./render2.sh <bundle> <optional space-separated list of combos>
 
   Usage examples:
     Render specific inheritance targets from a bundle:
-    ./render-2.sh bundles/foo/source_bundle.yaml \"trusty-liberty trusty-mitaka xenial-mitaka\"
+    ./render2.sh foo/source_bundle.yaml \"trusty-liberty trusty-mitaka xenial-mitaka\"
 
     Render the default inheritance targets from a bundle (assumes they exist):
-    ./render-2.sh bundles/foo/source_bundle.yaml
+    ./render2.sh foo/source_bundle.yaml
 
     In both of these examples, the rendered files will reside in the
-    bundles/foo/rendered/ dir.
+    foo/rendered/ dir.
 "
 }
 
