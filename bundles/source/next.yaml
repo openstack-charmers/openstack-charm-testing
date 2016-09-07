@@ -117,7 +117,7 @@ base-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
-    - [ glance, cinder ]
+    - [ glance, "cinder:image-service" ]
     - [ glance, rabbitmq-server ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]

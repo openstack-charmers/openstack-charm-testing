@@ -116,7 +116,7 @@ openstack-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
-    - [ glance, cinder ]
+    - [ glance, "cinder:image-service" ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
