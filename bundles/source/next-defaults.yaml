@@ -58,6 +58,8 @@ base-services:
       options:
         block-device: "None"
         glance-api-version: 2
+        # NOTE(coreycb): pin pymysql to work-around upstream oslo.db/pymysql issues
+        openstack-origin-git: include-file://cinder-master-pymysql-0.7.6.yaml
       constraints: mem=1G
 #    cinder-ceph:
 #      branch: https://github.com/openstack/charm-cinder-ceph

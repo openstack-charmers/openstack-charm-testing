@@ -1,0 +1,15 @@
+repositories:
+  - {name: requirements,
+     repository: 'git://github.com/openstack/requirements',
+     branch: master}
+  - {name: pymysql,
+     repository: 'git://github.com/PyMySQL/PyMySQL.git',
+     branch: 0.7.6}
+  - {name: cinder,
+     repository: 'git://github.com/openstack/cinder',
+     branch: master}
+directory: /mnt/openstack-git
+http_proxy: http://squid.internal:3128
+https_proxy: http://squid.internal:3128
+release: master
+use_constraints: false
