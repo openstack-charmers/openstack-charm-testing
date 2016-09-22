@@ -182,6 +182,9 @@ openstack-services-exclusive:
         migration-auth-type: ssh
         virt-type: lxd
         reserved-host-memory: 0
+    nova-cloud-controller:
+      options:
+        scheduler-default-filters: "AggregateInstanceExtraSpecsFilter,AggregateNumInstancesFilter,RetryFilter,AvailabilityZoneFilter,CoreFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter"
   relations:
     - [ nova-compute-exclusive-small, nova-cloud-controller ]
     - [ nova-compute-exclusive-small, lxd ]
