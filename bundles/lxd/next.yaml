@@ -153,7 +153,7 @@ openstack-services-exclusive:
   inherits: openstack-services
   services:
     nova-compute-exclusive-small:
-      branch: https://github.com/openstack/charm-nova-computea
+      branch: https://github.com/openstack/charm-nova-compute
       constraints: mem=2G
       num_units: 3
       options:
