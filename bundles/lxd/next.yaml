@@ -98,7 +98,6 @@ base-services:
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
     - [ nova-compute, nova-cloud-controller ]
-    - [ nova-compute, mysql ]
     - [ nova-compute, lxd ]
     - - nova-compute
       - rabbitmq-server:amqp
@@ -150,6 +149,52 @@ openstack-services:
         max-connections: 20000
         root-password: ChangeMe123
         sst-password: ChangeMe123
+openstack-services-exclusive:
+  inherits: openstack-services
+  services:
+    nova-compute-exclusive-small:
+      branch: https://github.com/openstack/charm-nova-computea
+      constraints: mem=2G
+      num_units: 3
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+        virt-type: lxd
+    nova-compute-exclusive-medium:
+      branch: https://github.com/openstack/charm-nova-compute
+      constraints: mem=4G
+      num_units: 3
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+        virt-type: lxd
+    nova-compute-exclusive-large:
+      branch: https://github.com/openstack/charm-nova-compute
+      constraints: mem=8G
+      num_units: 3
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+        virt-type: lxd
+  relations:
+    - [ nova-compute-exclusive-small, nova-cloud-controller ]
+    - [ nova-compute-exclusive-small, lxd ]
+    - - nova-compute-exclusive-small
+      - rabbitmq-server:amqp
+    - [ neutron-openvswitch, nova-compute-exclusive-small ]
+    - [ nova-compute-exclusive-medium, nova-cloud-controller ]
+    - [ nova-compute-exclusive-medium, lxd ]
+    - - nova-compute-exclusive-medium
+      - rabbitmq-server:amqp
+    - [ neutron-openvswitch, nova-compute-exclusive-medium ]
+    - [ nova-compute-exclusive-large, nova-cloud-controller ]
+    - [ nova-compute-exclusive-large, lxd ]
+    - - nova-compute-exclusive-large
+      - rabbitmq-server:amqp
+    - [ neutron-openvswitch, nova-compute-exclusive-large ]
 # mitaka
 xenial-mitaka:
   inherits: openstack-services
@@ -159,6 +204,9 @@ xenial-mitaka-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+xenial-mitaka-exclusive:
+  inherits: openstack-services-exclusive
+  series: xenial
 # newton
 xenial-newton:
   inherits: openstack-services
