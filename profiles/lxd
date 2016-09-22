@@ -74,7 +74,7 @@ for exclusive_flavor in small medium large; do
         done
         case ${exclusive_flavor} in
             medium)
-                ram=3996
+                ram=3948
                 cpu=2
                 disk=40
                 ;;
@@ -84,7 +84,7 @@ for exclusive_flavor in small medium large; do
                 disk=40
                 ;;
             large)
-                ram=8092
+                ram=7956
                 cpu=4
                 disk=80
                 ;;
