@@ -62,6 +62,38 @@ nova flavor-create m1.cirros 6 64 1 1
 nova flavor-create m1.tempest 7 256 5 1
 nova flavor-create m2.tempest 8 512 5 1
 
+for exclusive_flavor in small medium large; do
+    app_hostnames=$(./bin/application-hostnames nova-compute-exclusive-${exclusive_flavor})
+    if [ -n "$app_hostnames" ]; then
+        aggregate_name=exclusive-lxd-${exclusive_flavor}
+        nova aggregate-create ${aggregate_name}
+        nova aggregate-set-metadata ${aggregate_name} exclusive-flavor=${exclusive_flavor}
+        nova aggregate-set-metadata ${aggregate_name} max_instances_per_host=1
+        for hostname in ${app_hostnames}; do
+            nova aggregate-add-host ${aggregate_name} ${hostname}
+        done
+        case ${exclusive_flavor} in
+            medium)
+                ram=3996
+                cpu=2
+                disk=40
+                ;;
+            small)
+                ram=1948
+                cpu=1
+                disk=40
+                ;;
+            large)
+                ram=8092
+                cpu=4
+                disk=80
+                ;;
+        esac
+        nova flavor-create --is-public true e1.lxd.${exclusive_flavor} auto ${ram} ${disk} ${cpu}
+        nova flavor-key e1.lxd.${exclusive_flavor} set aggregate_instance_extra_specs:exclusive-flavor=${exclusive_flavor}
+    fi
+done
+
 # Gather vars for tempest template
 access=$(keystone --os-username demo --os-password pass --os-tenant-name demo ec2-credentials-create | grep access | awk '{ print $4 }')
 secret=$(keystone ec2-credentials-get --access $access | grep secret | awk '{ print $4 }')

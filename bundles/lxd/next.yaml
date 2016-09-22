@@ -161,6 +161,7 @@ openstack-services-exclusive:
         enable-resize: True
         migration-auth-type: ssh
         virt-type: lxd
+        reserved-host-memory: 0
     nova-compute-exclusive-medium:
       branch: https://github.com/openstack/charm-nova-compute
       constraints: mem=4G
@@ -170,6 +171,7 @@ openstack-services-exclusive:
         enable-resize: True
         migration-auth-type: ssh
         virt-type: lxd
+        reserved-host-memory: 0
     nova-compute-exclusive-large:
       branch: https://github.com/openstack/charm-nova-compute
       constraints: mem=8G
@@ -179,22 +181,26 @@ openstack-services-exclusive:
         enable-resize: True
         migration-auth-type: ssh
         virt-type: lxd
+        reserved-host-memory: 0
   relations:
     - [ nova-compute-exclusive-small, nova-cloud-controller ]
     - [ nova-compute-exclusive-small, lxd ]
     - - nova-compute-exclusive-small
       - rabbitmq-server:amqp
+    - [ nova-compute-exclusive-small, glance ]
     - [ neutron-openvswitch, nova-compute-exclusive-small ]
     - [ nova-compute-exclusive-medium, nova-cloud-controller ]
     - [ nova-compute-exclusive-medium, lxd ]
     - - nova-compute-exclusive-medium
       - rabbitmq-server:amqp
     - [ neutron-openvswitch, nova-compute-exclusive-medium ]
+    - [ nova-compute-exclusive-medium, glance ]
     - [ nova-compute-exclusive-large, nova-cloud-controller ]
     - [ nova-compute-exclusive-large, lxd ]
     - - nova-compute-exclusive-large
       - rabbitmq-server:amqp
     - [ neutron-openvswitch, nova-compute-exclusive-large ]
+    - [ nova-compute-exclusive-large, glance ]
 # mitaka
 xenial-mitaka:
   inherits: openstack-services
