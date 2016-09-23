@@ -54,12 +54,10 @@ function create_exclusive_aggregate {
                 openstack aggregate add host ${aggregate_name} ${hostname}
             done
         }
-        return 0
     fi
-    return 1
 }
 
-function create_exclusive_aggregate {
+function create_exclusive_flavor {
     exclusive_flavor=$1
     case ${exclusive_flavor} in
         small)
@@ -86,7 +84,8 @@ function create_exclusive_aggregate {
 }
 
 for exclusive_flavor in small medium large; do
-    create_exclusive_aggregate ${exclusive_flavor} && create_exclusive_flavor ${exclusive_flavor}
+    create_exclusive_aggregate ${exclusive_flavor}
+    create_exclusive_flavor ${exclusive_flavor}
 done
 
 # Gather vars for tempest template
