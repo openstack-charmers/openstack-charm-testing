@@ -39,10 +39,10 @@ function create_tempest_users {
     openstack project show demo || openstack project create demo
     openstack user show demo || openstack user create --project demo --password pass --enable --email demo@dev.null demo
     openstack role show Member || openstack role create Member
-    openstack role add --user demo --project demo Member
+    openstack role add --user demo --project demo Member || :
     openstack project show alt_demo || openstack project create alt_demo
     openstack user show alt_demo || openstack user create --project alt_demo --password secret --enable --email alt_demo@dev.null alt_demo
-    openstack role add --user alt_demo --project alt_demo Member
+    openstack role add --user alt_demo --project alt_demo Member || :
 }
 
 function create_tempest_flavors {
