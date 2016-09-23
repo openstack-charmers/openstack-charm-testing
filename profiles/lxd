@@ -2,6 +2,8 @@
 
 set -ex
 
+. ./profiles/common
+
 install_packages
 
 # Set serverstack defaults, if not already set.
