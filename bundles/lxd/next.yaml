@@ -238,6 +238,12 @@ xenial-newton-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/newton
     source: ppa:openstack-ubuntu-testing/newton
+xenial-newton-exclusive:
+  inherits: openstack-services-exclusive
+  series: xenial
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
+    source: ppa:ubuntu-cloud-archive/newton-staging
 yakkety-newton:
   inherits: openstack-services
   series: yakkety
