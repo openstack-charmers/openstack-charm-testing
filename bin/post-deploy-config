@@ -18,8 +18,7 @@ if __name__ == '__main__':
                             os.environ['OS_USERNAME'],
                             os.environ['OS_PASSWORD'],
                             os.environ['OS_TENANT_NAME'],
-                            os.environ['OS_AUTH_URL'],
-                            os.environ['OS_REGION_NAME'])
+                            os.environ['OS_AUTH_URL'])
 
     net_id = os.environ.get('NET_ID')
     if net_id:
@@ -38,8 +37,11 @@ if __name__ == '__main__':
 
     service = sys.argv[1]
 
+    juju_version = int(subprocess.check_output(['juju', 'version']).strip()[0])
+
     service_config = yaml.load(
-        subprocess.check_output(['juju', 'status', service])
+        subprocess.check_output(['juju', 'status', '--format=yaml',
+                                 service])
     )
 
     uuids = []
@@ -59,7 +61,12 @@ if __name__ == '__main__':
                                              fixed_ip=None).to_dict()
             ext_port.append("br-ex:{}".format(result['mac_addr']))
 
+    if juju_version == 1:
+        config_cmd = 'set'
+    else:
+        config_cmd = 'config'
+
     ports = " ".join(ext_port)
-    print("Setting ext-port configuration on {} to {}".format(service, ports))
-    subprocess.check_call(['juju', 'set', service, 'data-port={}'.format(ports)])
+    print("Setting data-port configuration on {} to {}".format(service, ports))
+    subprocess.check_call(['juju', config_cmd, service, 'data-port={}'.format(ports)])
 
