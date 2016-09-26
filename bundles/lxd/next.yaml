@@ -43,6 +43,14 @@ base-services:
         flat-network-providers: physnet1
     neutron-openvswitch:
       branch: https://github.com/openstack/charm-neutron-openvswitch
+    cinder:
+      branch: https://github.com/openstack/charm-cinder
+      options:
+        block-device: /dev/vdb
+        glance-api-version: 2
+        ephemeral-unmount: /mnt
+        overwrite: "true"
+      constraints: mem=4G
     glance:
       branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
@@ -106,6 +114,11 @@ base-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, rabbitmq-server ]
+    - [ glance, "cinder:image-service" ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
