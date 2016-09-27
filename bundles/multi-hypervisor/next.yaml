@@ -219,3 +219,33 @@ xenial-mitaka-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+# newton
+xenial-newton:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-newton
+    source: cloud:xenial-newton
+    storage-type: btrfs
+xenial-newton-proposed:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: cloud:xenial-newton/proposed
+    source: cloud:xenial-newton/proposed
+xenial-newton-staging:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
+    source: ppa:ubuntu-cloud-archive/newton-staging
+#yakkety
+yakkety-newton:
+  inherits: openstack-services
+  series: yakkety
+  services:
+    mysql:
+      branch: lp:charms/trusty/mysql
+yakkety-newton-proposed:
+  inherits: yakkety-newton
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
