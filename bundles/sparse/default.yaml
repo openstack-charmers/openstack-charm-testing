@@ -41,7 +41,7 @@ base-services:
         network-manager: Neutron
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway;stable/16.07
-      constraints: mem=1G
+      constraints: mem=4G
       options:
         instance-mtu: 1300
         bridge-mappings: physnet1:br-ex
