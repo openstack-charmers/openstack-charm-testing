@@ -61,17 +61,17 @@ function create_exclusive_flavor {
     exclusive_flavor=$1
     case ${exclusive_flavor} in
         small)
-            ram=1948
+            ram=1500
             cpu=1
             disk=40
             ;;
         medium)
-            ram=3948
+            ram=3500
             cpu=2
             disk=40
             ;;
         large)
-            ram=7956
+            ram=7500
             cpu=4
             disk=80
             ;;
