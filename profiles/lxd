@@ -41,6 +41,53 @@ secret=$(openstack ec2 credentials show $access | grep secret | awk '{ print $4 
 
 create_tempest_flavors
 
+function create_exclusive_aggregate {
+    exclusive_flavor=$1
+    app_hostnames=$(./bin/application-hostnames nova-compute-exclusive-${exclusiveflavor})
+    if [ -n "$app_hostnames" ]; then
+        aggregate_name=exclusive-lxd-${exclusive_flavor}
+        openstack aggregate show ${aggregate_name} || {
+            openstack aggregate create ${aggregate_name}
+            openstack aggregate set --property exclusive-flavor=${exclusive_flavor} ${aggregate_name}
+            openstack aggregate set --property max_instances_per_host=1 ${aggregate_name}
+            for hostname in ${app_hostnames}; do
+                openstack aggregate add host ${aggregate_name} ${hostname}
+            done
+        }
+    fi
+}
+
+function create_exclusive_flavor {
+    exclusive_flavor=$1
+    case ${exclusive_flavor} in
+        small)
+            ram=1500
+            cpu=1
+            disk=40
+            ;;
+        medium)
+            ram=3500
+            cpu=2
+            disk=40
+            ;;
+        large)
+            ram=7500
+            cpu=4
+            disk=80
+            ;;
+    esac
+    flavor_name=e1.lxd.${exclusive_flavor}
+    openstack flavor show ${flavor_name} || {
+        openstack flavor create --public --ram ${ram} --disk ${disk} --vcpus ${cpu} ${flavor_name}
+        openstack flavor set --property aggregate_instance_extra_specs:exclusive-flavor=${exclusive_flavor} ${flavor_name}
+    }
+}
+
+for exclusive_flavor in small medium large; do
+    create_exclusive_aggregate ${exclusive_flavor}
+    create_exclusive_flavor ${exclusive_flavor}
+done
+
 # Gather vars for tempest template
 ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
 router=$(neutron router-list | grep provider-router | awk '{ print $2}')
