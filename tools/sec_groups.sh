@@ -1,7 +1,9 @@
 #!/bin/bash
 # Set n-g mtu; add sec groups for basic access
 
-juju set neutron-gateway instance-mtu=1300
+juju set neutron-gateway instance-mtu=1300 ||
+    juju config neutron-gateway instance-mtu=1300
+
 for port in 22 80 443 3128; do
 	nova secgroup-add-rule default tcp $port $port 0.0.0.0/0
 	nova secgroup-add-rule default tcp $port $port ::/0
