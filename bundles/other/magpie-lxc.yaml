@@ -1,0 +1,20 @@
+series: "xenial"
+machines:
+  '0':
+    constraints: arch=amd64 mem=1G
+  '1':
+    constraints: arch=amd64 mem=1G
+  '2':
+    constraints: arch=amd64 mem=1G
+services:
+  magpie:
+    charm: "cs:~admcleod/xenial/magpie"
+    series: "xenial"
+    num_units: 6
+    to:
+      - "1"
+      - "2"
+      - "lxc:1"
+      - "lxc:1"
+      - "lxc:2"
+      - "lxc:2"
