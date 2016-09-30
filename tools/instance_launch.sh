@@ -35,7 +35,7 @@ echo " + Nova booting ${p_qty} ${p_name} instances as flavor ${flavor}..."
 for m in $(seq 1 $p_qty); do
   server_name="${p_name}$(date +'%H%M%S')"
   echo ${server_name} ${p_name} ${net_id}
-  nova boot --image ${p_name} --flavor ${flavor} --key_name testkey --nic net-id=${net_id} $server_name
+  nova boot --image ${p_name} --flavor ${flavor} --key-name testkey --nic net-id=${net_id} $server_name
 done
 
 echo " + Hint:  use ssh -i ~/testkey.pem ubuntu@<ip> to access new instances (may also need a floating IP)."
