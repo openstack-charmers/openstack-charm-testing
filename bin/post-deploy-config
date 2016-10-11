@@ -18,7 +18,8 @@ if __name__ == '__main__':
                             os.environ['OS_USERNAME'],
                             os.environ['OS_PASSWORD'],
                             os.environ['OS_TENANT_NAME'],
-                            os.environ['OS_AUTH_URL'])
+                            os.environ['OS_AUTH_URL'],
+                            region_name=os.environ['OS_REGION_NAME'])
 
     net_id = os.environ.get('NET_ID')
     if net_id:
