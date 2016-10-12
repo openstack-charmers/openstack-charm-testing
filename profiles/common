@@ -5,6 +5,8 @@ function upload_image {
     image_name=$2
     image_file=$3
     image_format=${4:-"qcow2"}
+    image_hv_type=${5:-"qemu"}
+    image_arch=${6:-"x86_64"}
 
     case "$src" in
         swift) http_root="http://$SWIFT_IP:80/swift/v1/images";;
@@ -20,7 +22,9 @@ function upload_image {
     openstack image show $image_name || {
         openstack image create --public \
             --container-format=bare --disk-format=$image_format \
-            --file=${HOME}/images/$image_file  $image_name
+            --file=${HOME}/images/$image_file  $image_name \
+            --property architecture=$image_arch \
+            --property hypervisor_type=$image_hv_type
     }
 }
 
