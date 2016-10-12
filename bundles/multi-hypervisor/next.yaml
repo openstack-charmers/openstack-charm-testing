@@ -7,8 +7,8 @@ base-services:
       branch: https://github.com/openstack/charm-percona-cluster
       constraints: mem=4G
       options:
-        dataset-size: 50%
-        max-connections: 20000
+        dataset-size: 15%
+        max-connections: 1000
         root-password: ChangeMe123
         sst-password: ChangeMe123
     rabbitmq-server:
