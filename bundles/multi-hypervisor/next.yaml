@@ -1,14 +1,16 @@
 # vim: set ts=2 et:
 # Multi-hypervisor test bundle for KVM and LXD
 # UOSCI relies on this for OS-on-OS deployment testing
-openstack-services:
+base-services:
   services:
     mysql:
       branch: https://github.com/openstack/charm-percona-cluster
-      constraints: mem=1G
+      constraints: mem=4G
       options:
         dataset-size: 50%
         max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
     rabbitmq-server:
       branch: https://github.com/openstack/charm-rabbitmq-server
       constraints: mem=1G
@@ -60,7 +62,7 @@ openstack-services:
         network-manager: Neutron
     neutron-gateway:
       branch: https://github.com/openstack/charm-neutron-gateway
-      constraints: mem=2G
+      constraints: mem=4G
       options:
         instance-mtu: 1300
         bridge-mappings: physnet1:br-ex
@@ -139,7 +141,7 @@ openstack-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
-    - [ glance, cinder ]
+    - [ glance, "cinder:image-service" ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
@@ -174,7 +176,7 @@ openstack-services:
     - [ nova-compute-lxd, lxd ]
 # liberty
 trusty-liberty:
-  inherits: openstack-services
+  inherits: base-services
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-liberty
@@ -192,7 +194,7 @@ trusty-liberty-staging:
     source: ppa:ubuntu-cloud-archive/liberty-staging
 # mitaka
 trusty-mitaka:
-  inherits: openstack-services
+  inherits: base-services
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
@@ -209,7 +211,7 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  inherits: openstack-services
+  inherits: base-services
   series: xenial
   services:
     mysql:
@@ -221,7 +223,7 @@ xenial-mitaka-proposed:
     openstack-origin: distro-proposed
 # newton
 xenial-newton:
-  inherits: openstack-services
+  inherits: base-services
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-newton
@@ -239,7 +241,7 @@ xenial-newton-staging:
     source: ppa:ubuntu-cloud-archive/newton-staging
 #yakkety
 yakkety-newton:
-  inherits: openstack-services
+  inherits: base-services
   series: yakkety
   services:
     mysql:
