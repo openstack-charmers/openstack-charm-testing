@@ -213,9 +213,6 @@ trusty-mitaka-staging:
 xenial-mitaka:
   inherits: base-services
   series: xenial
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
@@ -243,9 +240,6 @@ xenial-newton-staging:
 yakkety-newton:
   inherits: base-services
   series: yakkety
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
 yakkety-newton-proposed:
   inherits: yakkety-newton
   overrides:
