@@ -1,6 +1,5 @@
 # vim: set ts=2 et:
 # deployer bundle for development ('next') charms
-# UOSCI relies on this for OS-on-OS deployment testing
 base-services:
   services:
     rabbitmq-server:
@@ -59,8 +58,6 @@ base-services:
         block-device: "None"
         glance-api-version: 2
       constraints: mem=1G
-#    cinder-ceph:
-#      branch: https://github.com/openstack/charm-cinder-ceph
     glance:
       branch: https://github.com/openstack/charm-glance
       constraints: mem=1G
@@ -124,8 +121,6 @@ base-services:
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, ceph ]
-#    - [ cinder, cinder-ceph ]
-#    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -161,122 +156,48 @@ openstack-services:
         max-connections: 20000
         root-password: ChangeMe123
         sst-password: ChangeMe123
-# icehouse
-openstack-icehouse-git:
-  inherits: openstack-services
-  services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-icehouse.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-icehouse.yaml
-    cinder:
-      options:
-        openstack-origin-git: include-file://cinder-icehouse.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-icehouse.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-icehouse.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-icehouse.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-icehouse.yaml
-    nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-icehouse.yaml
-    nova-cloud-controller:
-      options:
-        openstack-origin-git: include-file://nova-icehouse.yaml
-trusty-icehouse:
-  inherits: openstack-icehouse-git
-  series: trusty
-# kilo
-openstack-kilo-git:
-  inherits: openstack-services
-  services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-kilo.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-kilo.yaml
-    cinder:
-      options:
-        openstack-origin-git: include-file://cinder-kilo.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-kilo.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-kilo.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-kilo.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-kilo.yaml
-    nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-kilo.yaml
-    nova-cloud-controller:
-      options:
-        openstack-origin-git: include-file://nova-kilo.yaml
-trusty-kilo:
-  inherits: openstack-kilo-git
-  series: trusty
-  overrides:
-    source: cloud:trusty-kilo
-trusty-kilo-proposed:
-  inherits: openstack-kilo-git
-  series: trusty
-  overrides:
-    source: cloud:trusty-kilo/proposed
 # liberty
-openstack-liberty-git:
-  inherits: openstack-services
-  services:
-    keystone:
-      options:
-        openstack-origin-git: include-file://keystone-liberty.yaml
-    glance:
-      options:
-        openstack-origin-git: include-file://glance-liberty.yaml
-    cinder:
-      options:
-        openstack-origin-git: include-file://cinder-liberty.yaml
-    neutron-api:
-      options:
-        openstack-origin-git: include-file://neutron-liberty.yaml
-    neutron-gateway:
-      options:
-        openstack-origin-git: include-file://neutron-liberty.yaml
-    neutron-openvswitch:
-      options:
-        openstack-origin-git: include-file://neutron-liberty.yaml
-    openstack-dashboard:
-      options:
-        openstack-origin-git: include-file://horizon-liberty.yaml
-    nova-compute:
-      options:
-        openstack-origin-git: include-file://nova-liberty.yaml
-    nova-cloud-controller:
-      options:
-        openstack-origin-git: include-file://nova-liberty.yaml
 trusty-liberty:
-  inherits: openstack-liberty-git
+  inherits: openstack-services
   series: trusty
   overrides:
+    openstack-origin-git: liberty
     source: cloud:trusty-liberty
 trusty-liberty-proposed:
-  inherits: openstack-liberty-git
-  series: trusty
+  inherits: trusty-liberty
   overrides:
     source: cloud:trusty-liberty/proposed
+# mitaka
+trusty-mitaka:
+  inherits: openstack-services
+  series: trusty
+  overrides:
+    openstack-origin-git: mitaka
+    source: cloud:trusty-mitaka
+trusty-mitaka-proposed:
+  inherits: trusty-mitaka
+  overrides:
+    source: cloud:trusty-mitaka/proposed
+xenial-mitaka:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin-git: mitaka
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+# newton
+xenial-newton:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin-git: newton
+    source: cloud:xenial-newton
+xenial-newton-proposed:
+  inherits: xenial-newton
+  overrides:
+    source: cloud:xenial-newton/proposed
 # master
 openstack-master-git:
   inherits: openstack-services
@@ -308,21 +229,22 @@ openstack-master-git:
     nova-cloud-controller:
       options:
         openstack-origin-git: include-file://nova-master.yaml
-xenial-master:
+xenial-master-yaml:
   inherits: openstack-master-git
   series: xenial
   overrides:
     source: cloud:xenial-newton
-xenial-master-proposed:
-  inherits: openstack-master-git
-  series: xenial
+xenial-master-proposed-yaml:
+  inherits: xenial-master-yaml
   overrides:
     source: cloud:xenial-newton/proposed
-yakkety-master:
-  inherits: openstack-master-git
-  series: yakkety
-yakkety-master-proposed:
-  inherits: openstack-master-git
-  series: yakkety
+xenial-master:
+  inherits: openstack-services
+  series: xenial
   overrides:
-    source: proposed
+    openstack-origin-git: master
+    source: cloud:xenial-newton
+xenial-master-proposed:
+  inherits: xenial-master
+  overrides:
+    source: cloud:xenial-newton/proposed

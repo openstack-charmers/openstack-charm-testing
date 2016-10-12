@@ -1,6 +1,5 @@
 # vim: set ts=2 et:
 # deployer bundle for development ('next') charms
-# UOSCI relies on this for OS-on-OS deployment testing
 base-services:
   services:
     rabbitmq-server:
@@ -58,51 +57,9 @@ base-services:
       options:
         block-device: "None"
         glance-api-version: 2
-        # NOTE(coreycb): pin pymysql to work-around upstream oslo.db/pymysql issues
-        openstack-origin-git: include-file://cinder-master-pymysql-0.7.6.yaml
       constraints: mem=1G
-#    cinder-ceph:
-#      branch: https://github.com/openstack/charm-cinder-ceph
     glance:
       branch: https://github.com/openstack/charm-glance
-      constraints: mem=1G
-    swift-proxy:
-      branch: https://github.com/openstack/charm-swift-proxy
-      constraints: mem=1G
-      options:
-        zone-assignment: manual
-        replicas: 3
-        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
-    swift-storage-z1:
-      branch: https://github.com/openstack/charm-swift-storage
-      constraints: mem=1G
-      options:
-        zone: 1
-        block-device: vdb
-        overwrite: "true"
-    swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage
-      constraints: mem=1G
-      options:
-        zone: 2
-        block-device: vdb
-        overwrite: "true"
-    swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage
-      constraints: mem=1G
-      options:
-        zone: 3
-        block-device: vdb
-        overwrite: "true"
-    ceilometer:
-      branch: https://github.com/openstack/charm-ceilometer
-      constraints: mem=1G
-    ceilometer-agent:
-      branch: https://github.com/openstack/charm-ceilometer-agent
-    heat:
-      branch: https://github.com/openstack/charm-heat
-    mongodb:
-      branch: lp:charms/trusty/mongodb
       constraints: mem=1G
   relations:
     - [ keystone, mysql ]
@@ -126,23 +83,8 @@ base-services:
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, ceph ]
-#    - [ cinder, cinder-ceph ]
-#    - [ cinder-ceph, ceph ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
-    - [ swift-proxy, keystone ]
-    - [ swift-proxy, swift-storage-z1 ]
-    - [ swift-proxy, swift-storage-z2 ]
-    - [ swift-proxy, swift-storage-z3 ]
-    - - ceilometer
-      - keystone:identity-service
-    - [ ceilometer, rabbitmq-server ]
-    - [ ceilometer, mongodb ]
-    - [ ceilometer-agent, nova-compute ]
-    - [ ceilometer-agent, ceilometer ]
-    - [ heat, mysql ]
-    - [ heat, keystone ]
-    - [ heat, rabbitmq-server ]
     - [ "neutron-gateway:amqp", rabbitmq-server ]
     - [ neutron-api, mysql ]
     - [ neutron-api, rabbitmq-server ]
@@ -171,10 +113,8 @@ trusty-liberty:
     openstack-origin-git: liberty
     source: cloud:trusty-liberty
 trusty-liberty-proposed:
-  inherits: openstack-services
-  series: trusty
+  inherits: trusty-liberty
   overrides:
-    openstack-origin-git: liberty
     source: cloud:trusty-liberty/proposed
 # mitaka
 trusty-mitaka:
@@ -184,17 +124,69 @@ trusty-mitaka:
     openstack-origin-git: mitaka
     source: cloud:trusty-mitaka
 trusty-mitaka-proposed:
-  inherits: openstack-services
-  series: trusty
+  inherits: trusty-mitaka
   overrides:
-    openstack-origin-git: mitaka
     source: cloud:trusty-mitaka/proposed
 xenial-mitaka:
   inherits: openstack-services
   series: xenial
   overrides:
     openstack-origin-git: mitaka
+xenial-mitaka-proposed:
+  inherits: xenial-mitaka
+  overrides:
+    source: proposed
+# newton
+xenial-newton:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin-git: newton
+    source: cloud:xenial-newton
+xenial-newton-proposed:
+  inherits: xenial-newton
+  overrides:
+    source: cloud:xenial-newton/proposed
 # master
+openstack-master-git:
+  inherits: openstack-services
+  services:
+    keystone:
+      options:
+        openstack-origin-git: include-file://keystone-master.yaml
+    glance:
+      options:
+        openstack-origin-git: include-file://glance-master.yaml
+    cinder:
+      options:
+        openstack-origin-git: include-file://cinder-master.yaml
+    neutron-api:
+      options:
+        openstack-origin-git: include-file://neutron-master.yaml
+    neutron-gateway:
+      options:
+        openstack-origin-git: include-file://neutron-master.yaml
+    neutron-openvswitch:
+      options:
+        openstack-origin-git: include-file://neutron-master.yaml
+    openstack-dashboard:
+      options:
+        openstack-origin-git: include-file://horizon-master.yaml
+    nova-compute:
+      options:
+        openstack-origin-git: include-file://nova-master.yaml
+    nova-cloud-controller:
+      options:
+        openstack-origin-git: include-file://nova-master.yaml
+xenial-master-yaml:
+  inherits: openstack-master-git
+  series: xenial
+  overrides:
+    source: cloud:xenial-newton
+xenial-master-proposed-yaml:
+  inherits: xenial-master-yaml
+  overrides:
+    source: cloud:xenial-newton/proposed
 xenial-master:
   inherits: openstack-services
   series: xenial
@@ -202,19 +194,6 @@ xenial-master:
     openstack-origin-git: master
     source: cloud:xenial-newton
 xenial-master-proposed:
-  inherits: openstack-services
-  series: xenial
+  inherits: xenial-master
   overrides:
-    openstack-origin-git: master
     source: cloud:xenial-newton/proposed
-yakkety-master:
-  inherits: openstack-services
-  series: yakkety
-  overrides:
-    openstack-origin-git: master
-yakkety-master-proposed:
-  inherits: openstack-services
-  series: yakkety
-  overrides:
-    openstack-origin-git: master
-    source: proposed
