@@ -1,7 +1,7 @@
 #!/bin/bash
 # Set quotas to a ridiculous level for admin tenant for testing.
 
-TENANT_ID="$(keystone tenant-get admin | grep " id " | awk '{ print $4 }')"
+TENANT_ID="$(openstack project show admin | awk '/ id /{ print $4 }')"
 
 nova quota-update \
 --instances 999999 \
