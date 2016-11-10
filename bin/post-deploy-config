@@ -10,11 +10,14 @@ from novaclient import client as no_client
 
 
 def get_data_port_config(juju_version, service):
+    data_ports = ''
     if juju_version == 1:
         config = yaml.load(
             subprocess.check_output(['juju', 'get', service])
         )
-        data_ports = config['settings']['data-port']['value']
+        data_port_setting = config['settings']['data-port']
+        if 'value' in data_port_settings:
+            data_ports = data_port_setting['value']
     else:
         data_ports = subprocess.check_output(['juju', 'config',
                                               service, 'data-port'])
