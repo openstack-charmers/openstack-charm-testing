@@ -109,14 +109,14 @@ openstack-services:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
     designate:
-      charm: cs:designate
+      charm: cs:~openstack-charmers-next/designate
       options:
         nova-domain: 'serverstack.ubuntu.com.'
         neutron-domain: 'serverstack.ubuntu.com.'
         nova-domain-email: 'bob@serverstack.ubuntu.com'
         neutron-domain-email: 'bob@serverstack.ubuntu.com'
     designate-bind:
-      charm: cs:designate-bind
+      charm: cs:~openstack-charmers-next/designate-bind
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
