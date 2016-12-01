@@ -1,0 +1,179 @@
+# vim: set ts=2 et:
+# Juju 2.x native deployer bundle for development ('next') charms
+# UOSCI relies on this for OS-on-OS deployment testing
+series: xenial
+services:
+  rabbitmq-server:
+    charm: cs:~openstack-charmers-next/rabbitmq-server
+    constraints: mem=1G
+    options:
+      source: cloud:xenial-newton
+  ceph:
+    charm: cs:~openstack-charmers-next/ceph
+    num_units: 3
+    constraints: mem=1G
+    options:
+      monitor-count: 3
+      fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+      monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+      osd-devices: /dev/vdb
+      osd-reformat: "yes"
+      ephemeral-unmount: /mnt
+  keystone:
+    charm: cs:~openstack-charmers-next/keystone
+    constraints: mem=1G
+    options:
+      admin-password: openstack
+      admin-token: ubuntutesting
+      openstack-origin: cloud:xenial-newton
+  openstack-dashboard:
+    charm: cs:~openstack-charmers-next/openstack-dashboard
+    constraints: mem=1G
+    options:
+      openstack-origin: cloud:xenial-newton
+  nova-compute:
+    charm: cs:~openstack-charmers-next/nova-compute
+    num_units: 3
+    constraints: mem=4G
+    options:
+      enable-live-migration: True
+      enable-resize: True
+      migration-auth-type: ssh
+      openstack-origin: cloud:xenial-newton
+  nova-cloud-controller:
+    charm: cs:~openstack-charmers-next/nova-cloud-controller
+    constraints: mem=1G
+    options:
+      network-manager: Neutron
+      openstack-origin: cloud:xenial-newton
+  neutron-gateway:
+    charm: cs:~openstack-charmers-next/neutron-gateway
+    constraints: mem=4G
+    options:
+      instance-mtu: 1300
+      bridge-mappings: physnet1:br-ex
+      openstack-origin: cloud:xenial-newton
+  neutron-api:
+    charm: cs:~openstack-charmers-next/neutron-api
+    constraints: mem=1G
+    options:
+      neutron-security-groups: True
+      flat-network-providers: physnet1
+      openstack-origin: cloud:xenial-newton
+  neutron-openvswitch:
+    charm: cs:~openstack-charmers-next/neutron-openvswitch
+  cinder:
+    charm: cs:~openstack-charmers-next/cinder
+    options:
+      block-device: "None"
+      glance-api-version: 2
+    constraints: mem=1G
+  cinder-ceph:
+    charm: cs:~openstack-charmers-next/cinder-ceph
+  glance:
+    charm: cs:~openstack-charmers-next/glance
+    constraints: mem=1G
+    options:
+      openstack-origin: cloud:xenial-newton
+  swift-proxy:
+    charm: cs:~openstack-charmers-next/swift-proxy
+    constraints: mem=1G
+    options:
+      zone-assignment: manual
+      replicas: 3
+      swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+      openstack-origin: cloud:xenial-newton
+  swift-storage-z1:
+    charm: cs:~openstack-charmers-next/swift-storage
+    constraints: mem=1G
+    options:
+      zone: 1
+      block-device: vdb
+      overwrite: "true"
+  swift-storage-z2:
+    charm: cs:~openstack-charmers-next/swift-storage
+    constraints: mem=1G
+    options:
+      zone: 2
+      block-device: vdb
+      overwrite: "true"
+  swift-storage-z3:
+    charm: cs:~openstack-charmers-next/swift-storage
+    constraints: mem=1G
+    options:
+      zone: 3
+      block-device: vdb
+      overwrite: "true"
+  ceilometer:
+    charm: cs:~openstack-charmers-next/ceilometer
+    constraints: mem=1G
+    options:
+      openstack-origin: cloud:xenial-newton
+  ceilometer-agent:
+    charm: cs:~openstack-charmers-next/ceilometer-agent
+  heat:
+    charm: cs:~openstack-charmers-next/heat
+    options:
+      openstack-origin: cloud:xenial-newton
+  mongodb:
+    series: trusty
+    charm: cs:mongodb
+    constraints: mem=1G
+    options:
+      source: cloud:xenial-newton
+  mysql:
+    charm: cs:~openstack-charmers-next/percona-cluster
+    constraints: mem=4G
+    options:
+      dataset-size: 50%
+      max-connections: 20000
+      root-password: ChangeMe123
+      sst-password: ChangeMe123
+      source: cloud:xenial-newton
+relations:
+  - [ keystone, mysql ]
+  - [ nova-cloud-controller, mysql ]
+  - [ nova-cloud-controller, rabbitmq-server ]
+  - [ nova-cloud-controller, glance ]
+  - [ nova-cloud-controller, keystone ]
+  - [ nova-compute, nova-cloud-controller ]
+  - [ nova-compute, mysql ]
+  - - nova-compute
+    - rabbitmq-server:amqp
+  - [ nova-compute, glance ]
+  - [ nova-compute, ceph ]
+  - [ glance, mysql ]
+  - [ glance, keystone ]
+  - [ glance, ceph ]
+  - [ glance, "cinder:image-service" ]
+  - [ glance, rabbitmq-server ]
+  - [ cinder, mysql ]
+  - [ cinder, rabbitmq-server ]
+  - [ cinder, nova-cloud-controller ]
+  - [ cinder, keystone ]
+  - [ cinder, cinder-ceph ]
+  - [ cinder-ceph, ceph ]
+  - [ neutron-gateway, nova-cloud-controller ]
+  - [ openstack-dashboard, keystone ]
+  - [ swift-proxy, keystone ]
+  - [ swift-proxy, swift-storage-z1 ]
+  - [ swift-proxy, swift-storage-z2 ]
+  - [ swift-proxy, swift-storage-z3 ]
+  - - ceilometer
+    - keystone:identity-service
+  - [ ceilometer, rabbitmq-server ]
+  - [ ceilometer, mongodb ]
+  - [ ceilometer-agent, nova-compute ]
+  - [ ceilometer-agent, ceilometer ]
+  - [ heat, mysql ]
+  - [ heat, keystone ]
+  - [ heat, rabbitmq-server ]
+  - [ "neutron-gateway:amqp", rabbitmq-server ]
+  - [ neutron-api, mysql ]
+  - [ neutron-api, rabbitmq-server ]
+  - [ neutron-api, nova-cloud-controller ]
+  - [ neutron-api, neutron-openvswitch ]
+  - [ neutron-api, keystone ]
+  - [ neutron-api, neutron-gateway ]
+  - [ neutron-openvswitch, nova-compute ]
+  - [ neutron-openvswitch, rabbitmq-server ]
