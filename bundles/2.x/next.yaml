@@ -22,6 +22,7 @@ services:
       osd-devices: /dev/vdb
       osd-reformat: "yes"
       ephemeral-unmount: /mnt
+      source: cloud:xenial-newton
   keystone:
     num_units: 1
     charm: cs:~openstack-charmers-next/keystone
