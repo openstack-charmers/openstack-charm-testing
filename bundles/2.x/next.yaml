@@ -1,9 +1,12 @@
 # vim: set ts=2 et:
+# IMPORTANT: ALL MODIFICATIONS SHOULD BE MADE TO THE TEMPLATE THEN REGENERATE
+#            THE BUNDLE WITH gen-bundle.sh <series> [<os-release>] [<pocket>]
 # Juju 2.x native deployer bundle for development ('next') charms
 # UOSCI relies on this for OS-on-OS deployment testing
 series: xenial
 services:
   rabbitmq-server:
+    num_units: 1
     charm: cs:~openstack-charmers-next/rabbitmq-server
     constraints: mem=1G
     options:
@@ -20,6 +23,7 @@ services:
       osd-reformat: "yes"
       ephemeral-unmount: /mnt
   keystone:
+    num_units: 1
     charm: cs:~openstack-charmers-next/keystone
     constraints: mem=1G
     options:
@@ -27,6 +31,7 @@ services:
       admin-token: ubuntutesting
       openstack-origin: cloud:xenial-newton
   openstack-dashboard:
+    num_units: 1
     charm: cs:~openstack-charmers-next/openstack-dashboard
     constraints: mem=1G
     options:
@@ -41,12 +46,14 @@ services:
       migration-auth-type: ssh
       openstack-origin: cloud:xenial-newton
   nova-cloud-controller:
+    num_units: 1
     charm: cs:~openstack-charmers-next/nova-cloud-controller
     constraints: mem=1G
     options:
       network-manager: Neutron
       openstack-origin: cloud:xenial-newton
   neutron-gateway:
+    num_units: 1
     charm: cs:~openstack-charmers-next/neutron-gateway
     constraints: mem=4G
     options:
@@ -54,6 +61,7 @@ services:
       bridge-mappings: physnet1:br-ex
       openstack-origin: cloud:xenial-newton
   neutron-api:
+    num_units: 1
     charm: cs:~openstack-charmers-next/neutron-api
     constraints: mem=1G
     options:
@@ -63,6 +71,7 @@ services:
   neutron-openvswitch:
     charm: cs:~openstack-charmers-next/neutron-openvswitch
   cinder:
+    num_units: 1
     charm: cs:~openstack-charmers-next/cinder
     options:
       block-device: "None"
@@ -71,11 +80,13 @@ services:
   cinder-ceph:
     charm: cs:~openstack-charmers-next/cinder-ceph
   glance:
+    num_units: 1
     charm: cs:~openstack-charmers-next/glance
     constraints: mem=1G
     options:
       openstack-origin: cloud:xenial-newton
   swift-proxy:
+    num_units: 1
     charm: cs:~openstack-charmers-next/swift-proxy
     constraints: mem=1G
     options:
@@ -84,6 +95,7 @@ services:
       swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
       openstack-origin: cloud:xenial-newton
   swift-storage-z1:
+    num_units: 1
     charm: cs:~openstack-charmers-next/swift-storage
     constraints: mem=1G
     options:
@@ -91,6 +103,7 @@ services:
       block-device: vdb
       overwrite: "true"
   swift-storage-z2:
+    num_units: 1
     charm: cs:~openstack-charmers-next/swift-storage
     constraints: mem=1G
     options:
@@ -98,6 +111,7 @@ services:
       block-device: vdb
       overwrite: "true"
   swift-storage-z3:
+    num_units: 1
     charm: cs:~openstack-charmers-next/swift-storage
     constraints: mem=1G
     options:
@@ -105,6 +119,7 @@ services:
       block-device: vdb
       overwrite: "true"
   ceilometer:
+    num_units: 1
     charm: cs:~openstack-charmers-next/ceilometer
     constraints: mem=1G
     options:
@@ -112,16 +127,19 @@ services:
   ceilometer-agent:
     charm: cs:~openstack-charmers-next/ceilometer-agent
   heat:
+    num_units: 1
     charm: cs:~openstack-charmers-next/heat
     options:
       openstack-origin: cloud:xenial-newton
   mongodb:
+    num_units: 1
     series: trusty
     charm: cs:mongodb
     constraints: mem=1G
     options:
       source: cloud:xenial-newton
   mysql:
+    num_units: 1
     charm: cs:~openstack-charmers-next/percona-cluster
     constraints: mem=4G
     options:
