@@ -10,7 +10,7 @@ services:
     charm: cs:~openstack-charmers-next/rabbitmq-server
     constraints: mem=1G
     options:
-      source: cloud:__SERIES__-__RELEASE____POCKET____POCKET__
+      source: cloud:__SERIES__-__RELEASE____POCKET__
   ceph:
     charm: cs:~openstack-charmers-next/ceph
     num_units: 3
