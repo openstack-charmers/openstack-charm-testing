@@ -28,8 +28,8 @@ source novarc
 ./bin/neutron-ext-net --network-type flat -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
 ./bin/quantum-tenant-net --network-type $net_type -t admin -r provider-router -N $NAMESERVER private $CIDR_PRIV
 
-upload_image cloudimages xenial xenial-server-cloudimg-amd64-root.tar.xz raw
-upload_image cloudimages trusty trusty-server-cloudimg-amd64-root.tar.xz raw
+upload_image cloudimages xenial xenial-server-cloudimg-amd64-root.tar.xz raw lxc
+upload_image cloudimages trusty trusty-server-cloudimg-amd64-root.tar.xz raw lxc
 
 image_id=$(openstack image list | grep trusty | awk '{ print $2 }')
 image_alt_id=$(openstack image list | grep xenial | awk '{ print $2 }')
@@ -54,6 +54,7 @@ function create_exclusive_aggregate {
                 openstack aggregate add host ${aggregate_name} ${hostname}
             done
         }
+        create_exclusive_flavor ${exclusive_flavor}
     fi
 }
 
@@ -85,7 +86,6 @@ function create_exclusive_flavor {
 
 for exclusive_flavor in small medium large; do
     create_exclusive_aggregate ${exclusive_flavor}
-    create_exclusive_flavor ${exclusive_flavor}
 done
 
 # Gather vars for tempest template
