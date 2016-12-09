@@ -31,11 +31,14 @@ function upload_image {
 function install_packages {
     # Install dependencies and CLI tools
     # See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
-    sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
-        python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
-        python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
-        python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
-        python-openstackclient openvswitch-test openvswitch-common -y
+
+    echo "NOTE: The configure script no longer sudo apt installs packages.  If you find a client is missing on your machine, resolve it manually in advance of ./configure."
+
+    #sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
+    #    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
+    #    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
+    #    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
+    #    python-openstackclient openvswitch-test openvswitch-common -y
 }
 
 function create_tempest_users {

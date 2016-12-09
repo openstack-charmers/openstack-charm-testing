@@ -20,11 +20,11 @@ function upload_image {
 
 # Install dependencies and CLI tools
 # See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
-sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
-    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
-    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
-    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
-    openvswitch-test openvswitch-common -y
+#sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
+#    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
+#    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
+#    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
+#    openvswitch-test openvswitch-common -y
 
 # Set serverstack defaults, if not already set.
 [[ -z "$GATEWAY" ]] && export GATEWAY="10.5.0.1"

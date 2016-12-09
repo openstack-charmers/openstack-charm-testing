@@ -3,11 +3,11 @@
 # Useful in manual deployment testing.
 
 # Install CLI tools
-sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
-    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
-    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
-    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
-    openvswitch-test openvswitch-common python-openstackclient -y
+#sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
+#    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
+#    python-cinderclient python-glanceclient python-heatclient python-keystoneclient \
+#    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
+#    openvswitch-test openvswitch-common python-openstackclient -y
 
 # Set "dellstack" network parameters, if not already set.  Adjust to fit your environment.
 [[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
