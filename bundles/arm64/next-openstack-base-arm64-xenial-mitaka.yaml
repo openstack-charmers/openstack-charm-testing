@@ -1,0 +1,281 @@
+# Dev/Test Example Bundle for ARM64
+# ===================================================================
+# Based on the openstack-base (next/master) bundle.
+#
+# This bundle file is for testing and development. It is an example
+# which must be reviewed and adjusted for the specific hardware,
+# device names, and network topology of those who consume it.
+#
+# 2017 Jan 26:  Basic validation with the following.
+#   Juju: 2.1~beta4-0ubuntu1~16.04.1~juju1
+#   MAAS: 2.1.3+bzr5573-0ubuntu1~16.04.1
+#   Ubuntu Server: 16.04.1 LTS
+#   OpenStack Charms: Master ('next')
+#   OpenStack: Mitaka
+#   4 x Gigabyte R120-T33 [64GB RAM, 2x1TB, 2x10GbE Cabled]
+#
+#   Native `juju deploy bundle.yaml` was successful.
+#
+#   Validated *without* the legacy "juju-deployer" tool.
+#
+#   Basic API functionality, tenant networking and tenant instance
+#   floating IP address confirmed.  Also basic cinder volume, ceph
+#   radosgw object storage, and ceph-backed glance support is confirmed,
+#   with some known / in-progress issues:
+#
+#     https://bugs.launchpad.net/ubuntu/+source/nova/+bug/1567807
+#
+#     https://bugs.linaro.org/show_bug.cgi?id=2462
+#
+# Usage Example:
+#   juju deploy next-openstack-base-arm64-xenial-mitaka.yaml
+#   watch juju status  #wait for deployment to complete
+#   bzr branch lp:openstack-charm-testing
+#   cd openstack-charm-testing
+#   . novarc
+#   ./configure
+#   ./tools/images_arm64.sh
+#   ./tools/instance_launch.sh 6 xenial-uefi
+#   ./tools/float_all.sh
+#
+machines:
+  '0':
+    constraints: arch=arm64
+    series: xenial
+  '1':
+    constraints: arch=arm64
+    series: xenial
+  '2':
+    constraints: arch=arm64
+    series: xenial
+  '3':
+    constraints: arch=arm64
+    series: xenial
+relations:
+- - nova-compute:amqp
+  - rabbitmq-server:amqp
+- - neutron-gateway:amqp
+  - rabbitmq-server:amqp
+- - keystone:shared-db
+  - mysql:shared-db
+- - nova-cloud-controller:identity-service
+  - keystone:identity-service
+- - glance:identity-service
+  - keystone:identity-service
+- - neutron-api:identity-service
+  - keystone:identity-service
+- - neutron-openvswitch:neutron-plugin-api
+  - neutron-api:neutron-plugin-api
+- - neutron-api:shared-db
+  - mysql:shared-db
+- - neutron-api:amqp
+  - rabbitmq-server:amqp
+- - neutron-gateway:neutron-plugin-api
+  - neutron-api:neutron-plugin-api
+- - glance:shared-db
+  - mysql:shared-db
+- - glance:amqp
+  - rabbitmq-server:amqp
+- - nova-cloud-controller:image-service
+  - glance:image-service
+- - nova-compute:image-service
+  - glance:image-service
+- - nova-cloud-controller:cloud-compute
+  - nova-compute:cloud-compute
+- - nova-cloud-controller:amqp
+  - rabbitmq-server:amqp
+- - nova-cloud-controller:quantum-network-service
+  - neutron-gateway:quantum-network-service
+- - nova-compute:neutron-plugin
+  - neutron-openvswitch:neutron-plugin
+- - neutron-openvswitch:amqp
+  - rabbitmq-server:amqp
+- - openstack-dashboard:identity-service
+  - keystone:identity-service
+- - nova-cloud-controller:shared-db
+  - mysql:shared-db
+- - nova-cloud-controller:neutron-api
+  - neutron-api:neutron-api
+- - cinder:image-service
+  - glance:image-service
+- - cinder:amqp
+  - rabbitmq-server:amqp
+- - cinder:identity-service
+  - keystone:identity-service
+- - cinder:cinder-volume-service
+  - nova-cloud-controller:cinder-volume-service
+- - cinder-ceph:storage-backend
+  - cinder:storage-backend
+- - ceph:client
+  - nova-compute:ceph
+- - cinder:shared-db
+  - mysql:shared-db
+- - ceph:client
+  - cinder-ceph:ceph
+- - ceph:client
+  - glance:ceph
+- - ceph-osd:mon
+  - ceph:osd
+- - ntp:juju-info
+  - nova-compute:juju-info
+- - ntp:juju-info
+  - neutron-gateway:juju-info
+- - ceph-radosgw:mon
+  - ceph:radosgw
+- - ceph-radosgw:identity-service
+  - keystone:identity-service
+series: xenial
+services:
+  ceph:
+    constraints: "arch=arm64"
+    annotations:
+      gui-x: '750'
+      gui-y: '500'
+    charm: cs:~openstack-charmers-next/xenial/ceph
+    num_units: 3
+    options:
+      fsid: 5a791d94-980b-11e4-b6f6-3c970e8b1cf7
+      monitor-secret: AQAi5a9UeJXUExAA+By9u+GPhl8/XiUQ4nwI3A==
+      osd-devices: /dev/sdb
+      osd-reformat: 'yes'
+    to:
+    - '1'
+    - '2'
+    - '3'
+  ceph-osd:
+    annotations:
+      gui-x: '1000'
+      gui-y: '500'
+    charm: cs:~openstack-charmers-next/xenial/ceph-osd
+    num_units: 1
+    options:
+      osd-devices: /dev/sdb
+      osd-reformat: 'yes'
+    to:
+    - '0'
+  ceph-radosgw:
+    annotations:
+      gui-x: '1000'
+      gui-y: '250'
+    charm: cs:~openstack-charmers-next/xenial/ceph-radosgw
+    num_units: 1
+    to:
+    - lxc:0
+  cinder:
+    annotations:
+      gui-x: '750'
+      gui-y: '0'
+    charm: cs:~openstack-charmers-next/xenial/cinder
+    num_units: 1
+    options:
+      block-device: None
+      glance-api-version: 2
+    to:
+    - lxc:1
+  cinder-ceph:
+    annotations:
+      gui-x: '750'
+      gui-y: '250'
+    charm: cs:~openstack-charmers-next/xenial/cinder-ceph
+    num_units: 0
+  glance:
+    annotations:
+      gui-x: '250'
+      gui-y: '0'
+    charm: cs:~openstack-charmers-next/xenial/glance
+    num_units: 1
+    to:
+    - lxc:2
+  keystone:
+    annotations:
+      gui-x: '500'
+      gui-y: '0'
+    charm: cs:~openstack-charmers-next/xenial/keystone
+    num_units: 1
+    options:
+      admin-password: openstack
+    to:
+    - lxc:3
+  mysql:
+    annotations:
+      gui-x: '0'
+      gui-y: '250'
+    charm: cs:~openstack-charmers-next/xenial/percona-cluster
+    num_units: 1
+    options:
+      max-connections: 20000
+    to:
+    - lxc:0
+  neutron-api:
+    annotations:
+      gui-x: '500'
+      gui-y: '500'
+    charm: cs:~openstack-charmers-next/xenial/neutron-api
+    num_units: 1
+    options:
+      neutron-security-groups: true
+    to:
+    - lxc:1
+  neutron-gateway:
+    annotations:
+      gui-x: '0'
+      gui-y: '0'
+    charm: cs:~openstack-charmers-next/xenial/neutron-gateway
+    num_units: 1
+    options:
+      ext-port: enP2p1s0f2
+    to:
+    - '0'
+  neutron-openvswitch:
+    annotations:
+      gui-x: '250'
+      gui-y: '500'
+    charm: cs:~openstack-charmers-next/xenial/neutron-openvswitch
+    num_units: 0
+  nova-cloud-controller:
+    annotations:
+      gui-x: '0'
+      gui-y: '500'
+    charm: cs:~openstack-charmers-next/xenial/nova-cloud-controller
+    num_units: 1
+    options:
+      network-manager: Neutron
+    to:
+    - lxc:2
+  nova-compute:
+    constraints: "arch=arm64"
+    annotations:
+      gui-x: '250'
+      gui-y: '250'
+    charm: cs:~openstack-charmers-next/xenial/nova-compute
+    num_units: 3
+    options:
+      enable-live-migration: true
+      enable-resize: true
+      migration-auth-type: ssh
+    to:
+    - '1'
+    - '2'
+    - '3'
+  ntp:
+    annotations:
+      gui-x: '1000'
+      gui-y: '0'
+    charm: cs:xenial/ntp
+    num_units: 0
+  openstack-dashboard:
+    annotations:
+      gui-x: '500'
+      gui-y: '-250'
+    charm: cs:~openstack-charmers-next/xenial/openstack-dashboard
+    num_units: 1
+    to:
+    - lxc:3
+  rabbitmq-server:
+    annotations:
+      gui-x: '500'
+      gui-y: '250'
+    charm: cs:~openstack-charmers-next/xenial/rabbitmq-server
+    num_units: 1
+    to:
+    - lxc:0
