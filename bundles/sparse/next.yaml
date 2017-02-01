@@ -169,17 +169,14 @@ openstack-services:
         max-connections: 20000
         root-password: ChangeMe123
         sst-password: ChangeMe123
-openstack-services-new:
+openstack-services-trusty-mitaka:
   inherits: openstack-services
   services:
     aodh:
-      charm: cs:~openstack-charmers-next/xenial/aodh
-      constraints: mem=1G
-    barbican:
-      charm: cs:~openstack-charmers-next/xenial/barbican
+      charm: cs:~openstack-charmers-next/aodh
       constraints: mem=1G
     designate:
-      charm: cs:~openstack-charmers-next/xenial/designate
+      charm: cs:~openstack-charmers-next/designate
       constraints: mem=1G
       options:
         nameservers: 'ns1.ubuntu.com'
@@ -188,18 +185,25 @@ openstack-services-new:
         nova-domain-email: 'bob@serverstack.ubuntu.com'
         neutron-domain-email: 'bob@serverstack.ubuntu.com'
     designate-bind:
-      charm: cs:~openstack-charmers-next/xenial/designate-bind
+      charm: cs:~openstack-charmers-next/designate-bind
   relations:
     - [ aodh, rabbitmq-server ]
     - [ aodh, mysql ]
     - [ aodh, keystone ]
-    - [ barbican, rabbitmq-server ]
-    - [ barbican, mysql ]
-    - [ barbican, keystone ]
     - [ designate, keystone ]
     - [ designate, mysql ]
     - [ designate, rabbitmq-server ]
     - [ designate, designate-bind ]
+openstack-services-xenial:
+  inherits: openstack-services-trusty-mitaka
+  services:
+    barbican:
+      charm: cs:~openstack-charmers-next/barbican
+      constraints: mem=1G
+  relations:
+    - [ barbican, rabbitmq-server ]
+    - [ barbican, mysql ]
+    - [ barbican, keystone ]
 # icehouse
 precise-icehouse:
   inherits: openstack-services-legacy
@@ -281,7 +285,7 @@ wily-liberty-proposed:
     openstack-origin: distro-proposed
 # mitaka
 trusty-mitaka:
-  inherits: openstack-services
+  inherits: openstack-services-trusty-mitaka
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
@@ -297,7 +301,7 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  inherits: openstack-services-new
+  inherits: openstack-services-xenial
   series: xenial
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
@@ -306,7 +310,7 @@ xenial-mitaka-proposed:
     openstack-origin: distro-proposed
 # newton
 xenial-newton:
-  inherits: openstack-services-new
+  inherits: openstack-services-xenial
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-newton
@@ -327,7 +331,7 @@ xenial-newton-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/newton
     source: ppa:openstack-ubuntu-testing/newton
 yakkety-newton:
-  inherits: openstack-services-new
+  inherits: openstack-services-xenial
   series: yakkety
 yakkety-newton-proposed:
   inherits: yakkety-newton
@@ -341,10 +345,10 @@ yakkety-newton-branch:
     source: ppa:openstack-ubuntu-testing/newton
 # ocata
 xenial-ocata:
-  inherits: openstack-services-new
+  inherits: openstack-services-xenial
   series: xenial
   overrides:
-    openstack-origin: cloud:xenial-octata
+    openstack-origin: cloud:xenial-ocata
     source: cloud:xenial-ocata
 xenial-ocata-proposed:
   inherits: xenial-ocata
@@ -362,7 +366,7 @@ xenial-ocata-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
 zesty-ocata:
-  inherits: openstack-services-new
+  inherits: openstack-services-xenial
   series: zesty
 zesty-ocata-proposed:
   inherits: zesty-ocata
