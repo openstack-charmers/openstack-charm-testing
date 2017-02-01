@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -ex
+
+# Set overrides, if not already set.
+[[ -z "$GATEWAY" ]] && export GATEWAY="10.246.64.1"
+[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.246.64.0/21"
+[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.246.67.128:10.246.67.255"
+[[ -z "$NAMESERVER" ]] && export NAMESERVER="10.246.64.50"
+[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/12"
+[[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.161.162"
+
+export BARE_METAL="True"
+./profiles/default $1 $2 $3 $4 $5

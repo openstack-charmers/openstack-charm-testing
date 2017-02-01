@@ -43,6 +43,7 @@ access=$(openstack --os-username demo --os-password pass --os-tenant-name demo e
 secret=$(openstack ec2 credentials show $access | grep secret | awk '{ print $4 }')
 
 create_tempest_flavors
+create_default_flavors
 
 # Gather vars for tempest template
 ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
