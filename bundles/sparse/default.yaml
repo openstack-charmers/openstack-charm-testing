@@ -117,7 +117,7 @@ base-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph ]
-    - [ glance, cinder ]
+    - [ glance, "cinder:image-service" ]
     - [ glance, rabbitmq-server ]
     - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
@@ -169,6 +169,41 @@ openstack-services:
         max-connections: 20000
         root-password: ChangeMe123
         sst-password: ChangeMe123
+openstack-services-trusty-mitaka:
+  inherits: openstack-services
+  services:
+    aodh:
+      charm: cs:~openstack-charmers/aodh
+      constraints: mem=1G
+    designate:
+      charm: cs:~openstack-charmers/designate
+      constraints: mem=1G
+      options:
+        nameservers: 'ns1.ubuntu.com'
+        nova-domain: 'serverstack.ubuntu.com.'
+        neutron-domain: 'serverstack.ubuntu.com.'
+        nova-domain-email: 'bob@serverstack.ubuntu.com'
+        neutron-domain-email: 'bob@serverstack.ubuntu.com'
+    designate-bind:
+      charm: cs:~openstack-charmers/designate-bind
+  relations:
+    - [ aodh, rabbitmq-server ]
+    - [ aodh, mysql ]
+    - [ aodh, keystone ]
+    - [ designate, keystone ]
+    - [ designate, mysql ]
+    - [ designate, rabbitmq-server ]
+    - [ designate, designate-bind ]
+openstack-services-xenial:
+  inherits: openstack-services-trusty-mitaka
+  services:
+    barbican:
+      charm: cs:~openstack-charmers/barbican
+      constraints: mem=1G
+  relations:
+    - [ barbican, rabbitmq-server ]
+    - [ barbican, mysql ]
+    - [ barbican, keystone ]
 # icehouse
 precise-icehouse:
   inherits: openstack-services-legacy
@@ -250,7 +285,7 @@ wily-liberty-proposed:
     openstack-origin: distro-proposed
 # mitaka
 trusty-mitaka:
-  inherits: openstack-services
+  inherits: openstack-services-trusty-mitaka
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
@@ -266,10 +301,45 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  inherits: openstack-services
+  inherits: openstack-services-xenial
   series: xenial
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+# newton
+xenial-newton:
+  inherits: openstack-services-xenial
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-newton
+    source: cloud:xenial-newton
+xenial-newton-proposed:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: cloud:xenial-newton/proposed
+    source: cloud:xenial-newton/proposed
+xenial-newton-staging:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
+    source: ppa:ubuntu-cloud-archive/newton-staging
+xenial-newton-branch:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/newton
+    source: ppa:openstack-ubuntu-testing/newton
+yakkety-newton:
+  inherits: openstack-services-xenial
+  series: yakkety
+yakkety-newton-proposed:
+  inherits: yakkety-newton
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+yakkety-newton-branch:
+  inherits: yakkety-newton
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/newton
+    source: ppa:openstack-ubuntu-testing/newton
