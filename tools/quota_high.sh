@@ -32,4 +32,3 @@ juju set nova-cloud-controller ram-allocation-ratio=100 ||
 
 juju set nova-cloud-controller cpu-allocation-ratio=100 ||
   juju config nova-cloud-controller cpu-allocation-ratio=100
-
