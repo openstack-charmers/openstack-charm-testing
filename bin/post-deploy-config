@@ -8,6 +8,22 @@ import sys
 from neutronclient.v2_0 import client as ne_client
 from novaclient import client as no_client
 
+
+def get_data_port_config(juju_version, service):
+    data_ports = ''
+    if juju_version == 1:
+        config = yaml.load(
+            subprocess.check_output(['juju', 'get', service])
+        )
+        data_port_settings = config['settings']['data-port']
+        if 'value' in data_port_settings:
+            data_ports = data_port_settings['value']
+    else:
+        data_ports = subprocess.check_output(['juju', 'config',
+                                              service, 'data-port'])
+    return data_ports.split(' ')
+
+
 if __name__ == '__main__':
     neutron = ne_client.Client(username=os.environ['OS_USERNAME'],
                                password=os.environ['OS_PASSWORD'],
@@ -22,9 +38,16 @@ if __name__ == '__main__':
                             region_name=os.environ['OS_REGION_NAME'])
 
     net_id = os.environ.get('NET_ID')
+    net_name = None
     if net_id:
         # Use OSCI / Jenkins environment variable if defined.
         print('Using NET_ID environment variable: {}'.format(net_id))
+        try:
+            network = neutron.list_networks(id=net_id)['networks'][0]
+            net_name = network['name']
+        except IndexError:
+            print("Unable to find network with id: {}".format(net_id))
+            raise ValueError('Unable to find network {}'.format(net_id))
     else:
         # Preserve existing default behavior (eg. manual testing)
         net_name = os.environ['OS_USERNAME'] + '_admin_net'
@@ -50,18 +73,49 @@ if __name__ == '__main__':
     for machine in service_config['machines']:
         uuids.append(service_config['machines'][machine]['instance-id'])
 
+    unit_addresses = []
+    for unit in service_config['services'][service]['units'].values():
+        if unit['public-address']:
+            unit_addresses.append(unit['public-address'])
+
     ext_port = []
     if len(sys.argv) >= 3:
         ext_port = [sys.argv[2]]
+    config_ports = get_data_port_config(juju_version, service)
 
-    if len(uuids) > 0:
-        for uuid in uuids:
+    for uuid in uuids:
+        print("Configuring interface for instance {}".format(uuid))
+        server = nova.servers.get(uuid)
+
+        # Check how many interfaces have been attached to the instance
+        # already to see if more are necessary.
+        attached_ports = neutron.list_ports(network_id=net_id,
+                                            device_id=uuid)['ports']
+
+        data_port = None
+        for port in attached_ports:
+            # Don't consider the port containing the unit address
+            if port['fixed_ips'][0]['ip_address'] in unit_addresses:
+                continue
+
+            # Pick the first mac address which is not the unit address
+            data_port = port['mac_address']
+            break
+
+        if data_port is None:
+            # Attach a new port
             print("Attaching interface to instance {}".format(uuid))
-            server = nova.servers.get(uuid)
             result = server.interface_attach(port_id=None,
                                              net_id=net_id,
                                              fixed_ip=None).to_dict()
-            ext_port.append("br-ex:{}".format(result['mac_addr']))
+            data_port = result['mac_addr']
+        else:
+            print("Using existing interface {} "
+                  "for instance {}".format(data_port, uuid))
+
+        data_port = "br-ex:{}".format(data_port)
+        if data_port not in ext_port:
+            ext_port.append(data_port)
 
     if juju_version == 1:
         config_cmd = 'set'
