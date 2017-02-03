@@ -285,7 +285,10 @@ wily-liberty-proposed:
     openstack-origin: distro-proposed
 # mitaka
 trusty-mitaka:
-  inherits: openstack-services-trusty-mitaka
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-trusty-mitaka
+  inherits: openstack-services
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
@@ -301,7 +304,10 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  inherits: openstack-services-xenial
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
   series: xenial
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
@@ -310,7 +316,10 @@ xenial-mitaka-proposed:
     openstack-origin: distro-proposed
 # newton
 xenial-newton:
-  inherits: openstack-services-xenial
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-newton
@@ -331,7 +340,10 @@ xenial-newton-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/newton
     source: ppa:openstack-ubuntu-testing/newton
 yakkety-newton:
-  inherits: openstack-services-xenial
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
   series: yakkety
 yakkety-newton-proposed:
   inherits: yakkety-newton
