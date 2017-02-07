@@ -7,7 +7,7 @@ set -ex
 [[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.38.0.0/19"
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.38.3.0:10.38.10.254"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.38.0.1"
-[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/12"
+[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/22"
 [[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.0.38.3"
 
 export BARE_METAL="True"
