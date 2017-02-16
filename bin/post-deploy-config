@@ -74,7 +74,10 @@ if __name__ == '__main__':
         uuids.append(service_config['machines'][machine]['instance-id'])
 
     unit_addresses = []
-    for unit in service_config['services'][service]['units'].values():
+    applications = 'applications'
+    if 'services' in service_config:
+        applications = 'services'
+    for unit in service_config[applications][service]['units'].values():
         if unit['public-address']:
             unit_addresses.append(unit['public-address'])
 
