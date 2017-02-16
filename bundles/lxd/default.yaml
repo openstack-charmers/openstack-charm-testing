@@ -1,22 +1,22 @@
 # vim: set ts=2 et:
-# deployer bundle for stable charms
+# deployer bundle for development ('next') charms
 # UOSCI relies on this for OS-on-OS deployment testing
 base-services:
   services:
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.07
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.10
       constraints: mem=1G
     keystone:
-      branch: https://github.com/openstack/charm-keystone;stable/16.07
+      branch: https://github.com/openstack/charm-keystone;stable/16.10
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: https://github.com/openstack/charm-openstack-dashboard;stable/16.07
+      branch: https://github.com/openstack/charm-openstack-dashboard;stable/16.10
       constraints: mem=1G
     nova-compute:
-      branch: https://github.com/openstack/charm-nova-compute;stable/16.07
+      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
       num_units: 3
       constraints: mem=4G
       options:
@@ -25,67 +25,75 @@ base-services:
         migration-auth-type: ssh
         virt-type: lxd
     nova-cloud-controller:
-      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.07
+      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.10
       constraints: mem=1G
       options:
         network-manager: Neutron
     neutron-gateway:
-      branch: https://github.com/openstack/charm-neutron-gateway;stable/16.07
+      branch: https://github.com/openstack/charm-neutron-gateway;stable/16.10
       constraints: mem=2G
       options:
         instance-mtu: 1300
         bridge-mappings: physnet1:br-ex
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api;stable/16.07
+      branch: https://github.com/openstack/charm-neutron-api;stable/16.10
       constraints: mem=1G
       options:
         neutron-security-groups: True
         flat-network-providers: physnet1
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.07
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.10
+    cinder:
+      branch: https://github.com/openstack/charm-cinder;stable/16.10
+      options:
+        block-device: /dev/vdb
+        glance-api-version: 2
+        ephemeral-unmount: /mnt
+        overwrite: "true"
+      constraints: mem=4G
     glance:
-      branch: https://github.com/openstack/charm-glance;stable/16.07
+      branch: https://github.com/openstack/charm-glance;stable/16.10
       constraints: mem=1G
     swift-proxy:
-      branch: https://github.com/openstack/charm-swift-proxy;stable/16.07
+      branch: https://github.com/openstack/charm-swift-proxy;stable/16.10
       constraints: mem=1G
       options:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
     swift-storage-z1:
-      branch: https://github.com/openstack/charm-swift-storage;stable/16.07
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.10
       constraints: mem=1G
       options:
         zone: 1
         block-device: vdb
         overwrite: "true"
     swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage;stable/16.07
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.10
       constraints: mem=1G
       options:
         zone: 2
         block-device: vdb
         overwrite: "true"
     swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage;stable/16.07
+      branch: https://github.com/openstack/charm-swift-storage;stable/16.10
       constraints: mem=1G
       options:
         zone: 3
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: https://github.com/openstack/charm-ceilometer;stable/16.07
+      branch: https://github.com/openstack/charm-ceilometer;stable/16.10
       constraints: mem=1G
     ceilometer-agent:
-      branch: https://github.com/openstack/charm-ceilometer-agent;stable/16.07
+      branch: https://github.com/openstack/charm-ceilometer-agent;stable/16.10
     heat:
-      branch: https://github.com/openstack/charm-heat;stable/16.07
+      branch: https://github.com/openstack/charm-heat;stable/16.10
     mongodb:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
     lxd:
-      branch: https://github.com/openstack/charm-lxd
+      branch: https://github.com/openstack/charm-lxd;stable/16.10
       options:
         block-devices: /dev/vdb
         ephemeral-unmount: /mnt
@@ -98,7 +106,6 @@ base-services:
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
     - [ nova-compute, nova-cloud-controller ]
-    - [ nova-compute, mysql ]
     - [ nova-compute, lxd ]
     - - nova-compute
       - rabbitmq-server:amqp
@@ -106,6 +113,11 @@ base-services:
     - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, rabbitmq-server ]
+    - [ glance, "cinder:image-service" ]
+    - [ cinder, mysql ]
+    - [ cinder, rabbitmq-server ]
+    - [ cinder, nova-cloud-controller ]
+    - [ cinder, keystone ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -116,7 +128,6 @@ base-services:
       - keystone:identity-service
     - [ ceilometer, rabbitmq-server ]
     - [ ceilometer, mongodb ]
-    - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
     - [ heat, mysql ]
     - [ heat, keystone ]
@@ -130,26 +141,72 @@ base-services:
     - [ neutron-api, neutron-gateway ]
     - [ neutron-openvswitch, nova-compute ]
     - [ neutron-openvswitch, rabbitmq-server ]
-openstack-services-legacy:
-  inherits: base-services
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-      constraints: mem=2G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
 openstack-services:
   inherits: base-services
   services:
     mysql:
-      branch: https://github.com/openstack/charm-percona-cluster;stable/16.07
+      branch: https://github.com/openstack/charm-percona-cluster;stable/16.10
       constraints: mem=4G
       options:
-        dataset-size: 50%
-        max-connections: 20000
+        max-connections: 1000
+        innodb-buffer-pool-size: 512M
         root-password: ChangeMe123
         sst-password: ChangeMe123
+openstack-services-exclusive:
+  inherits: openstack-services
+  services:
+    nova-compute-exclusive-small:
+      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
+      constraints: mem=2G
+      num_units: 3
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+        virt-type: lxd
+        reserved-host-memory: 0
+    nova-compute-exclusive-medium:
+      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
+      constraints: mem=4G
+      num_units: 3
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+        virt-type: lxd
+        reserved-host-memory: 0
+    nova-compute-exclusive-large:
+      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
+      constraints: mem=8G
+      num_units: 3
+      options:
+        enable-live-migration: True
+        enable-resize: True
+        migration-auth-type: ssh
+        virt-type: lxd
+        reserved-host-memory: 0
+    nova-cloud-controller:
+      options:
+        scheduler-default-filters: "AggregateInstanceExtraSpecsFilter,AggregateNumInstancesFilter,RetryFilter,AvailabilityZoneFilter,CoreFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter"
+  relations:
+    - [ nova-compute-exclusive-small, nova-cloud-controller ]
+    - [ nova-compute-exclusive-small, lxd ]
+    - - nova-compute-exclusive-small
+      - rabbitmq-server:amqp
+    - [ nova-compute-exclusive-small, glance ]
+    - [ neutron-openvswitch, nova-compute-exclusive-small ]
+    - [ nova-compute-exclusive-medium, nova-cloud-controller ]
+    - [ nova-compute-exclusive-medium, lxd ]
+    - - nova-compute-exclusive-medium
+      - rabbitmq-server:amqp
+    - [ neutron-openvswitch, nova-compute-exclusive-medium ]
+    - [ nova-compute-exclusive-medium, glance ]
+    - [ nova-compute-exclusive-large, nova-cloud-controller ]
+    - [ nova-compute-exclusive-large, lxd ]
+    - - nova-compute-exclusive-large
+      - rabbitmq-server:amqp
+    - [ neutron-openvswitch, nova-compute-exclusive-large ]
+    - [ nova-compute-exclusive-large, glance ]
 # mitaka
 xenial-mitaka:
   inherits: openstack-services
@@ -159,3 +216,93 @@ xenial-mitaka-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
+xenial-mitaka-branch:
+  inherits: xenial-mitaka
+  overrides:
+    source: ppa:openstack-ubuntu-testing/mitaka
+    openstack-origin: ppa:openstack-ubuntu-testing/mitaka
+xenial-mitaka-exclusive:
+  inherits: openstack-services-exclusive
+  series: xenial
+# newton
+xenial-newton:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-newton
+    source: cloud:xenial-newton
+xenial-newton-proposed:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: cloud:xenial-newton/proposed
+    source: cloud:xenial-newton/proposed
+xenial-newton-staging:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
+    source: ppa:ubuntu-cloud-archive/newton-staging
+xenial-newton-branch:
+  inherits: xenial-newton
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/newton
+    source: ppa:openstack-ubuntu-testing/newton
+xenial-newton-exclusive:
+  inherits: openstack-services-exclusive
+  series: xenial
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
+    source: ppa:ubuntu-cloud-archive/newton-staging
+yakkety-newton:
+  inherits: openstack-services
+  series: yakkety
+yakkety-newton-proposed:
+  inherits: yakkety-newton
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+yakkety-newton-branch:
+  inherits: yakkety-newton
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/newton
+    source: ppa:openstack-ubuntu-testing/newton
+# ocata
+xenial-ocata:
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-ocata
+    source: cloud:xenial-ocata
+xenial-ocata-proposed:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: cloud:xenial-ocata/proposed
+    source: cloud:xenial-ocata/proposed
+xenial-ocata-staging:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/ocata-staging
+    source: ppa:ubuntu-cloud-archive/ocata-staging
+xenial-ocata-branch:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ocata
+    source: ppa:openstack-ubuntu-testing/ocata
+zesty-ocata:
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
+  series: zesty
+zesty-ocata-proposed:
+  inherits: zesty-ocata
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+zesty-ocata-branch:
+  inherits: zesty-ocata
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ocata
+    source: ppa:openstack-ubuntu-testing/ocata
