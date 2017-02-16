@@ -174,42 +174,7 @@ base-services:
     - [ neutron-openvswitch, nova-compute-lxd ]
     - [ neutron-openvswitch, rabbitmq-server ]
     - [ nova-compute-lxd, lxd ]
-# liberty
-trusty-liberty:
-  inherits: base-services
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-liberty
-    source: cloud:trusty-liberty
-    storage-type: btrfs
-trusty-liberty-proposed:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: cloud:trusty-liberty/proposed
-    source: cloud:trusty-liberty/proposed
-trusty-liberty-staging:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
-    source: ppa:ubuntu-cloud-archive/liberty-staging
 # mitaka
-trusty-mitaka:
-  inherits: base-services
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-mitaka
-    source: cloud:trusty-mitaka
-    storage-type: btrfs
-trusty-mitaka-proposed:
-  inherits: trusty-mitaka
-  overrides:
-    openstack-origin: cloud:trusty-mitaka/proposed
-    source: cloud:trusty-mitaka/proposed
-trusty-mitaka-staging:
-  inherits: trusty-mitaka
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
-    source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
   inherits: base-services
   series: xenial
@@ -236,12 +201,37 @@ xenial-newton-staging:
   overrides:
     openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
     source: ppa:ubuntu-cloud-archive/newton-staging
-#yakkety
 yakkety-newton:
   inherits: base-services
   series: yakkety
 yakkety-newton-proposed:
   inherits: yakkety-newton
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+# ocata
+xenial-ocata:
+  inherits: base-services
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-ocata
+    source: cloud:xenial-ocata
+    storage-type: btrfs
+xenial-ocata-proposed:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: cloud:xenial-ocata/proposed
+    source: cloud:xenial-ocata/proposed
+xenial-ocata-staging:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/ocata-staging
+    source: ppa:ubuntu-cloud-archive/ocata-staging
+zesty-ocata:
+  inherits: base-services
+  series: zesty
+zesty-ocata-proposed:
+  inherits: zesty-ocata
   overrides:
     source: proposed
     openstack-origin: distro-proposed
