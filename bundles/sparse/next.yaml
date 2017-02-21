@@ -359,6 +359,11 @@ xenial-ocata-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
+xenial-ocata-trunk:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ocata
+    source: ppa:openstack-ubuntu-testing/ocata
 zesty-ocata:
   #NOTE(coreycb): Temporarily disable reactive charms until
   #               https://bugs.launchpad.net/bugs/1643027 is resolved.
