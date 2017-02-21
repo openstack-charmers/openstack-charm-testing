@@ -205,27 +205,6 @@ openstack-services-xenial:
     - [ barbican, mysql ]
     - [ barbican, keystone ]
 # icehouse
-precise-icehouse:
-  inherits: openstack-services-legacy
-  series: precise
-  overrides:
-    openstack-origin: cloud:precise-icehouse
-    source: cloud:precise-icehouse
-precise-icehouse-proposed:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: cloud:precise-icehouse/proposed
-    source: cloud:precise-updates/icehouse
-precise-icehouse-staging:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/icehouse-staging
-    source: ppa:ubuntu-cloud-archive/icehouse-staging
-precise-icehouse-trunk:
-  inherits: precise-icehouse
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/icehouse
-    source: ppa:openstack-ubuntu-testing/icehouse
 trusty-icehouse:
   inherits: openstack-services
   series: trusty
