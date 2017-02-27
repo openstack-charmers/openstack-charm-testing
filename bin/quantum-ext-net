@@ -5,7 +5,10 @@ try:
 except ImportError:
     from neutronclient.v2_0 import client
 
+from keystoneauth1.identity import v2
+from keystoneauth1 import session
 from keystoneclient.v2_0 import client as ks_client
+import keystoneclient
 import optparse
 import os
 import sys
@@ -61,11 +64,19 @@ if __name__ == '__main__':
         start_floating_ip = None
         end_floating_ip = None
 
-    keystone = ks_client.Client(username=os.environ['OS_USERNAME'],
-                                password=os.environ['OS_PASSWORD'],
-                                tenant_name=os.environ['OS_TENANT_NAME'],
-                                auth_url=os.environ['OS_AUTH_URL'],
-                                region_name=os.environ['OS_REGION_NAME'])
+    if keystoneclient.__version__ >= "3.10.0":
+        auth = v2.Password(username=os.environ['OS_USERNAME'],
+                           password=os.environ['OS_PASSWORD'],
+                           tenant_name=os.environ['OS_TENANT_NAME'],
+                           auth_url=os.environ['OS_AUTH_URL'])
+        sess = session.Session(auth=auth)
+        keystone = ks_client.Client(session=sess)
+    else:
+        keystone = ks_client.Client(username=os.environ['OS_USERNAME'],
+                                    password=os.environ['OS_PASSWORD'],
+                                    tenant_name=os.environ['OS_TENANT_NAME'],
+                                    auth_url=os.environ['OS_AUTH_URL'],
+                                    region_name=os.environ['OS_REGION_NAME'])
     quantum = client.Client(username=os.environ['OS_USERNAME'],
                             password=os.environ['OS_PASSWORD'],
                             tenant_name=os.environ['OS_TENANT_NAME'],
