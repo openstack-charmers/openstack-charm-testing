@@ -43,6 +43,9 @@ else
   else
       sed -i -r "s/__POCKET__//g" $fout
   fi
+  if [ `echo -e "$series\nxenia"| sort| head -n 1` = "$series" ]; then
+      sed -i -r "s/#__MONGODB__//g" $fout
+  fi
 fi
 cat $fout
 rm $fout
