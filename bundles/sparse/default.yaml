@@ -334,3 +334,50 @@ yakkety-newton-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/newton
     source: ppa:openstack-ubuntu-testing/newton
+# ocata
+xenial-ocata:
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-ocata
+    source: cloud:xenial-ocata
+xenial-ocata-proposed:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: cloud:xenial-ocata/proposed
+    source: cloud:xenial-ocata/proposed
+xenial-ocata-staging:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/ocata-staging
+    source: ppa:ubuntu-cloud-archive/ocata-staging
+xenial-ocata-branch:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ocata
+    source: ppa:openstack-ubuntu-testing/ocata
+xenial-ocata-trunk:
+  inherits: xenial-ocata
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ocata
+    source: ppa:openstack-ubuntu-testing/ocata
+zesty-ocata:
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
+  series: zesty
+zesty-ocata-proposed:
+  inherits: zesty-ocata
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+zesty-ocata-branch:
+  inherits: zesty-ocata
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ocata
+    source: ppa:openstack-ubuntu-testing/ocata
+
