@@ -5,6 +5,8 @@ import yaml
 import os
 import sys
 
+import novaclient
+
 from neutronclient.v2_0 import client as ne_client
 from novaclient import client as no_client
 
@@ -30,12 +32,20 @@ if __name__ == '__main__':
                                tenant_name=os.environ['OS_TENANT_NAME'],
                                auth_url=os.environ['OS_AUTH_URL'],
                                region_name=os.environ['OS_REGION_NAME'])
-    nova = no_client.Client('2',
-                            os.environ['OS_USERNAME'],
-                            os.environ['OS_PASSWORD'],
-                            os.environ['OS_TENANT_NAME'],
-                            os.environ['OS_AUTH_URL'],
-                            region_name=os.environ['OS_REGION_NAME'])
+    if novaclient.__version__[0] >= "7":
+        nova = no_client.Client('2',
+                                username=os.environ['OS_USERNAME'],
+                                password=os.environ['OS_PASSWORD'],
+                                project_name=os.environ['OS_TENANT_NAME'],
+                                auth_url=os.environ['OS_AUTH_URL'],
+                                region_name=os.environ['OS_REGION_NAME'])
+    else:
+        nova = no_client.Client('2',
+                                os.environ['OS_USERNAME'],
+                                os.environ['OS_PASSWORD'],
+                                os.environ['OS_TENANT_NAME'],
+                                os.environ['OS_AUTH_URL'],
+                                region_name=os.environ['OS_REGION_NAME'])
 
     net_id = os.environ.get('NET_ID')
     net_name = None
