@@ -4,19 +4,19 @@
 base-services:
   services:
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server;stable/16.10
+      branch: https://github.com/openstack/charm-rabbitmq-server;stable/17.02
       constraints: mem=1G
     keystone:
-      branch: https://github.com/openstack/charm-keystone;stable/16.10
+      branch: https://github.com/openstack/charm-keystone;stable/17.02
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: https://github.com/openstack/charm-openstack-dashboard;stable/16.10
+      branch: https://github.com/openstack/charm-openstack-dashboard;stable/17.02
       constraints: mem=1G
     nova-compute:
-      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
+      branch: https://github.com/openstack/charm-nova-compute;stable/17.02
       num_units: 3
       constraints: mem=4G
       options:
@@ -25,26 +25,26 @@ base-services:
         migration-auth-type: ssh
         virt-type: lxd
     nova-cloud-controller:
-      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/16.10
+      branch: https://github.com/openstack/charm-nova-cloud-controller;stable/17.02
       constraints: mem=1G
       options:
         network-manager: Neutron
     neutron-gateway:
-      branch: https://github.com/openstack/charm-neutron-gateway;stable/16.10
+      branch: https://github.com/openstack/charm-neutron-gateway;stable/17.02
       constraints: mem=2G
       options:
         instance-mtu: 1300
         bridge-mappings: physnet1:br-ex
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api;stable/16.10
+      branch: https://github.com/openstack/charm-neutron-api;stable/17.02
       constraints: mem=1G
       options:
         neutron-security-groups: True
         flat-network-providers: physnet1
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/16.10
+      branch: https://github.com/openstack/charm-neutron-openvswitch;stable/17.02
     cinder:
-      branch: https://github.com/openstack/charm-cinder;stable/16.10
+      branch: https://github.com/openstack/charm-cinder;stable/17.02
       options:
         block-device: /dev/vdb
         glance-api-version: 2
@@ -52,48 +52,48 @@ base-services:
         overwrite: "true"
       constraints: mem=4G
     glance:
-      branch: https://github.com/openstack/charm-glance;stable/16.10
+      branch: https://github.com/openstack/charm-glance;stable/17.02
       constraints: mem=1G
     swift-proxy:
-      branch: https://github.com/openstack/charm-swift-proxy;stable/16.10
+      branch: https://github.com/openstack/charm-swift-proxy;stable/17.02
       constraints: mem=1G
       options:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
     swift-storage-z1:
-      branch: https://github.com/openstack/charm-swift-storage;stable/16.10
+      branch: https://github.com/openstack/charm-swift-storage;stable/17.02
       constraints: mem=1G
       options:
         zone: 1
         block-device: vdb
         overwrite: "true"
     swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage;stable/16.10
+      branch: https://github.com/openstack/charm-swift-storage;stable/17.02
       constraints: mem=1G
       options:
         zone: 2
         block-device: vdb
         overwrite: "true"
     swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage;stable/16.10
+      branch: https://github.com/openstack/charm-swift-storage;stable/17.02
       constraints: mem=1G
       options:
         zone: 3
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: https://github.com/openstack/charm-ceilometer;stable/16.10
+      branch: https://github.com/openstack/charm-ceilometer;stable/17.02
       constraints: mem=1G
     ceilometer-agent:
-      branch: https://github.com/openstack/charm-ceilometer-agent;stable/16.10
+      branch: https://github.com/openstack/charm-ceilometer-agent;stable/17.02
     heat:
-      branch: https://github.com/openstack/charm-heat;stable/16.10
+      branch: https://github.com/openstack/charm-heat;stable/17.02
     mongodb:
       branch: lp:charms/trusty/mongodb
       constraints: mem=1G
     lxd:
-      branch: https://github.com/openstack/charm-lxd;stable/16.10
+      branch: https://github.com/openstack/charm-lxd;stable/17.02
       options:
         block-devices: /dev/vdb
         ephemeral-unmount: /mnt
@@ -145,7 +145,7 @@ openstack-services:
   inherits: base-services
   services:
     mysql:
-      branch: https://github.com/openstack/charm-percona-cluster;stable/16.10
+      branch: https://github.com/openstack/charm-percona-cluster;stable/17.02
       constraints: mem=4G
       options:
         max-connections: 1000
@@ -156,7 +156,7 @@ openstack-services-exclusive:
   inherits: openstack-services
   services:
     nova-compute-exclusive-small:
-      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
+      branch: https://github.com/openstack/charm-nova-compute;stable/17.02
       constraints: mem=2G
       num_units: 3
       options:
@@ -166,7 +166,7 @@ openstack-services-exclusive:
         virt-type: lxd
         reserved-host-memory: 0
     nova-compute-exclusive-medium:
-      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
+      branch: https://github.com/openstack/charm-nova-compute;stable/17.02
       constraints: mem=4G
       num_units: 3
       options:
@@ -176,7 +176,7 @@ openstack-services-exclusive:
         virt-type: lxd
         reserved-host-memory: 0
     nova-compute-exclusive-large:
-      branch: https://github.com/openstack/charm-nova-compute;stable/16.10
+      branch: https://github.com/openstack/charm-nova-compute;stable/17.02
       constraints: mem=8G
       num_units: 3
       options:
