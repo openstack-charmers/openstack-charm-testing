@@ -2,9 +2,11 @@
 # Download images and add to glance.
 
 # Download images if not already present
+: ${TEST_IMAGE_URL_XENIAL:="http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-arm64-uefi1.img"}
+
 mkdir -vp ~/images
 [ -f ~/images/xenial-server-cloudimg-arm64-uefi1.img ] || {
-    wget -O ~/images/xenial-server-cloudimg-arm64-uefi1.img http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-arm64-uefi1.img
+    wget -O ~/images/xenial-server-cloudimg-arm64-uefi1.img $TEST_IMAGE_URL_XENIAL
 }
 
 # Create glance image
