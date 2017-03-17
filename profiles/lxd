@@ -40,6 +40,7 @@ access=$(openstack --os-username demo --os-password pass --os-tenant-name demo e
 secret=$(openstack ec2 credentials show $access | grep secret | awk '{ print $4 }')
 
 create_tempest_flavors
+create_default_flavors
 
 function create_exclusive_aggregate {
     exclusive_flavor=$1
