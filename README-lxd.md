@@ -65,8 +65,8 @@ Very permissive secgroups for testing, and lower instance MTU due to nested tunn
 
 ### Create 3 new Trusty and 3 new Xenial lxd instances
 ```
-./tools/instance_launch.sh 3 trusty-lxd
-./tools/instance_launch.sh 3 xenial-lxd
+./tools/instance_launch.sh 3 trusty
+./tools/instance_launch.sh 3 xenial
 ```
 
 ### Watch the instances go ACTIVE
@@ -76,7 +76,7 @@ watch nova list
 
 ### Assign floating IP addresses
 ```
-./tools/float_all.sh 
+./tools/float_all.sh
 ```
 
 ### Confirm floating IPs
