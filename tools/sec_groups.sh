@@ -1,15 +1,11 @@
-#!/bin/bash
-# Set n-g mtu; add sec groups for basic access
+#!/bin/bash -ex
+# Add sec groups for basic access
 
-juju set neutron-gateway instance-mtu=1300 ||
-    juju config neutron-gateway instance-mtu=1300
-
-for port in 22 80 443 3128; do
-	nova secgroup-add-rule default tcp $port $port 0.0.0.0/0
-	nova secgroup-add-rule default tcp $port $port ::/0
+for port in 22 53 80 443; do
+    openstack security group rule create default --protocol tcp --remote-ip 0.0.0.0/0 --dst-port $port --project admin ||:
 done
 
-nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
-nova secgroup-add-rule default icmp -1 -1 ::/0
-nova secgroup-add-rule default udp 53 53 0.0.0.0/0
-nova secgroup-add-rule default udp 53 53 ::/0
+openstack security group rule create default --protocol icmp --remote-ip 0.0.0.0/0 --project admin ||:
+
+openstack security group rule list | egrep '22:22'
+
