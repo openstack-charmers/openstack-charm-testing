@@ -81,7 +81,7 @@ openstack-services:
     heat:
       branch: https://github.com/openstack/charm-heat;stable/16.07
     mongodb:
-      branch: lp:charms/trusty/mongodb;stable/16.07
+      branch: https://git.launchpad.net/mongodb-charm;stable/16.07
       constraints: mem=1G
     lxd:
       branch: https://github.com/openstack/charm-lxd

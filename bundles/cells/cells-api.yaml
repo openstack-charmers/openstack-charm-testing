@@ -73,7 +73,7 @@ openstack-services:
         glance-api-version: 2
       constraints": mem=1G
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
   relations:
     - [ keystone, mysql-api ]

@@ -6,7 +6,7 @@
 # fyi not used:  branch: https://github.com/openstack/charm-ceilometer
 # fyi not used:  branch: https://github.com/openstack/charm-ceilometer-agent
 # fyi not used:  branch: https://github.com/openstack/charm-heat
-# fyi not used:  branch: lp:charms/trusty/mongodb
+# fyi not used:  branch: https://git.launchpad.net/mongodb-charm
 basic: 
   series: trusty
   services: 
