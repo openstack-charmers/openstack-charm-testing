@@ -120,7 +120,7 @@ openstack-services:
       options:
           harden: "os ssh"
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
     hardening-os-tests:
       branch: https://git.launchpad.net/~openstack-charmers/charms/+source/hardening-os-tests-charm

@@ -119,7 +119,7 @@ openstack-services:
       to:
         - "lxc:swift-storage-z2=0"
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      branch: https://git.launchpad.net/mongodb-charm
       to:
         - "lxc:swift-storage-z3=0"
     ntp:

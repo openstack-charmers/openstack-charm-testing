@@ -248,7 +248,7 @@ two-smash:
       to:
         - "lxc:0"
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      branch: https://git.launchpad.net/mongodb-charm
       annotations:
         "gui-x": "1000"
         "gui-y": "750"
