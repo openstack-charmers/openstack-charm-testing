@@ -1,5 +1,3 @@
-#!/bin/bash
+#!/bin/bash -ex
+for i in $(openstack server list | awk '/ACTIVE/{ print $2 }');do openstack server stop $i; done
 
-echo " + Attempting to stop all instances."
-
-for i in $(nova list | grep = | awk '{ print $2 }');do echo $i; nova stop $i; done

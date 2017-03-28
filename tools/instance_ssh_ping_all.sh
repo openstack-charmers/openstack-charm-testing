@@ -1,11 +1,6 @@
-#!/bin/bash
-
-echo " + Attempting to ping and check ssh socket for all ACTIVE instances (must have floating IPs)."
-
-[[ -z "$1" ]] && count=2 || count="$1"
-
-for i in $(nova list | grep ACTIVE | awk '{ print $13 }'); do
-  echo ==== $i ====
-  nc -w $count $i 22 && echo "OK: ssh socket check" || echo "FAIL: ssh"
-  ping -c $count $i &> /dev/null && echo "OK: ping" || echo "FAIL: ping"
+#!/bin/bash -ex
+# Known good with client: openstack 3.7.0
+for i in $(openstack server list | awk '/ACTIVE/{ print $9 }'); do
+  nc -vzw 2 $i 22
+  ping -c 2 $i
 done

@@ -2,11 +2,11 @@
 # Shrink flavors for density testing
 
 echo " + Shrinking flavors."
-nova flavor-delete m1.tiny
-nova flavor-delete m1.small
-nova flavor-delete m1.medium
-nova flavor-delete m1.large
-nova flavor-delete m1.xlarge
+nova flavor-delete m1.tiny ||:
+nova flavor-delete m1.small ||:
+nova flavor-delete m1.medium ||:
+nova flavor-delete m1.large ||:
+nova flavor-delete m1.xlarge ||:
 nova flavor-create --ephemeral 20 --is-public True m1.tiny 1 512 20 1
 nova flavor-create --ephemeral 20 --is-public True m1.small 2 3072 20 2
 nova flavor-create --ephemeral 40 --is-public True m1.medium 3 4096 40 2

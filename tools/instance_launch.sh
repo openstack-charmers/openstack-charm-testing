@@ -1,41 +1,37 @@
-#!/bin/bash
+#!/bin/bash -ex
 # Launch N quantity of XYZ instances
 # Presumes glance images exist and have been imported using the
 # accompanying configure script.
 
-p_qty=$1
-p_name=$2
-if [ -z "$p_qty" ] || [ -z "$p_name" ]; then
-  echo "Launches N quantity of XYZ instances."
-  echo "Usage:  <this script> <qty of instances> <glance image name>"
-  echo "   ex:  ./instance_launch.sh 2 precise"
-  echo "   ex:  ./instance_launch.sh 10 cirros"
-  echo "   ex:  ./instance_launch.sh 25 trusty"
-  echo "   ex:  ./instance_launch.sh 10 vivid-ppc64el"
-  echo "   Cirros will assume m1.cirros flavor."
-  echo "   All others will use m1.small flabor."
+instance_qty=$1
+image_name=$2
+if [ -z "$instance_qty" ] || [ -z "$image_name" ]; then
+  set +x
+  echo "Launches N quantity of XYZ instances.
+Usage:  <this script> <qty of instances> <glance image name>
+   ex:  ./instance_launch.sh 10 xenial-ppc64el
+   Cirros images will use m1.cirros flavor.
+   All others will use m1.small flavor."
   exit 1
 fi
 
-echo " + Keying nova and ~/testkey.pem..."
-nova keypair-list | grep testkey &> /dev/null || { nova keypair-add testkey > ~/testkey.pem; chmod 600 ~/testkey.pem; }
-nova keypair-list | grep testkey
+# Key nova and ~/testkey.pem
+openstack keypair show testkey ||\
+    { openstack keypair create testkey > ~/testkey.pem; chmod 600 ~/testkey.pem; }
 
-echo " + Grabbing 'private' network ID..."
-net_id=$(neutron net-list | awk '/private/ {print $2}')
+# Grab private network ID
+net_id=$(openstack network list | awk '/private/ {print $2}')
 
-echo " + Determining flavor to use..."
-if [[ "${p_name}" == *cirros* ]]; then
+# Determining flavor to use
+if [[ "${image_name}" == *cirros* ]]; then
   flavor="m1.cirros"
 else
   flavor="m1.small"
 fi
 
-echo " + Nova booting ${p_qty} ${p_name} instances as flavor ${flavor}..."
-for m in $(seq 1 $p_qty); do
-  server_name="${p_name}$(date +'%H%M%S')"
-  echo ${server_name} ${p_name} ${net_id}
-  nova boot --image ${p_name} --flavor ${flavor} --key-name testkey --nic net-id=${net_id} $server_name
-done
+# Create instances
+server_name="${image_name}-$(date +'%H%M%S')"
+openstack server create --wait --image $image_name --flavor $flavor --key-name testkey --nic net-id=${net_id} --min $instance_qty --max $instance_qty $server_name
 
-echo " + Hint:  use ssh -i ~/testkey.pem ubuntu@<ip> to access new instances (may also need a floating IP)."
+# Hint:  use ssh -i ~/testkey.pem ubuntu@<ip> to access new instances (may also need a floating IP).
+

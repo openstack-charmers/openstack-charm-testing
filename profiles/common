@@ -67,3 +67,9 @@ function create_default_flavors {
     openstack flavor show m1.large || openstack flavor create --id 4 --ram 8192 --disk 20 --vcpus 4 m1.large
     openstack flavor show m1.xlarge || openstack flavor create --id 5 --ram 16384 --disk 20 --vcpus 8 m1.xlarge
 }
+
+
+function juju_config_neutron_mtu {
+    juju set neutron-gateway instance-mtu=1300 &> /dev/null ||
+        juju config neutron-gateway instance-mtu=1300 &> /dev/null
+}

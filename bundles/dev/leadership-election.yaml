@@ -108,7 +108,7 @@ openstack-services:
     heat:
       branch: https://github.com/openstack/charm-heat
     mongodb:
-      branch: lp:charms/trusty/mongodb
+      branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
   relations:
     - [ keystone, mysql ]
