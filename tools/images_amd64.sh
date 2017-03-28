@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 # Download ppc64el images and add to glance.
 
 # Presumes cirros is available in a swift bucket
