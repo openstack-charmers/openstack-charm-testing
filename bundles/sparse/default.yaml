@@ -370,6 +370,8 @@ zesty-ocata:
   #inherits: openstack-services-xenial
   inherits: openstack-services
   series: zesty
+  relations:
+    - [ cinder-ceph, nova-compute ]
 zesty-ocata-proposed:
   inherits: zesty-ocata
   overrides:
