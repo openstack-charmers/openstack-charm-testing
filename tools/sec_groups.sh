@@ -6,6 +6,3 @@ for port in 22 53 80 443; do
 done
 
 openstack security group rule create default --protocol icmp --remote-ip 0.0.0.0/0 --project admin ||:
-
-openstack security group rule list | egrep '22:22'
-
