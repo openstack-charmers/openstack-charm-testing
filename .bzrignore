@@ -1,1 +1,7 @@
-bundles/keystone-v3/trusty
+.coverage
+.testrepository
+.tox
+*.sw[nop]
+*.pyc
+.unit-state.db
+

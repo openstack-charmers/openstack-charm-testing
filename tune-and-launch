@@ -6,4 +6,4 @@
 ./tools/sec_groups.sh
 ./tools/instance_launch.sh 3 trusty
 ./tools/float_all.sh
-nova list
+openstack server list

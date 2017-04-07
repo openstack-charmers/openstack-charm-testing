@@ -1,0 +1,4 @@
+# Requirements for post-deployment configuration tools
+python-openstackclient
+python-neutronclient
+juju-deployer

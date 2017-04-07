@@ -1,7 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 # Download LXD images and add to glance
 
-# Download images if not already present
 mkdir -vp ~/images
 [ -f ~/images/trusty-server-cloudimg-amd64-root.tar.xz ] || {
     wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.xz
