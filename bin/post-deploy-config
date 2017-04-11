@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import subprocess
 import yaml
@@ -9,6 +9,9 @@ import novaclient
 
 from neutronclient.v2_0 import client as ne_client
 from novaclient import client as no_client
+
+import keystoneauth1.identity.v3 as keystoneauth1
+import keystoneauth1.session as keystoneauth1_session
 
 
 def get_data_port_config(juju_version, service):
@@ -22,29 +25,32 @@ def get_data_port_config(juju_version, service):
             data_ports = data_port_settings['value']
     else:
         data_ports = subprocess.check_output(['juju', 'config',
-                                              service, 'data-port'])
+                                              service, 'data-port']).decode('UTF-8')
     return data_ports.split(' ')
 
 
 if __name__ == '__main__':
-    neutron = ne_client.Client(username=os.environ['OS_USERNAME'],
-                               password=os.environ['OS_PASSWORD'],
-                               tenant_name=os.environ['OS_TENANT_NAME'],
-                               auth_url=os.environ['OS_AUTH_URL'],
+    if os.environ.get('OS_AUTH_VERSION', '2') == '3':
+        auth = keystoneauth1.Password(username=os.environ['OS_USERNAME'],
+                                      user_domain_name=os.environ['OS_USER_DOMAIN_NAME'],
+                                      password=os.environ['OS_PASSWORD'],
+                                      project_name=os.environ['OS_PROJECT_NAME'],
+                                      project_domain_name=os.environ['OS_PROJECT_DOMAIN_NAME'],
+                                      auth_url=os.environ['OS_AUTH_URL'])
+    else:
+        auth = keystoneauth1.Password(username=os.environ['OS_USERNAME'],
+                                      password=os.environ['OS_PASSWORD'],
+                                      tenant_name=os.environ['OS_TENANT_NAME'],
+                                      auth_url=os.environ['OS_AUTH_URL'])
+    session = keystoneauth1_session.Session(auth=auth)
+
+    neutron = ne_client.Client(session=session,
                                region_name=os.environ['OS_REGION_NAME'])
     if novaclient.__version__[0] >= "7":
-        nova = no_client.Client('2',
-                                username=os.environ['OS_USERNAME'],
-                                password=os.environ['OS_PASSWORD'],
-                                project_name=os.environ['OS_TENANT_NAME'],
-                                auth_url=os.environ['OS_AUTH_URL'],
+        nova = no_client.Client('2', session=session,
                                 region_name=os.environ['OS_REGION_NAME'])
     else:
-        nova = no_client.Client('2',
-                                os.environ['OS_USERNAME'],
-                                os.environ['OS_PASSWORD'],
-                                os.environ['OS_TENANT_NAME'],
-                                os.environ['OS_AUTH_URL'],
+        nova = no_client.Client('2', session=session,
                                 region_name=os.environ['OS_REGION_NAME'])
 
     net_id = os.environ.get('NET_ID')
@@ -72,11 +78,11 @@ if __name__ == '__main__':
 
     service = sys.argv[1]
 
-    juju_version = int(subprocess.check_output(['juju', 'version']).strip()[0])
+    juju_version = int(subprocess.check_output(['juju', 'version']).decode('UTF-8').strip()[0])
 
     service_config = yaml.load(
         subprocess.check_output(['juju', 'status', '--format=yaml',
-                                 service])
+                                 service]).decode('UTF-8')
     )
 
     uuids = []
@@ -118,8 +124,17 @@ if __name__ == '__main__':
         if data_port is None:
             # Attach a new port
             print("Attaching interface to instance {}".format(uuid))
-            result = server.interface_attach(port_id=None,
-                                             net_id=net_id,
+            new_port =  {
+                "port": {
+                    "admin_state_up": True,
+                    "name": "data-port",
+                    "network_id": net_id,
+                    "port_security_enabled": False,
+                }
+            }
+            result = neutron.create_port(body=new_port)
+            result = server.interface_attach(port_id=result['port']['id'],
+                                             net_id=None,
                                              fixed_ip=None).to_dict()
             data_port = result['mac_addr']
         else:
