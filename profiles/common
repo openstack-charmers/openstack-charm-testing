@@ -67,10 +67,12 @@ function create_default_flavors {
 }
 
 function shrink_flavors {
+    openstack flavor delete m1.tiny ||:
     openstack flavor delete m1.small ||:
     openstack flavor delete m1.medium ||:
     openstack flavor delete m1.large ||:
     openstack flavor delete m1.xlarge ||:
+    openstack flavor create --id 1 --ram 512  --disk 1  --swap 0    --vcpus 1 m1.tiny
     openstack flavor create --id 2 --ram 768  --disk 10 --swap 2048 --vcpus 1 m1.small
     openstack flavor create --id 3 --ram 1024 --disk 12 --swap 2048 --vcpus 2 m1.medium
     openstack flavor create --id 4 --ram 1536 --disk 14 --swap 2048 --vcpus 4 m1.large
