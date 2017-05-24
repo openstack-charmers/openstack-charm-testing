@@ -306,3 +306,38 @@ zesty-ocata-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
+# Pike
+xenial-pike:
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-pike
+    source: cloud:xenial-pike
+xenial-pike-proposed:
+  inherits: xenial-pike
+  overrides:
+    openstack-origin: cloud:xenial-pike/proposed
+    source: cloud:xenial-pike/proposed
+xenial-pike-staging:
+  inherits: xenial-pike
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/pike-staging
+    source: ppa:ubuntu-cloud-archive/pike-staging
+xenial-pike-branch:
+  inherits: xenial-pike
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/pike
+    source: ppa:openstack-ubuntu-testing/pike
+artful-pike:
+  inherits: openstack-services
+  series: artful
+artful-pike-proposed:
+  inherits: artful-pike
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+artful-pike-branch:
+  inherits: artful-pike
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/pike
+    source: ppa:openstack-ubuntu-testing/pike

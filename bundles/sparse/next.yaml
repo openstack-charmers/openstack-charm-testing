@@ -384,3 +384,54 @@ zesty-ocata-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
+# pike
+xenial-pike:
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-pike
+    source: cloud:xenial-pike
+  relations:
+    - [ cinder-ceph, nova-compute ]
+xenial-pike-proposed:
+  inherits: xenial-pike
+  overrides:
+    openstack-origin: cloud:xenial-pike/proposed
+    source: cloud:xenial-pike/proposed
+xenial-pike-staging:
+  inherits: xenial-pike
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/pike-staging
+    source: ppa:ubuntu-cloud-archive/pike-staging
+xenial-pike-branch:
+  inherits: xenial-pike
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/pike
+    source: ppa:openstack-ubuntu-testing/pike
+xenial-pike-trunk:
+  inherits: xenial-pike
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/pike
+    source: ppa:openstack-ubuntu-testing/pike
+artful-pike:
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-xenial
+  inherits: openstack-services
+  series: artful
+  relations:
+    - [ cinder-ceph, nova-compute ]
+artful-pike-proposed:
+  inherits: artful-pike
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+artful-pike-branch:
+  inherits: artful-pike
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/pike
+    source: ppa:openstack-ubuntu-testing/pike
+
