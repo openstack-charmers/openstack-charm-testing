@@ -10,7 +10,8 @@ import novaclient
 from neutronclient.v2_0 import client as ne_client
 from novaclient import client as no_client
 
-import keystoneauth1.identity.v3 as keystoneauth1
+import keystoneauth1.identity.v2 as keystoneauth1_v2
+import keystoneauth1.identity.v3 as keystoneauth1_v3
 import keystoneauth1.session as keystoneauth1_session
 
 
@@ -31,17 +32,17 @@ def get_data_port_config(juju_version, service):
 
 if __name__ == '__main__':
     if os.environ.get('OS_AUTH_VERSION', '2') == '3':
-        auth = keystoneauth1.Password(username=os.environ['OS_USERNAME'],
-                                      user_domain_name=os.environ['OS_USER_DOMAIN_NAME'],
-                                      password=os.environ['OS_PASSWORD'],
-                                      project_name=os.environ['OS_PROJECT_NAME'],
-                                      project_domain_name=os.environ['OS_PROJECT_DOMAIN_NAME'],
-                                      auth_url=os.environ['OS_AUTH_URL'])
+        auth = keystoneauth1_v3.Password(username=os.environ['OS_USERNAME'],
+                                         user_domain_name=os.environ['OS_USER_DOMAIN_NAME'],
+                                         password=os.environ['OS_PASSWORD'],
+                                         project_name=os.environ['OS_PROJECT_NAME'],
+                                         project_domain_name=os.environ['OS_PROJECT_DOMAIN_NAME'],
+                                         auth_url=os.environ['OS_AUTH_URL'])
     else:
-        auth = keystoneauth1.Password(username=os.environ['OS_USERNAME'],
-                                      password=os.environ['OS_PASSWORD'],
-                                      tenant_name=os.environ['OS_TENANT_NAME'],
-                                      auth_url=os.environ['OS_AUTH_URL'])
+        auth = keystoneauth1_v2.Password(username=os.environ['OS_USERNAME'],
+                                         password=os.environ['OS_PASSWORD'],
+                                         tenant_name=os.environ['OS_TENANT_NAME'],
+                                         auth_url=os.environ['OS_AUTH_URL'])
     session = keystoneauth1_session.Session(auth=auth)
 
     neutron = ne_client.Client(session=session,
