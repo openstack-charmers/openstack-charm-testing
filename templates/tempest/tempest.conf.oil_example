@@ -458,3 +458,4 @@ api_v3=false
 [object-storage-feature-enabled]
 [volume-feature-enabled]
 backup=false
+api_v1=false

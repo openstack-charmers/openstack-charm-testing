@@ -88,3 +88,4 @@ backend1_name=cinder-ceph
 catalog_type = volume
 [volume-feature-enabled]
 backup=false
+api_v1=false

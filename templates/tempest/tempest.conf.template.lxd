@@ -83,3 +83,4 @@ max_instances = 4
 [telemetry]
 [volume]
 [volume-feature-enabled]
+api_v1=false
