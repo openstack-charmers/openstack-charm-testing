@@ -85,7 +85,7 @@ max_instances = 4
 [volume]
 storage_protocol=ceph
 backend1_name=cinder-ceph
-catalog_type = volume
+catalog_type = volumev2
 [volume-feature-enabled]
 backup=false
 api_v1=false

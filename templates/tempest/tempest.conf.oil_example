@@ -252,7 +252,7 @@ public_router_id = {{ neutron_ext_net_router_id }}
 # The type of endpoint for a Cinder or Block Storage API service.
 # Unless you have a custom Keystone service catalog implementation, you
 # probably want to leave this value as "volume"
-catalog_type = volume
+catalog_type = volumev2
 # The name of a region for volume. If empty or commented-out, the value of
 # identity.region is used instead. If no such region is found in the service
 # catalog, the first found one is used.
