@@ -4,6 +4,6 @@
 ./tools/flavor_shrink.sh
 ./tools/quota_million.sh
 ./tools/sec_groups.sh
-./tools/instance_launch.sh 3 trusty
+./tools/instance_launch.sh 3 xenial
 ./tools/float_all.sh
 openstack server list

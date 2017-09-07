@@ -128,7 +128,7 @@ if __name__ == '__main__':
         if data_port is None:
             # Attach a new port
             print("Attaching interface to instance {}".format(uuid))
-            new_port =  {
+            new_port = {
                 "port": {
                     "admin_state_up": True,
                     "name": "data-port",
