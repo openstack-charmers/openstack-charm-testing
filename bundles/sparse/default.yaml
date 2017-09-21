@@ -329,7 +329,7 @@ xenial-ocata-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
 zesty-ocata:
-  inherits: openstack-services-xenial
+  inherits: openstack-services-xenial-ocata
   series: zesty
 zesty-ocata-proposed:
   inherits: zesty-ocata
