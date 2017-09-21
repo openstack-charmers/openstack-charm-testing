@@ -19,11 +19,14 @@ image_ref=__IMAGE_ID__
 image_ref_alt=__IMAGE_ALT_ID__
 allow_tenant_isolation = true
 allow_tenant_reuse = true
+min_compute_nodes = 3
 [compute-admin]
 [compute-feature-enabled]
 api_v3=false
 console_output=false
 resize=true
+live_migration=true
+block_migration_for_live_migration=true
 [dashboard]
 dashboard_url=http://__DASHBOARD__/horizon
 login_url=http://__DASHBOARD__/horizon/auth/login/
