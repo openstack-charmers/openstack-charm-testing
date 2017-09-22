@@ -4,10 +4,10 @@
 base-services:
   services:
     rabbitmq-server:
-      branch: https://github.com/openstack/charm-rabbitmq-server
+      charm: cs:~openstack-charmers-next/rabbitmq-server
       constraints: mem=1G
     ceph:
-      branch: https://github.com/openstack/charm-ceph
+      charm: cs:~openstack-charmers-next/ceph
       num_units: 3
       constraints: mem=1G
       options:
@@ -18,16 +18,16 @@ base-services:
         osd-reformat: "yes"
         ephemeral-unmount: /mnt
     keystone:
-      branch: https://github.com/openstack/charm-keystone
+      charm: cs:~openstack-charmers-next/keystone
       constraints: mem=1G
       options:
         admin-password: openstack
         admin-token: ubuntutesting
     openstack-dashboard:
-      branch: https://github.com/openstack/charm-openstack-dashboard
+      charm: cs:~openstack-charmers-next/openstack-dashboard
       constraints: mem=1G
     nova-compute:
-      branch: https://github.com/openstack/charm-nova-compute
+      charm: cs:~openstack-charmers-next/nova-compute
       num_units: 3
       constraints: mem=4G
       options:
@@ -35,70 +35,70 @@ base-services:
         enable-resize: True
         migration-auth-type: ssh
     nova-cloud-controller:
-      branch: https://github.com/openstack/charm-nova-cloud-controller
+      charm: cs:~openstack-charmers-next/nova-cloud-controller
       constraints: mem=2G
       options:
         network-manager: Neutron
     neutron-gateway:
-      branch: https://github.com/openstack/charm-neutron-gateway
+      charm: cs:~openstack-charmers-next/neutron-gateway
       constraints: mem=4G
       options:
         instance-mtu: 1300
         bridge-mappings: physnet1:br-ex
     neutron-api:
-      branch: https://github.com/openstack/charm-neutron-api
+      charm: cs:~openstack-charmers-next/neutron-api
       constraints: mem=1G
       options:
         neutron-security-groups: True
         flat-network-providers: physnet1
     neutron-openvswitch:
-      branch: https://github.com/openstack/charm-neutron-openvswitch
+      charm: cs:~openstack-charmers-next/neutron-openvswitch
     cinder:
-      branch: https://github.com/openstack/charm-cinder
+      charm: cs:~openstack-charmers-next/cinder
       options:
         block-device: "None"
         glance-api-version: 2
       constraints: mem=1G
     cinder-ceph:
-      branch: https://github.com/openstack/charm-cinder-ceph
+      charm: cs:~openstack-charmers-next/cinder-ceph
     glance:
-      branch: https://github.com/openstack/charm-glance
+      charm: cs:~openstack-charmers-next/glance
       constraints: mem=1G
     swift-proxy:
-      branch: https://github.com/openstack/charm-swift-proxy
+      charm: cs:~openstack-charmers-next/swift-proxy
       constraints: mem=1G
       options:
         zone-assignment: manual
         replicas: 3
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
     swift-storage-z1:
-      branch: https://github.com/openstack/charm-swift-storage
+      charm: cs:~openstack-charmers-next/swift-storage
       constraints: mem=1G
       options:
         zone: 1
         block-device: vdb
         overwrite: "true"
     swift-storage-z2:
-      branch: https://github.com/openstack/charm-swift-storage
+      charm: cs:~openstack-charmers-next/swift-storage
       constraints: mem=1G
       options:
         zone: 2
         block-device: vdb
         overwrite: "true"
     swift-storage-z3:
-      branch: https://github.com/openstack/charm-swift-storage
+      charm: cs:~openstack-charmers-next/swift-storage
       constraints: mem=1G
       options:
         zone: 3
         block-device: vdb
         overwrite: "true"
     ceilometer:
-      branch: https://github.com/openstack/charm-ceilometer
+      charm: cs:~openstack-charmers-next/ceilometer
       constraints: mem=1G
     ceilometer-agent:
-      branch: https://github.com/openstack/charm-ceilometer-agent
+      charm: cs:~openstack-charmers-next/ceilometer-agent
     heat:
-      branch: https://github.com/openstack/charm-heat
+      charm: cs:~openstack-charmers-next/heat
     mongodb:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
@@ -149,20 +149,11 @@ base-services:
     - [ neutron-api, neutron-gateway ]
     - [ neutron-openvswitch, nova-compute ]
     - [ neutron-openvswitch, rabbitmq-server ]
-openstack-services-legacy:
-  inherits: base-services
-  services:
-    mysql:
-      branch: lp:charms/trusty/mysql
-      constraints: mem=2G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
 openstack-services:
   inherits: base-services
   services:
     mysql:
-      branch: https://github.com/openstack/charm-percona-cluster
+      charm: cs:~openstack-charmers-next/percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -204,6 +195,21 @@ openstack-services-xenial:
     - [ barbican, rabbitmq-server ]
     - [ barbican, mysql ]
     - [ barbican, keystone ]
+openstack-services-xenial-ocata:
+  inherits: openstack-services-xenial
+  services:
+    gnocchi:
+      charm: cs:~openstack-charmers-next/gnocchi
+    memcached:
+      charm: cs:memcached
+  relations:
+    - [ gnocchi, ceph ]
+    - [ gnocchi, mysql ]
+    - [ gnocchi, rabbitmq-server ]
+    - [ gnocchi, memcached ]
+    - [ gnocchi, ceilometer ]
+    - [ gnocchi, keystone ]
+    - [ cinder-ceph, nova-compute ]
 # icehouse
 trusty-icehouse:
   inherits: openstack-services
@@ -283,10 +289,7 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-xenial
-  inherits: openstack-services
+  inherits: openstack-services-xenial
   series: xenial
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
@@ -295,10 +298,7 @@ xenial-mitaka-proposed:
     openstack-origin: distro-proposed
 # newton
 xenial-newton:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-xenial
-  inherits: openstack-services
+  inherits: openstack-services-xenial
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-newton
@@ -319,9 +319,7 @@ xenial-newton-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/newton
     source: ppa:openstack-ubuntu-testing/newton
 yakkety-newton:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-xenial
+  inherits: openstack-services-xenial
   inherits: openstack-services
   series: yakkety
 yakkety-newton-proposed:
@@ -336,16 +334,11 @@ yakkety-newton-branch:
     source: ppa:openstack-ubuntu-testing/newton
 # ocata
 xenial-ocata:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-xenial
-  inherits: openstack-services
+  inherits: openstack-services-xenial-ocata
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-ocata
     source: cloud:xenial-ocata
-  relations:
-    - [ cinder-ceph, nova-compute ]
 xenial-ocata-proposed:
   inherits: xenial-ocata
   overrides:
@@ -361,19 +354,9 @@ xenial-ocata-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
-xenial-ocata-trunk:
-  inherits: xenial-ocata
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/ocata
-    source: ppa:openstack-ubuntu-testing/ocata
 zesty-ocata:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-xenial
-  inherits: openstack-services
+  inherits: openstack-services-xenial-ocata
   series: zesty
-  relations:
-    - [ cinder-ceph, nova-compute ]
 zesty-ocata-proposed:
   inherits: zesty-ocata
   overrides:
@@ -386,16 +369,11 @@ zesty-ocata-branch:
     source: ppa:openstack-ubuntu-testing/ocata
 # pike
 xenial-pike:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-xenial
-  inherits: openstack-services
+  inherits: openstack-services-xenial-ocata
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-pike
     source: cloud:xenial-pike
-  relations:
-    - [ cinder-ceph, nova-compute ]
 xenial-pike-proposed:
   inherits: xenial-pike
   overrides:
@@ -411,19 +389,9 @@ xenial-pike-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/pike
     source: ppa:openstack-ubuntu-testing/pike
-xenial-pike-trunk:
-  inherits: xenial-pike
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/pike
-    source: ppa:openstack-ubuntu-testing/pike
 artful-pike:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-xenial
-  inherits: openstack-services
+  inherits: openstack-services-xenial-ocata
   series: artful
-  relations:
-    - [ cinder-ceph, nova-compute ]
 artful-pike-proposed:
   inherits: artful-pike
   overrides:
@@ -434,4 +402,3 @@ artful-pike-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/pike
     source: ppa:openstack-ubuntu-testing/pike
-
