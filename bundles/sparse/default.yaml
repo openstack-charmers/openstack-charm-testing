@@ -165,6 +165,9 @@ openstack-services-trusty-mitaka:
     aodh:
       charm: cs:aodh
       constraints: mem=1G
+    memcached:
+      charm: cs:memcached
+      constraints: mem=1G
     designate:
       charm: cs:designate
       constraints: mem=1G
@@ -184,6 +187,7 @@ openstack-services-trusty-mitaka:
     - [ designate, mysql ]
     - [ designate, rabbitmq-server ]
     - [ designate, designate-bind ]
+    - [ designate, memcached ]
 openstack-services-xenial:
   inherits: openstack-services-trusty-mitaka
   services:
