@@ -404,4 +404,45 @@ artful-pike-branch:
   inherits: artful-pike
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/pike
-    source: ppa:openstack-ubuntu-testing/pike
+xenial-queens:
+  inherits: openstack-services-xenial-ocata
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-queens
+    source: cloud:xenial-queens
+xenial-queens-proposed:
+  inherits: xenial-queens
+  overrides:
+    openstack-origin: cloud:xenial-queens/proposed
+    source: cloud:xenial-queens/proposed
+xenial-queens-staging:
+  inherits: xenial-queens
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/queens-staging
+    source: ppa:ubuntu-cloud-archive/queens-staging
+xenial-queens-branch:
+  inherits: xenial-queens
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/queens
+    source: ppa:openstack-ubuntu-testing/queens
+bionic-queens:
+  inherits: openstack-services-xenial-ocata
+  series: bionic
+  overrides:
+    openstack-origin: cloud:bionic-queens
+    source: cloud:bionic-queens
+bionic-queens-proposed:
+  inherits: bionic-queens
+  overrides:
+    openstack-origin: cloud:bionic-queens/proposed
+    source: cloud:bionic-queens/proposed
+bionic-queens-staging:
+  inherits: bionic-queens
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/queens-staging
+    source: ppa:ubuntu-cloud-archive/queens-staging
+bionic-queens-branch:
+  inherits: bionic-queens
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/queens
+    source: ppa:openstack-ubuntu-testing/queens
