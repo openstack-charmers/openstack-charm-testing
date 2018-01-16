@@ -404,6 +404,7 @@ artful-pike-branch:
   inherits: artful-pike
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/pike
+    source: ppa:openstack-ubuntu-testing/pike
 xenial-queens:
   inherits: openstack-services-xenial-ocata
   series: xenial
