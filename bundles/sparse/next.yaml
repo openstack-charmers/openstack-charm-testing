@@ -412,6 +412,9 @@ xenial-queens:
   overrides:
     openstack-origin: cloud:xenial-queens
     source: cloud:xenial-queens
+  relations:
+    - - ceilometer
+      - keystone:identity-credentials
 xenial-queens-proposed:
   inherits: xenial-queens
   overrides:
