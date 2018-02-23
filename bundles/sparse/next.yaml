@@ -415,6 +415,8 @@ xenial-queens:
   relations:
     - - ceilometer
       - keystone:identity-credentials
+    - - designate:dnsaas
+      - neutron-api:external-dns
 xenial-queens-proposed:
   inherits: xenial-queens
   overrides:
