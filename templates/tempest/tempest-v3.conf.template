@@ -1,5 +1,5 @@
 [auth]
-use_dynamic_credentials=true
+test_accounts_file=accounts.yaml
 default_credentials_domain_name=admin_domain
 admin_username=admin
 admin_project_name=admin
@@ -20,7 +20,7 @@ block_migration_for_live_migration=true
 [identity]
 uri_v3=__PROTO__://__KEYSTONE__:5000/v3
 auth_version=v3
-admin_role = Admin
+admin_role=Admin
 region=RegionOne
 default_domain_id=__DEFAULT_DOMAIN_ID__
 admin_domain_scope=true
