@@ -14,7 +14,7 @@ function upload_image {
         wget -O ~/images/$image_file ${http_root}/${image_file}
     }
     openstack image show $image_name || {
-        openstack image create --container-format=bare --disk-format=qcow2 --file=${HOME}/images/$image_file  $image_name
+        openstack image create --public --container-format=bare --disk-format=qcow2 --file=${HOME}/images/$image_file  $image_name
     }
 }
 
