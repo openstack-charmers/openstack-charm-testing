@@ -12,7 +12,7 @@ usage = """Usage: %prog [options] name cidr
 
 For example:
 
-  %prog -t admin -r provider-router admin_net 10.5.5.0/24
+  %prog -p admin -r provider-router admin_net 10.5.5.0/24
 
 will create a new network for the admin tenant called 'admin_net' with a
 default gateway of 10.5.5.1 and a dhcp allocation range of
