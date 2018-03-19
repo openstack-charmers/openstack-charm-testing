@@ -245,26 +245,12 @@ trusty-kilo-staging:
   overrides:
     openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
     source: ppa:ubuntu-cloud-archive/kilo-staging
-# liberty
-trusty-liberty:
-  inherits: openstack-services
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-liberty
-    source: cloud:trusty-liberty
-trusty-liberty-proposed:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: cloud:trusty-liberty/proposed
-    source: cloud:trusty-liberty/proposed
-trusty-liberty-staging:
-  inherits: trusty-liberty
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/liberty-staging
-    source: ppa:ubuntu-cloud-archive/liberty-staging
 # mitaka
 trusty-mitaka:
-  inherits: openstack-services-trusty-mitaka
+  #NOTE(coreycb): Temporarily disable reactive charms until
+  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
+  #inherits: openstack-services-trusty-mitaka
+  inherits: openstack-services
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
@@ -331,19 +317,6 @@ xenial-ocata-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
-zesty-ocata:
-  inherits: openstack-services-xenial-ocata
-  series: zesty
-zesty-ocata-proposed:
-  inherits: zesty-ocata
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-zesty-ocata-branch:
-  inherits: zesty-ocata
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/ocata
-    source: ppa:openstack-ubuntu-testing/ocata
 # pike
 xenial-pike:
   inherits: openstack-services-xenial-ocata
@@ -379,3 +352,43 @@ artful-pike-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/pike
     source: ppa:openstack-ubuntu-testing/pike
+# queens
+xenial-queens:
+  inherits: openstack-services-xenial-ocata
+  series: xenial
+  overrides:
+    openstack-origin: cloud:xenial-queens
+    source: cloud:xenial-queens
+  relations:
+    - - ceilometer
+      - keystone:identity-credentials
+    - - designate:dnsaas
+      - neutron-api:external-dns
+xenial-queens-proposed:
+  inherits: xenial-queens
+  overrides:
+    openstack-origin: cloud:xenial-queens/proposed
+    source: cloud:xenial-queens/proposed
+xenial-queens-staging:
+  inherits: xenial-queens
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/queens-staging
+    source: ppa:ubuntu-cloud-archive/queens-staging
+xenial-queens-branch:
+  inherits: xenial-queens
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/queens
+    source: ppa:openstack-ubuntu-testing/queens
+bionic-queens:
+  inherits: openstack-services-xenial-ocata
+  series: bionic
+bionic-queens-proposed:
+  inherits: bionic-queens
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+bionic-queens-branch:
+  inherits: bionic-queens
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/queens
+    source: ppa:openstack-ubuntu-testing/queens
