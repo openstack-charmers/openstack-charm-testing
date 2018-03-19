@@ -11,7 +11,7 @@
 # Necessary preparation for this script:
 #   mkdir -vp ~/tools
 #   cd ~/tools
-#   bzr branch lp:openstack-charm-testing
+#   git clone https://github.com/openstack-charmers/openstack-charm-testing.git
 #   bzr branch lp:ubuntu-openstack-ci
 #   bzr branch lp:juju-wait
 #   cd openstack-charm-testing

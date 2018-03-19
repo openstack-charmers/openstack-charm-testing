@@ -6,7 +6,7 @@ An OpenStack-on-OpenStack example exercise.
 ### Get o-c-t bundle and scripts
 ```
 mkdir -p ~/tools
-bzr branch lp:openstack-charm-testing ~/tools/openstack-charm-testing
+git clone https://github.com/openstack-charmers/openstack-charm-testing.git ~/tools/openstack-charm-testing
 cd ~/./tools/openstack-charm-testing
 ```
 
