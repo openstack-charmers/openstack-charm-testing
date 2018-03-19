@@ -21,7 +21,7 @@
 #     environment.
 #
 #  Example - deployment:
-#    bzr branch lp:openstack-charm-testing
+#    git clone https://github.com/openstack-charmers/openstack-charm-testing.git
 #    cd openstack-charm-testing
 #    juju bootstrap --constraints arch=amd64
 #    juju-deployer -v -c bundles/ppc64/powerkvm-fullstack.yaml -d trusty-kilo

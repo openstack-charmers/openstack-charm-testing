@@ -30,7 +30,7 @@
 # Usage Example:
 #   juju deploy next-openstack-base-arm64-xenial-mitaka.yaml
 #   watch juju status  #wait for deployment to complete
-#   bzr branch lp:openstack-charm-testing
+#   git clone https://github.com/openstack-charmers/openstack-charm-testing.git
 #   cd openstack-charm-testing
 #   . novarc
 #   ./configure

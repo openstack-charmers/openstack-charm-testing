@@ -1,7 +1,0 @@
-.coverage
-.testrepository
-.tox
-*.sw[nop]
-*.pyc
-.unit-state.db
-
