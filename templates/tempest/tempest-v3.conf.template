@@ -1,6 +1,6 @@
 [auth]
 test_accounts_file=accounts.yaml
-default_credentials_domain_name=admin_domain
+default_credentials_domain_name=default
 admin_username=admin
 admin_project_name=admin
 admin_password=openstack
