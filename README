@@ -68,7 +68,9 @@ virtualenv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/pip install python-ceilometerclient python-cinderclient python-glanceclient python-heatclient \
     python-keystoneclient python-neutronclient python-novaclient python-swiftclient python-openstackclient pytz
-./run_tempest.sh -V --smoke
+# Pinned tempest branch may use old-style run_tempest.sh (ie. profiles/default)
+# Master tempest branch uses tox to run tests (ie. profiles/keystonev3)
+./run_tempest.sh -V --smoke || tox -e smoke  # Pinned tempest branch may use old-style run_tempest.sh
 ```
 
 NOTES: 
