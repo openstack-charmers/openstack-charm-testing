@@ -6,14 +6,19 @@ base-services:
     rabbitmq-server:
       charm: cs:~openstack-charmers-next/rabbitmq-server
       constraints: mem=1G
-    ceph:
-      charm: cs:~openstack-charmers-next/ceph
+    ceph-mon:
+      charm: cs:~openstack-charmers-next/ceph-mon
       num_units: 3
       constraints: mem=1G
       options:
-        monitor-count: 3
-        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+        expected-osd-count: 3
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
+        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
+    ceph-osd:
+      charm: cs:~openstack-charmers-next/ceph-osd
+      num_units: 3
+      constraints: mem=1G
+      options:
         osd-devices: /dev/vdb
         osd-reformat: True
         ephemeral-unmount: /mnt
@@ -112,10 +117,10 @@ base-services:
     - - nova-compute
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
-    - [ nova-compute, ceph ]
+    - [ nova-compute, ceph-mon ]
     - [ glance, mysql ]
     - [ glance, keystone ]
-    - [ glance, ceph ]
+    - [ glance, ceph-mon ]
     - [ glance, "cinder:image-service" ]
     - [ glance, rabbitmq-server ]
     - [ cinder, mysql ]
@@ -123,7 +128,7 @@ base-services:
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
     - [ cinder, cinder-ceph ]
-    - [ cinder-ceph, ceph ]
+    - [ cinder-ceph, ceph-mon ]
     - [ neutron-gateway, nova-cloud-controller ]
     - [ openstack-dashboard, keystone ]
     - [ swift-proxy, keystone ]
@@ -148,6 +153,7 @@ base-services:
     - [ neutron-api, neutron-gateway ]
     - [ neutron-openvswitch, nova-compute ]
     - [ neutron-openvswitch, rabbitmq-server ]
+    - [ ceph-osd, ceph-mon ]
 openstack-services:
   inherits: base-services
   services:
@@ -206,7 +212,7 @@ openstack-services-xenial-ocata:
     memcached:
       charm: cs:memcached
   relations:
-    - [ gnocchi, ceph ]
+    - [ gnocchi, ceph-mon ]
     - [ gnocchi, mysql ]
     - [ gnocchi, rabbitmq-server ]
     - [ gnocchi, memcached ]
