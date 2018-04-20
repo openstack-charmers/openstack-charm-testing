@@ -379,6 +379,11 @@ xenial-queens-branch:
 bionic-queens:
   inherits: openstack-services-xenial-ocata
   series: bionic
+  relations:
+    - - ceilometer
+      - keystone:identity-credentials
+    - - designate:dnsaas
+      - neutron-api:external-dns
 bionic-queens-proposed:
   inherits: bionic-queens
   overrides:
