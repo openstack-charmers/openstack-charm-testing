@@ -234,23 +234,6 @@ trusty-icehouse-trunk:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
     offline-compression: "no"
-# kilo
-trusty-kilo:
-  inherits: openstack-services
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-kilo
-    source: cloud:trusty-kilo
-trusty-kilo-proposed:
-  inherits: trusty-kilo
-  overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
-    source: cloud:trusty-kilo/proposed
-trusty-kilo-staging:
-  inherits: trusty-kilo
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
-    source: ppa:ubuntu-cloud-archive/kilo-staging
 # mitaka
 trusty-mitaka:
   #NOTE(coreycb): Temporarily disable reactive charms until
@@ -279,28 +262,6 @@ xenial-mitaka-proposed:
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-# newton
-xenial-newton:
-  inherits: openstack-services-xenial
-  series: xenial
-  overrides:
-    openstack-origin: cloud:xenial-newton
-    source: cloud:xenial-newton
-xenial-newton-proposed:
-  inherits: xenial-newton
-  overrides:
-    openstack-origin: cloud:xenial-newton/proposed
-    source: cloud:xenial-newton/proposed
-xenial-newton-staging:
-  inherits: xenial-newton
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
-    source: ppa:ubuntu-cloud-archive/newton-staging
-xenial-newton-branch:
-  inherits: xenial-newton
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/newton
-    source: ppa:openstack-ubuntu-testing/newton
 # ocata
 xenial-ocata:
   inherits: openstack-services-xenial-ocata
