@@ -2,15 +2,16 @@
 # Download ppc64el images and add to glance.
 
 # Download images if not already present
+: ${WGET_MODE}:=""
 : ${TEST_IMAGE_URL_XENIAL:="http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-ppc64el-disk1.img"}
 : ${TEST_IMAGE2_URL_XENIAL:="http://download.cirros-cloud.net/daily/20150923/cirros-d150923-ppc64le-disk.img"}
 
 mkdir -p ~/images
 [ -f ~/images/xenial-server-cloudimg-ppc64el-disk1.img ] || {
-    wget -O ~/images/xenial-server-cloudimg-ppc64el-disk1.img $TEST_IMAGE_URL_XENIAL
+    wget ${WGET_MODE} -O ~/images/xenial-server-cloudimg-ppc64el-disk1.img $TEST_IMAGE_URL_XENIAL
 }
 [ -f ~/images/cirros-d150923-ppc64le-disk.img ] || {
-    wget -O ~/images/cirros-d150923-ppc64le-disk.img $TEST_IMAGE2_URL_XENIAL
+    wget ${WGET_MODE} -O ~/images/cirros-d150923-ppc64le-disk.img $TEST_IMAGE2_URL_XENIAL
 }
 
 # Upload glance images to overcloud

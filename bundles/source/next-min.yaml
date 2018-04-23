@@ -14,7 +14,7 @@ base-services:
         fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
         monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
         osd-devices: /dev/vdb
-        osd-reformat: "yes"
+        osd-reformat: True
         ephemeral-unmount: /mnt
     keystone:
       branch: https://github.com/openstack/charm-keystone

@@ -63,6 +63,9 @@ def check_snapshot():
         if "snap--root" in line.decode('utf-8') and not "cow" in line.decode('utf-8'):
             found = True
             out = line.decode('utf-8').split()
+            if out[3] == "error":
+                print("snap--root in error, probably still restoring")
+                return 1
             size = out[4].split('/')[0]
             print("snap root found, size is {}".format(size))
             return int(size)
@@ -73,7 +76,7 @@ def check_snapshot():
 
 def check_restoring():
     firstcheck = check_snapshot()
-    if firstcheck = 2:
+    if firstcheck == 2:
         exit(2)
     print("waiting 60 seconds for snapshot deltas...")
     sleep(60)
