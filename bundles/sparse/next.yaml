@@ -12,8 +12,6 @@ base-services:
       constraints: mem=1G
       options:
         expected-osd-count: 3
-        monitor-secret: AQCXrnZQwI7KGBAAiPofmKEXKxu5bUzoYLVkbQ==
-        fsid: 6547bd3e-1397-11e2-82e5-53567c8d32dc
     ceph-osd:
       charm: cs:~openstack-charmers-next/ceph-osd
       num_units: 3
@@ -104,9 +102,6 @@ base-services:
       charm: cs:~openstack-charmers-next/ceilometer-agent
     heat:
       charm: cs:~openstack-charmers-next/heat
-    mongodb:
-      branch: https://git.launchpad.net/mongodb-charm
-      constraints: mem=1G
   relations:
     - [ keystone, mysql ]
     - [ nova-cloud-controller, mysql ]
@@ -138,7 +133,6 @@ base-services:
     - - ceilometer
       - keystone:identity-service
     - [ ceilometer, rabbitmq-server ]
-    - [ ceilometer, mongodb ]
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
     - [ heat, mysql ]
@@ -223,6 +217,12 @@ openstack-services-xenial-ocata:
 trusty-icehouse:
   inherits: openstack-services
   series: trusty
+  services:
+    mongodb:
+      branch: https://git.launchpad.net/mongodb-charm
+      constraints: mem=1G
+  relations:
+    - [ ceilometer, mongodb ]
 trusty-icehouse-proposed:
   inherits: trusty-icehouse
   overrides:
@@ -234,23 +234,6 @@ trusty-icehouse-trunk:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
     offline-compression: "no"
-# kilo
-trusty-kilo:
-  inherits: openstack-services
-  series: trusty
-  overrides:
-    openstack-origin: cloud:trusty-kilo
-    source: cloud:trusty-kilo
-trusty-kilo-proposed:
-  inherits: trusty-kilo
-  overrides:
-    openstack-origin: cloud:trusty-kilo/proposed
-    source: cloud:trusty-kilo/proposed
-trusty-kilo-staging:
-  inherits: trusty-kilo
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/kilo-staging
-    source: ppa:ubuntu-cloud-archive/kilo-staging
 # mitaka
 trusty-mitaka:
   #NOTE(coreycb): Temporarily disable reactive charms until
@@ -261,6 +244,12 @@ trusty-mitaka:
   overrides:
     openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
+  services:
+    mongodb:
+      branch: https://git.launchpad.net/mongodb-charm
+      constraints: mem=1G
+  relations:
+    - [ ceilometer, mongodb ]
 trusty-mitaka-proposed:
   inherits: trusty-mitaka
   overrides:
@@ -274,33 +263,17 @@ trusty-mitaka-staging:
 xenial-mitaka:
   inherits: openstack-services-xenial
   series: xenial
+  services:
+    mongodb:
+      branch: https://git.launchpad.net/mongodb-charm
+      constraints: mem=1G
+  relations:
+    - [ ceilometer, mongodb ]
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-# newton
-xenial-newton:
-  inherits: openstack-services-xenial
-  series: xenial
-  overrides:
-    openstack-origin: cloud:xenial-newton
-    source: cloud:xenial-newton
-xenial-newton-proposed:
-  inherits: xenial-newton
-  overrides:
-    openstack-origin: cloud:xenial-newton/proposed
-    source: cloud:xenial-newton/proposed
-xenial-newton-staging:
-  inherits: xenial-newton
-  overrides:
-    openstack-origin: ppa:ubuntu-cloud-archive/newton-staging
-    source: ppa:ubuntu-cloud-archive/newton-staging
-xenial-newton-branch:
-  inherits: xenial-newton
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/newton
-    source: ppa:openstack-ubuntu-testing/newton
 # ocata
 xenial-ocata:
   inherits: openstack-services-xenial-ocata
@@ -308,6 +281,12 @@ xenial-ocata:
   overrides:
     openstack-origin: cloud:xenial-ocata
     source: cloud:xenial-ocata
+  services:
+    mongodb:
+      branch: https://git.launchpad.net/mongodb-charm
+      constraints: mem=1G
+  relations:
+    - [ ceilometer, mongodb ]
 xenial-ocata-proposed:
   inherits: xenial-ocata
   overrides:
@@ -330,6 +309,12 @@ xenial-pike:
   overrides:
     openstack-origin: cloud:xenial-pike
     source: cloud:xenial-pike
+  services:
+    mongodb:
+      branch: https://git.launchpad.net/mongodb-charm
+      constraints: mem=1G
+  relations:
+    - [ ceilometer, mongodb ]
 xenial-pike-proposed:
   inherits: xenial-pike
   overrides:
@@ -348,6 +333,12 @@ xenial-pike-branch:
 artful-pike:
   inherits: openstack-services-xenial-ocata
   series: artful
+  services:
+    mongodb:
+      branch: https://git.launchpad.net/mongodb-charm
+      constraints: mem=1G
+  relations:
+    - [ ceilometer, mongodb ]
 artful-pike-proposed:
   inherits: artful-pike
   overrides:
