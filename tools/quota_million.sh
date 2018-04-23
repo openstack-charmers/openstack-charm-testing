@@ -3,6 +3,7 @@
 
 TENANT_ID="$(openstack project show admin | awk '/ id /{ print $4 }')"
 
+for a in $(openstack project list|grep -v Name|awk '{print $2}') ; do
 openstack quota set\
     --instances 999999\
     --cores 999999\
@@ -16,7 +17,8 @@ openstack quota set\
     --secgroups 999999\
     --secgroup-rules 999999\
     --key-pairs 999999\
-    admin
+    $a ;
+done
 
 juju set nova-cloud-controller ram-allocation-ratio=999999 &> /dev/null ||
   juju config nova-cloud-controller ram-allocation-ratio=999999 &> /dev/null

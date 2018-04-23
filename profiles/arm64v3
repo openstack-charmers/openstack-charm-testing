@@ -20,7 +20,7 @@ set -ex
 net_type=${1:-"gre"}
 
 # Configure neutron networking on overcloud
-source novarcv3_domain
+source openrc_domain
 ./bin/neutron-ext-net-ksv3 --project admin --network-type flat -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
 ./bin/neutron-tenant-net-ksv3 --project admin --network-type $net_type -r provider-router -N $NAMESERVER private $CIDR_PRIV
 ext_net=$(openstack network list | awk '/ext_net/ {print $2}')
@@ -36,7 +36,7 @@ openstack role add --user alt_demo --project alt_demo Member
 access=$(openstack ec2 credentials create --user demo --project demo  | awk '/access/ {print $4}')
 secret=$(openstack ec2 credentials show $access  | awk '/secret/ {print $4}')
 
-source novarcv3_project
+source openrc_project
 # Download images if not already present
 tools/images_arm64.sh
 
@@ -52,9 +52,9 @@ create_default_flavors
 echo "Tempest"
 router=$(neutron --os-project-name admin router-list | grep provider-router | awk '{ print $2}')
 # Gather vars for tempest template
-keystone=$(juju-deployer -f keystone)
-dashboard=$(juju-deployer -f openstack-dashboard)
-ncc=$(juju-deployer -f nova-cloud-controller)
+keystone=$(juju run --unit keystone/0 'unit-get private-address')
+dashboard=$(juju run --unit openstack-dashboard/0 'unit-get private-address')
+ncc=$(juju run --unit nova-cloud-controller/0 'unit-get private-address')
 http=${OS_AUTH_PROTOCOL:-http}
 default_domain_id=$(openstack domain list | awk '/default/ {print $2}')
 

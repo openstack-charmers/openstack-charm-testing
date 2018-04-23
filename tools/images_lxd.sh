@@ -1,12 +1,14 @@
 #!/bin/bash -ex
 # Download LXD images and add to glance
 
+: ${WGET_MODE}:=""
+
 mkdir -vp ~/images
 [ -f ~/images/trusty-server-cloudimg-amd64-root.tar.xz ] || {
-    wget -O ~/images/trusty-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.xz
+    wget ${WGET_MODE} -O ~/images/trusty-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-root.tar.xz
 }
 [ -f ~/images/xenial-server-cloudimg-amd64-root.tar.xz ] || {
-    wget -O ~/images/xenial-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-root.tar.xz
+    wget ${WGET_MODE} -O ~/images/xenial-server-cloudimg-amd64-root.tar.xz http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-root.tar.xz
 }
 
 # Upload glance images to overcloud
