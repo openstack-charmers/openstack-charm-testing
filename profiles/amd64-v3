@@ -1,24 +1,7 @@
 #!/bin/bash
 
 set -ex
-
-function upload_image {
-    src=$1
-    image_name=$2
-    image_file=$3
-    case "$src" in
-        swift) http_root="http://$SWIFT_IP:80/swift/v1/images";;
-        cloudimages) http_root="http://cloud-images.ubuntu.com/${image_name}/current";;
-    esac
-    [ -f ~/images/$image_file ] || {
-        wget -O ~/images/$image_file ${http_root}/${image_file}
-    }
-    openstack image show $image_name || {
-        openstack image create --public --container-format=bare --disk-format=qcow2 --file=${HOME}/images/$image_file  $image_name
-    }
-}
-
-# Install dependencies and CLI tools
+. ./profiles/common
 # See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
 #sudo apt-get install git testrepository subunit python-nose python-lxml python-boto \
 #    python-junitxml python-subunit python-testresources python-oslotest python-stevedore \
@@ -26,24 +9,15 @@ function upload_image {
 #    python-neutronclient python-novaclient python-swiftclient python-ceilometerclient \
 #    openvswitch-test openvswitch-common -y
 
-# Set serverstack defaults, if not already set.
-[[ -z "$GATEWAY" ]] && export GATEWAY="10.5.0.1"
-[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.5.0.0/16"
-[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.5.150.0:10.5.200.254"
+[[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
+[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
+[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.171.0:10.245.171.255"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.6"
-[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
+[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/22"
 [[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.161.162"
 
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}
-
-# If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
-if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
-    unset OS_DEFAULT_DOMAIN OS_PROJECT_NAME OS_IDENTITY_API_VERSION OS_PROJECT_DOMAIN_NAME
-    source novarc_unset_all
-    source ~/novarc
-    ./bin/post-deploy-config neutron-gateway
-fi
 
 # Configure neutron networking on overcloud
 source novarcv3_project
@@ -75,26 +49,26 @@ access=$(openstack ec2 credentials create --user-domain admin_domain \
 secret=$(openstack ec2 credentials show $access  | awk '/secret/ {print $4}')
 
 # Download images if not already present
-mkdir -vp ~/images
-upload_image cloudimages xenial xenial-server-cloudimg-amd64-disk1.img
-upload_image cloudimages trusty trusty-server-cloudimg-amd64-disk1.img
-upload_image cloudimages precise precise-server-cloudimg-amd64-disk1.img
-upload_image swift cirros cirros-0.3.4-x86_64-disk.img
-image_id=$(openstack image list | awk '/cirros/ {print $2}')
-image_alt_id=$(openstack image list | awk '/precise/ {print $2}')
+tools/images_amd64.sh
 
+# Run Sec Groups
+tools/sec_groups.sh
 
 echo "Flavors"
 openstack flavor show m1.cirros || openstack flavor create --id 6 --ram 64 --disk 1 --vcpus 1 m1.cirros
 openstack flavor show m1.tempest || openstack flavor create --id 7 --ram 256 --disk 5 --vcpus 1 m1.tempest
 openstack flavor show m2.tempest || openstack flavor create --id 8 --ram 512 --disk 5 --vcpus 1 m2.tempest
+create_default_flavors
+
+echo "Quotas"
+tools/quota_million.sh
 
 echo "Tempest"
 router=$(neutron --os-project-name admin router-list | grep provider-router | awk '{ print $2}')
 # Gather vars for tempest template
-keystone=$(juju-deployer -f keystone)
-dashboard=$(juju-deployer -f openstack-dashboard)
-ncc=$(juju-deployer -f nova-cloud-controller)
+keystone=$(juju run --unit keystone/0 'unit-get private-address')
+dashboard=$(juju run --unit openstack-dashboard/0 'unit-get private-address')
+ncc=$(juju run --unit nova-cloud-controller/0 'unit-get private-address')
 http=${OS_AUTH_PROTOCOL:-http}
 default_domain_id=$(openstack domain list | awk '/default/ {print $2}')
 

@@ -4,22 +4,26 @@
 # Download images if not already present
 : ${WGET_MODE}:=""
 : ${TEST_IMAGE_URL_XENIAL:="http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-ppc64el-disk1.img"}
-: ${TEST_IMAGE2_URL_XENIAL:="http://download.cirros-cloud.net/daily/20150923/cirros-d150923-ppc64le-disk.img"}
+: ${TEST_IMAGE_URL_CIRROS:="http://download.cirros-cloud.net/daily/20150923/cirros-d150923-ppc64le-disk.img"}
+: ${TEST_IMAGE_NAME_XENIAL:="xenial-ppc64el"}
+: ${TEST_IMAGE_NAME_CIRROS:="cirros-ppc64el"}
 
-mkdir -p ~/images
-[ -f ~/images/xenial-server-cloudimg-ppc64el-disk1.img ] || {
+if [ ! -d ~/images ] ; then
+        mkdir -p ~/images
+fi
+
+openstack image show ${TEST_IMAGE_NAME_XENIAL} ||
+([ -f ~/images/xenial-server-cloudimg-ppc64el-disk1.img ] || {
     wget ${WGET_MODE} -O ~/images/xenial-server-cloudimg-ppc64el-disk1.img $TEST_IMAGE_URL_XENIAL
 }
-[ -f ~/images/cirros-d150923-ppc64le-disk.img ] || {
-    wget ${WGET_MODE} -O ~/images/cirros-d150923-ppc64le-disk.img $TEST_IMAGE2_URL_XENIAL
+openstack image create --public --container-format bare --disk-format qcow2 --property architecture=ppc64 --file ~/images/xenial-server-cloudimg-ppc64el-disk1.img xenial-ppc64el
+)
+
+openstack image show ${TEST_IMAGE_NAME_CIRROS} ||
+([ -f ~/images/cirros-d150923-ppc64le-disk.img ] || {
+    export http_proxy=http://squid.internal:3128
+    wget ${WGET_MODE} -O ~/images/cirros-d150923-ppc64le-disk.img $TEST_IMAGE_URL_CIRROS
+    export http_proxy=''
 }
-
-# Upload glance images to overcloud
-glance --os-image-api-version 1 image-create --name="xenial-ppc64el" --is-public=true --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/xenial-server-cloudimg-ppc64el-disk1.img
-glance --os-image-api-version 1 image-create --name="cirros-ppc64el" --is-public=true --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/cirros-d150923-ppc64le-disk.img
-
-# Set image architecture properties
-glance --os-image-api-version 1 image-update --property architecture=ppc64 xenial-ppc64el
-glance --os-image-api-version 1 image-update --property architecture=ppc64 cirros-ppc64el
+openstack image create --public --container-format bare --disk-format qcow2 --property architecture=ppc64 --file ~/images/cirros-d150923-ppc64le-disk.img cirros-ppc64el
+)

@@ -1,5 +1,10 @@
 #!/bin/bash -ex
-# Download ppc64el images and add to glance.
+# Download amd64 images and add to glance.
+
+: ${WGET_MODE}:=""
+: ${TEST_IMAGE_NAME_XENIAL:="xenial"}
+: ${TEST_IMAGE_NAME_CIRROS:="cirros"}
+: ${TEST_IMAGE_NAME_BIONIC:="bionic"}
 
 : ${WGET_MODE}:=""
 
@@ -7,35 +12,41 @@
 [[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.161.162"
 
 # Download images if not already present
-mkdir -vp ~/images
-[ -f ~/images/xenial-server-cloudimg-amd64-disk1.img ] || {
+if [ ! -d ~/images ] ; then
+        mkdir -vp ~/images
+fi
+
+openstack image show xenial || \
+([ -f ~/images/xenial-server-cloudimg-amd64-disk1.img ] || {
+    export http_proxy=http://squid.internal:3128
     wget ${WGET_MODE} -O ~/images/xenial-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+    export http_proxy=''
 }
-[ -f ~/images/trusty-server-cloudimg-amd64-disk1.img ] || {
-    wget ${WGET_MODE} -O ~/images/trusty-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
+openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/xenial-server-cloudimg-amd64-disk1.img xenial
+)
+
+openstack image show bionic || \
+([ -f ~/images/bionic-server-cloudimg-amd64-disk1.img ] || {
+    export http_proxy=http://squid.internal:3128
+    wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+    export http_proxy=''
 }
-[ -f ~/images/precise-server-cloudimg-amd64-disk1.img ] || {
-    wget ${WGET_MODE} -O ~/images/precise-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
-}
-[ -f ~/images/cirros-0.3.4-x86_64-disk.img ] || {
+openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64.img bionic
+)
+
+openstack image show cirros || \
+([ -f ~/images/cirros-0.3.4-x86_64-disk.img ] || {
+    export http_proxy=http://squid.internal:3128
     wget ${WGET_MODE} -O ~/images/cirros-0.3.4-x86_64-disk.img http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.4-x86_64-disk.img
+    export http_proxy=''
 }
+
+
 [ -f ~/images/cirros-0.3.4-x86_64-uec.tar.gz ] || {
+    export http_proxy=http://squid.internal:3128
     wget ${WGET_MODE} -O ~/images/cirros-0.3.4-x86_64-uec.tar.gz http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.4-x86_64-uec.tar.gz
+    export http_proxy=''
     (cd ~/images && tar -xzf cirros-0.3.4-x86_64-uec.tar.gz)
 }
-
-# Upload glance images to overcloud
-glance --os-image-api-version 1 image-create --name="xenial" --is-public=true --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/xenial-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version 1 image-create --name="trusty" --is-public=true --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/trusty-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version 1 image-create --name="precise" --is-public=true --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/precise-server-cloudimg-amd64-disk1.img
-glance --os-image-api-version 1 image-create --name="cirros" --is-public=true  --progress \
-    --container-format=bare --disk-format=qcow2 < ~/images/cirros-0.3.4-x86_64-disk.img
-
-glance --os-image-api-version 1 image-update --property architecture=x86_64 xenial
-glance --os-image-api-version 1 image-update --property architecture=x86_64 trusty
-glance --os-image-api-version 1 image-update --property architecture=x86_64 precise
-glance --os-image-api-version 1 image-update --property architecture=x86_64 cirros
+openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/cirros-0.3.4-x86_64-disk.img cirros
+)

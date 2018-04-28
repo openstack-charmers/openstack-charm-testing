@@ -65,7 +65,7 @@ def check_snapshot():
             out = line.decode('utf-8').split()
             if out[3] == "error":
                 print("snap--root in error, probably still restoring")
-                return 1
+                exit(1)
             size = out[4].split('/')[0]
             print("snap root found, size is {}".format(size))
             return int(size)
