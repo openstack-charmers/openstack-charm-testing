@@ -46,23 +46,34 @@ if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
 fi
 
 # Configure neutron networking on overcloud
-source novarcv3_domain
+source novarcv3_project
 ./bin/neutron-ext-net-ksv3 --project admin --network-type flat -g $GATEWAY -c $CIDR_EXT -f $FIP_RANGE ext_net
 ./bin/neutron-tenant-net-ksv3 --project admin --network-type $net_type -r provider-router -N $NAMESERVER private $CIDR_PRIV
 ext_net=$(openstack network list | awk '/ext_net/ {print $2}')
 
 # Create demo/testing users, tenants and flavor
-openstack project show demo || openstack project create demo
-openstack user show demo || openstack user create --project demo --password pass --enable --email demo@dev.null demo
+openstack project show --domain admin_domain demo || \
+	openstack project create --domain admin_domain demo
+openstack user show --domain admin_domain demo || \
+	openstack user create --project-domain admin_domain --project demo \
+	--password pass --enable --email demo@dev.null \
+	--domain admin_domain demo
 openstack role show Member || openstack role create Member
-openstack role add --user demo --project demo Member
-openstack project show alt_demo || openstack project create alt_demo
-openstack user show alt_demo || openstack user create --project alt_demo --password secret --enable --email alt_demo@dev.null alt_demo
-openstack role add --user alt_demo --project alt_demo Member
-access=$(openstack ec2 credentials create --user demo --project demo  | awk '/access/ {print $4}')
+openstack role add --user-domain admin_domain --user demo \
+	--project-domain admin_domain --project demo Member
+openstack project show --domain admin_domain alt_demo || \
+	openstack project create --domain admin_domain alt_demo
+openstack user show --domain admin_domain alt_demo || \
+	openstack user create --project-domain admin_domain --project alt_demo \
+	--password secret --enable --email alt_demo@dev.null \
+	--domain admin_domain alt_demo
+openstack role add --user-domain admin_domain --user alt_demo \
+	--project-domain admin_domain --project alt_demo Member
+access=$(openstack ec2 credentials create --user-domain admin_domain \
+	--user demo --project-domain admin_domain --project demo \
+       | awk '/access/ {print $4}')
 secret=$(openstack ec2 credentials show $access  | awk '/secret/ {print $4}')
 
-source novarcv3_project
 # Download images if not already present
 mkdir -vp ~/images
 upload_image cloudimages xenial xenial-server-cloudimg-amd64-disk1.img
