@@ -13,7 +13,7 @@
 [[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
 [[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
 [[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.173.0:10.245.173.254"
-[[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.2"
+[[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.6"
 [[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/22"
 
 # Accept network type as first parameter, assume gre if unspecified
