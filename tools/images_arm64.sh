@@ -1,16 +1,17 @@
 #!/bin/bash -ex
 # Download images and add to glance.
 
+: ${WGET_MODE}:=""
 : ${TEST_IMAGE_URL_XENIAL:="http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-arm64-uefi1.img"}
 : ${CIRROS_IMAGE_URL_XENIAL:="http://download.cirros-cloud.net/daily/20150522/cirros-d150522-aarch64-disk.img"}
 
 mkdir -vp ~/images
 [ -f ~/images/xenial-server-cloudimg-arm64-uefi1.img ] || {
-    wget -O ~/images/xenial-server-cloudimg-arm64-uefi1.img $TEST_IMAGE_URL_XENIAL
+    wget ${WGET_MODE} -O ~/images/xenial-server-cloudimg-arm64-uefi1.img $TEST_IMAGE_URL_XENIAL
 }
 
 export http_proxy=http://squid.internal:3128
-    wget -O ~/images/cirros_test.img $CIRROS_IMAGE_URL_XENIAL
+    wget ${WGET_MODE} -O ~/images/cirros_test.img $CIRROS_IMAGE_URL_XENIAL
 export http_proxy=''
 
 # Create glance image
