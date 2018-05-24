@@ -125,7 +125,8 @@ base-services:
     - [ cinder, cinder-ceph ]
     - [ cinder-ceph, ceph-mon ]
     - [ neutron-gateway, nova-cloud-controller ]
-    - [ openstack-dashboard, keystone ]
+    - - openstack-dashboard:identity-service
+      - keystone:identity-service
     - [ swift-proxy, keystone ]
     - [ swift-proxy, swift-storage-z1 ]
     - [ swift-proxy, swift-storage-z2 ]
