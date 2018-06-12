@@ -77,22 +77,25 @@ base-services:
       constraints: mem=1G
       options:
         zone: 1
-        block-device: vdb
+        block-device: /dev/vdb
         overwrite: "true"
+        ephemeral-unmount: "/mnt"
     swift-storage-z2:
       charm: cs:~openstack-charmers-next/swift-storage
       constraints: mem=1G
       options:
         zone: 2
-        block-device: vdb
+        block-device: /dev/vdb
         overwrite: "true"
+        ephemeral-unmount: "/mnt"
     swift-storage-z3:
       charm: cs:~openstack-charmers-next/swift-storage
       constraints: mem=1G
       options:
         zone: 3
-        block-device: vdb
+        block-device: /dev/vdb
         overwrite: "true"
+        ephemeral-unmount: "/mnt"
     ceilometer:
       charm: cs:~openstack-charmers-next/ceilometer
       constraints: mem=1G
