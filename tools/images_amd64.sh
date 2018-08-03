@@ -42,11 +42,11 @@ openstack image show cirros || \
 }
 
 
-[ -f ~/images/cirros-0.3.4-x86_64-uec.tar.gz ] || {
-    export http_proxy=http://squid.internal:3128
-    wget ${WGET_MODE} -O ~/images/cirros-0.3.4-x86_64-uec.tar.gz http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.4-x86_64-uec.tar.gz
-    export http_proxy=''
-    (cd ~/images && tar -xzf cirros-0.3.4-x86_64-uec.tar.gz)
-}
+#[ -f ~/images/cirros-0.3.4-x86_64-uec.tar.gz ] || {
+#    export http_proxy=http://squid.internal:3128
+#    wget ${WGET_MODE} -O ~/images/cirros-0.3.4-x86_64-uec.tar.gz http://$SWIFT_IP:80/swift/v1/images/cirros-0.3.4-x86_64-uec.tar.gz
+#    export http_proxy=''
+#    (cd ~/images && tar -xzf cirros-0.3.4-x86_64-uec.tar.gz)
+#}
 openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/cirros-0.3.4-x86_64-disk.img cirros
 )

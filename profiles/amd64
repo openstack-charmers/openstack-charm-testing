@@ -17,7 +17,7 @@ install_packages
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}
 
-source novarc
+source rcs/openrc
 
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
