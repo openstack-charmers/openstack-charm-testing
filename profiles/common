@@ -29,6 +29,7 @@ function upload_image {
 }
 
 function install_packages {
+    sudo apt-get install python-openstackclient python-neutronclient python-novaclient
     # Install dependencies and CLI tools
     # See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
 

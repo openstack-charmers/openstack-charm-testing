@@ -35,5 +35,5 @@ tools/images_arm64.sh
 tools/sec_groups.sh
 
 # Tune for higher-density testing
-tools/flavor_shrink.sh
+#tools/flavor_shrink.sh
 tools/quota_million.sh
