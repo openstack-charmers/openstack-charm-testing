@@ -1,1 +1,66 @@
-ls: cannot access '/q3123123': No such file or directory
+Model                    Controller               Cloud/Region  Version  SLA          Timestamp
+arm64-mosci-ruxton-maas  arm64-mosci-ruxton-maas  ruxton-maas   2.4.1    unsupported  12:30:41Z
+
+App                    Version       Status  Scale  Charm                  Store       Rev  OS      Notes
+ceph-mon               10.2.10       active      3  ceph-mon               jujucharms  338  ubuntu  
+ceph-osd               10.2.10       active      3  ceph-osd               jujucharms  359  ubuntu  
+ceph-radosgw           10.2.10       active      1  ceph-radosgw           jujucharms  292  ubuntu  
+cinder                 8.1.1         active      1  cinder                 jujucharms  335  ubuntu  
+cinder-ceph            8.1.1         active      1  cinder-ceph            jujucharms  266  ubuntu  
+glance                 12.0.0        active      1  glance                 jujucharms  322  ubuntu  
+keystone               9.3.0         active      1  keystone               jujucharms  367  ubuntu  
+mysql                  5.6.37-26.21  active      1  percona-cluster        jujucharms  306  ubuntu  
+neutron-api            8.4.0         active      1  neutron-api            jujucharms  352  ubuntu  
+neutron-gateway        8.4.0         error       1  neutron-gateway        jujucharms  328  ubuntu  
+neutron-openvswitch    8.4.0         active      3  neutron-openvswitch    jujucharms  311  ubuntu  
+nova-cloud-controller  13.1.4        active      1  nova-cloud-controller  jujucharms  362  ubuntu  
+nova-compute           13.1.4        active      3  nova-compute           jujucharms  382  ubuntu  
+ntp                    4.2.8p4+dfsg  active      3  ntp                    jujucharms   27  ubuntu  
+openstack-dashboard    9.1.2         active      1  openstack-dashboard    jujucharms  319  ubuntu  
+rabbitmq-server        3.5.7         active      1  rabbitmq-server        jujucharms  300  ubuntu  
+
+Unit                      Workload  Agent  Machine  Public address  Ports           Message
+ceph-mon/0                active    idle   1/lxd/0  10.245.168.56                   Unit is ready and clustered
+ceph-mon/1*               active    idle   2/lxd/0  10.245.168.54                   Unit is ready and clustered
+ceph-mon/2                active    idle   3/lxd/0  10.245.168.60                   Unit is ready and clustered
+ceph-osd/0*               active    idle   1        10.245.168.43                   Unit is ready (1 OSD)
+ceph-osd/1                active    idle   2        10.245.168.63                   Unit is ready (1 OSD)
+ceph-osd/2                active    idle   3        10.245.168.29                   Unit is ready (1 OSD)
+ceph-radosgw/0*           active    idle   0/lxd/0  10.245.168.50   80/tcp          Unit is ready
+cinder/0*                 active    idle   1/lxd/1  10.245.168.55   8776/tcp        Unit is ready
+  cinder-ceph/0*          active    idle            10.245.168.55                   Unit is ready
+glance/0*                 active    idle   2/lxd/1  10.245.168.51   9292/tcp        Unit is ready
+keystone/0*               active    idle   3/lxd/1  10.245.168.59   5000/tcp        Unit is ready
+mysql/0*                  active    idle   0/lxd/1  10.245.168.49   3306/tcp        Unit is ready
+neutron-api/0*            active    idle   1/lxd/2  10.245.168.58   9696/tcp        Unit is ready
+neutron-gateway/0*        error     idle   0        10.245.168.36                   hook failed: "config-changed"
+nova-cloud-controller/0*  active    idle   2/lxd/2  10.245.168.53   8774/tcp        Unit is ready
+nova-compute/0*           active    idle   1        10.245.168.43                   Unit is ready
+  neutron-openvswitch/1   active    idle            10.245.168.43                   Unit is ready
+  ntp/1                   active    idle            10.245.168.43   123/udp         Ready
+nova-compute/1            active    idle   2        10.245.168.63                   Unit is ready
+  neutron-openvswitch/0*  active    idle            10.245.168.63                   Unit is ready
+  ntp/0*                  active    idle            10.245.168.63   123/udp         Ready
+nova-compute/2            active    idle   3        10.245.168.29                   Unit is ready
+  neutron-openvswitch/2   active    idle            10.245.168.29                   Unit is ready
+  ntp/2                   active    idle            10.245.168.29   123/udp         Ready
+openstack-dashboard/0*    active    idle   3/lxd/2  10.245.168.57   80/tcp,443/tcp  Unit is ready
+rabbitmq-server/0*        active    idle   0/lxd/2  10.245.168.30   5672/tcp        Unit is ready
+
+Machine  State    DNS            Inst id              Series  AZ       Message
+0        started  10.245.168.36  tyn3qs               xenial  default  Deployed
+0/lxd/0  started  10.245.168.50  juju-fa13e2-0-lxd-0  xenial  default  Container started
+0/lxd/1  started  10.245.168.49  juju-fa13e2-0-lxd-1  xenial  default  Container started
+0/lxd/2  started  10.245.168.30  juju-fa13e2-0-lxd-2  xenial  default  Container started
+1        started  10.245.168.43  p7mgw4               xenial  default  Deployed
+1/lxd/0  started  10.245.168.56  juju-fa13e2-1-lxd-0  xenial  default  Container started
+1/lxd/1  started  10.245.168.55  juju-fa13e2-1-lxd-1  xenial  default  Container started
+1/lxd/2  started  10.245.168.58  juju-fa13e2-1-lxd-2  xenial  default  Container started
+2        started  10.245.168.63  ggss4r               xenial  default  Deployed
+2/lxd/0  started  10.245.168.54  juju-fa13e2-2-lxd-0  xenial  default  Container started
+2/lxd/1  started  10.245.168.51  juju-fa13e2-2-lxd-1  xenial  default  Container started
+2/lxd/2  started  10.245.168.53  juju-fa13e2-2-lxd-2  xenial  default  Container started
+3        started  10.245.168.29  qmwcqs               xenial  default  Deployed
+3/lxd/0  started  10.245.168.60  juju-fa13e2-3-lxd-0  xenial  default  Container started
+3/lxd/1  started  10.245.168.59  juju-fa13e2-3-lxd-1  xenial  default  Container started
+3/lxd/2  started  10.245.168.57  juju-fa13e2-3-lxd-2  xenial  default  Container started

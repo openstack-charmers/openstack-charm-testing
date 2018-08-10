@@ -39,10 +39,10 @@ if not args.release and not args.lock and not args.unlock and not args.list and 
     print("At least one of: -r, -l, -u, --list are required")
     sys.exit(100)
 
-# If releasing, make sure we have tags and arch
-if (args.release or args.list) and (not args.tags or not args.arch):
+# If releasing, make sure we have tags and arch or system id
+if (args.release or args.list) and (not args.tags or not args.arch) and not args.system_id:
     print (args)
-    print("Can't list or release machines without tags and arch")
+    print("Can't list or release machines without tags and arch or system id")
     sys.exit(101)
 
 # Lock or unlock one specific host
@@ -106,15 +106,18 @@ def getInterfaces(id=args.interfaces):
             if "subnet" in iface:
                 print(item["name"])
 
-def Release():
-    found = getSysIds()
+def Release(**system_id):
+    if system_id['system_id'] == None:
+        found = getSysIds()
+    else:
+        found = {system_id['system_id']}
     if found == []:
         print ("No machines found to release")
         sys.exit(0)
     print ("Found these ID's to release: {}".format(found))
-    for system_id in found:
-        print ("Releasing {}".format(system_id))
-        client.post(u"machines/" + system_id + "/", "release")
+    for sys in found:
+        print ("Releasing {}".format(sys))
+        client.post(u"machines/" + sys + "/", "release")
 
 def Lock(system_id=SYSTEM_ID):
     # Requires admin permissions
@@ -128,7 +131,7 @@ if args.interfaces:
     getInterfaces()
 
 if args.release:
-    Release()
+    Release(system_id=args.system_id)
 
 if args.lock:
     Lock()
