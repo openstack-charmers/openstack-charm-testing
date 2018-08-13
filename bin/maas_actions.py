@@ -115,9 +115,9 @@ def Release(**system_id):
         print ("No machines found to release")
         sys.exit(0)
     print ("Found these ID's to release: {}".format(found))
-    for sys in found:
-        print ("Releasing {}".format(sys))
-        client.post(u"machines/" + sys + "/", "release")
+    for system in found:
+        print ("Releasing {}".format(system))
+        client.post(u"machines/" + system + "/", "release")
 
 def Lock(system_id=SYSTEM_ID):
     # Requires admin permissions
