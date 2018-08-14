@@ -9,12 +9,15 @@
 #
 # Lock and Unlock will only work if the API key provided has admin permissions
 
-import sys
+import sys, os
 import argparse
 import bson 
 import json
 from pprint import pprint
 from apiclient import maas_client
+
+os.environ['HTTP_PROXY'] = ""
+os.environ['http_proxy'] = ""
 
 parser = argparse.ArgumentParser(description="Release, lock or unlock a maas machine:"
                                              "-o and at least one of -r, -l, -u required. "
