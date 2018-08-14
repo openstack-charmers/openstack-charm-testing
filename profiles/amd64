@@ -20,7 +20,7 @@ net_type=${1:-"gre"}
 source rcs/openrc
 
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
-if [[ "${BARE_METAL^^}" == "FALSE" ]]; then
+if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     ./bin/post-deploy-config neutron-gateway
 fi
 
@@ -47,9 +47,12 @@ tools/quota_million.sh
 # Gather vars for tempest template
 ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
 router=$(neutron router-list | grep provider-router | awk '{ print $2}')
-keystone=$(juju-deployer -f keystone)
-dashboard=$(juju-deployer -f openstack-dashboard)
-ncc=$(juju-deployer -f nova-cloud-controller)
+keystone_unit=$(juju status keystone|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+dashboard_unit=$(juju status openstack-dashboard|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+ncc_unit=$(juju status nova-cloud-controller|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+keystone=$(juju run --unit ${keystone_unit} "unit-get private-address")
+dashboard=$(juju run --unit ${dashboard_unit} "unit-get private-address")
+ncc=$(juju run --unit ${ncc_unit} "unit-get private-address")
 http=${OS_AUTH_PROTOCOL:-http}
 
 # Insert vars into tempest conf
