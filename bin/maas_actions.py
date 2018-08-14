@@ -20,6 +20,7 @@ parser = argparse.ArgumentParser(description="Release, lock or unlock a maas mac
                                              "-o and at least one of -r, -l, -u required. "
                                              "MAAS admin permissions required to lock/unlock.")
 parser.add_argument('-a', '--arch', help="architecture to match")
+parser.add_argument('-c', '--count', help="count machines in Ready state, matching arch and tags", action="store_true")
 parser.add_argument('-m', '--maashost', help="MAAS hostname (api v2 support only)", required=True)
 parser.add_argument('-k', '--key', help="MAAS api key", required=True)
 parser.add_argument('-t', '--tags', help="primary tag to match")
@@ -35,14 +36,14 @@ parser.add_argument('--additional', help="one additional tag")
 args = parser.parse_args()
 
 # Check that an action has been specified
-if not args.release and not args.lock and not args.unlock and not args.list and not args.interfaces:
-    print("At least one of: -r, -l, -u, --list are required")
+if not args.release and not args.lock and not args.unlock and not args.list and not args.interfaces and not args.count:
+    print("At least one of: -r, -l, -u, --list, --count are required")
     sys.exit(100)
 
 # If releasing, make sure we have tags and arch or system id
-if (args.release or args.list) and (not args.tags or not args.arch) and not args.system_id:
+if (args.release or args.list or args.count) and (not args.tags or not args.arch) and not args.system_id:
     print (args)
-    print("Can't list or release machines without tags and arch or system id")
+    print("Can't list, count or release machines without tags and arch or system id")
     sys.exit(101)
 
 # Lock or unlock one specific host
@@ -56,7 +57,7 @@ if args.lock and args.unlock:
     sys.exit(103)
 
 # Just list the nodes
-if args.list:
+if args.list or args.count:
     args.release == False
     args.lock == False
     args.unlock == False
@@ -71,13 +72,14 @@ APIKEY=args.key
 MAAS_URL="http://" + args.maashost + "/MAAS/api/2.0"
 ADD_TAGS=args.additional
 SYSTEM_ID=args.system_id
+STATUS="not ready"
 
 #print ("Trying to find machines which match the following:\ntags: {}, arch: {}, owner: {}, maas url: {}\n".format(TAGS,ARCH,OWNER,MAAS_URL))
 
 auth = maas_client.MAASOAuth(*APIKEY.split(":"))
 client = maas_client.MAASClient(auth, maas_client.MAASDispatcher(), MAAS_URL)
 
-def getSysIds(tags=TAGS,owner=OWNER,arch=ARCH,additional=ADD_TAGS):
+def getSysIds(tags=TAGS,owner=OWNER,arch=ARCH,additional=ADD_TAGS,status=STATUS):
     id = []
     result = client.get(u"tags/" + TAGS + "/", "machines")
     data = str(result.read(), "utf8")
@@ -95,6 +97,16 @@ def getSysIds(tags=TAGS,owner=OWNER,arch=ARCH,additional=ADD_TAGS):
                     print ("{} found (locked)".format(item["system_id"]))
                 else:
                     id.append(item["system_id"])
+    return id
+
+def CountAvailable(tags=TAGS,arch=ARCH):
+    id = []
+    result = client.get(u"tags/" +TAGS + "/", "machines")
+    data = str(result.read(), "utf8")
+    jdata = json.loads(data)
+    for item in jdata:
+        if item["owner"] == None and arch in item["architecture"] and item["status_name"] == "Ready":
+            id.append(item["system_id"])
     return id
 
 def getInterfaces(id=args.interfaces):
@@ -138,6 +150,13 @@ if args.lock:
 
 if args.unlock:
     Unlock()
+
+if args.count:
+    found = CountAvailable()
+    if not found:
+        print ("0")
+    else:
+        print (len(found))
 
 if args.list:
     found = getSysIds()
