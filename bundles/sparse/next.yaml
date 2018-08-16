@@ -215,6 +215,13 @@ openstack-services-xenial-ocata:
     - [ gnocchi, ceilometer ]
     - [ gnocchi, keystone ]
     - [ cinder-ceph, nova-compute ]
+openstack-services-queens:
+  inherits: openstack-services-xenial-ocata
+  relations:
+    - - ceilometer
+      - keystone:identity-credentials
+    - - designate:dnsaas
+      - neutron-api:external-dns
 # icehouse
 trusty-icehouse:
   inherits: openstack-services
@@ -353,16 +360,11 @@ artful-pike-branch:
     source: ppa:openstack-ubuntu-testing/pike
 # queens
 xenial-queens:
-  inherits: openstack-services-xenial-ocata
+  inherits: openstack-services-queens
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-queens
     source: cloud:xenial-queens
-  relations:
-    - - ceilometer
-      - keystone:identity-credentials
-    - - designate:dnsaas
-      - neutron-api:external-dns
 xenial-queens-proposed:
   inherits: xenial-queens
   overrides:
@@ -396,3 +398,43 @@ bionic-queens-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/queens
     source: ppa:openstack-ubuntu-testing/queens
+# rocky
+bionic-rocky:
+  inherits: openstack-services-queens
+  series: bionic
+  overrides:
+    openstack-origin: cloud:bionic-rocky
+    source: cloud:bionic-rocky
+bionic-rocky-proposed:
+  inherits: bionic-rocky
+  overrides:
+    openstack-origin: cloud:bionic-rocky/proposed
+    source: cloud:bionic-rocky/proposed
+bionic-rocky-staging:
+  inherits: bionic-rocky
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/rocky-staging
+    source: ppa:ubuntu-cloud-archive/rocky-staging
+bionic-rocky-branch:
+  inherits: bionic-rocky
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/rocky
+    source: ppa:openstack-ubuntu-testing/rocky
+cosmic-rocky:
+  inherits: openstack-services-bionic-ocata
+  series: cosmic
+  relations:
+    - - ceilometer
+      - keystone:identity-credentials
+    - - designate:dnsaas
+      - neutron-api:external-dns
+cosmic-rocky-proposed:
+  inherits: cosmic-rocky
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+cosmic-rocky-branch:
+  inherits: cosmic-rocky
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/rocky
+    source: ppa:openstack-ubuntu-testing/rocky
