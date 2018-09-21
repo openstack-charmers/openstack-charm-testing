@@ -27,3 +27,12 @@ openstack image show ${TEST_IMAGE_NAME_CIRROS} ||
 }
 openstack image create --public --container-format bare --disk-format qcow2 --property architecture=ppc64 --file ~/images/cirros-d150923-ppc64le-disk.img cirros-ppc64el
 )
+
+openstack image show bionic || \
+([ -f ~/images/bionic-server-cloudimg-ppc64el-disk1.img ] || {
+    export http_proxy=http://squid.internal:3128
+    wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-ppc64el.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-ppc64el.img
+    export http_proxy=''
+}
+openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-ppc64el.img bionic
+)
