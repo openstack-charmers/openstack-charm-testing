@@ -396,3 +396,25 @@ bionic-queens-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/queens
     source: ppa:openstack-ubuntu-testing/queens
+# rocky
+bionic-rocky:
+  inherits: openstack-services-queens
+  series: bionic
+  overrides:
+    openstack-origin: cloud:bionic-rocky
+    source: cloud:bionic-rocky
+bionic-rocky-proposed:
+  inherits: bionic-rocky
+  overrides:
+    openstack-origin: cloud:bionic-rocky/proposed
+    source: cloud:bionic-rocky/proposed
+bionic-rocky-staging:
+  inherits: bionic-rocky
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/rocky-staging
+    source: ppa:ubuntu-cloud-archive/rocky-staging
+bionic-rocky-branch:
+  inherits: bionic-rocky
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/rocky
+    source: ppa:openstack-ubuntu-testing/rocky
