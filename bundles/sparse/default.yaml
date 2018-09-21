@@ -215,6 +215,13 @@ openstack-services-xenial-ocata:
     - [ gnocchi, ceilometer ]
     - [ gnocchi, keystone ]
     - [ cinder-ceph, nova-compute ]
+openstack-services-queens:
+  inherits: openstack-services-xenial-ocata
+  relations:
+    - - ceilometer
+      - keystone:identity-credentials
+    - - designate:dnsaas
+      - neutron-api:external-dns
 # icehouse
 trusty-icehouse:
   inherits: openstack-services
