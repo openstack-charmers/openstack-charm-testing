@@ -27,5 +27,5 @@ openstack image show bionic || \
     wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-arm64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-arm64.img
     export http_proxy=''
 }
-openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-arm64.img bionic
+openstack image create --public --container-format bare --disk-format qcow2 --property hw_firmware_type=uefi --file ~/images/bionic-server-cloudimg-arm64.img bionic
 )
