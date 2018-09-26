@@ -27,6 +27,8 @@ parser.add_argument('-c', '--count', help="count machines in Ready state, matchi
 parser.add_argument('-m', '--maashost', help="MAAS hostname (api v2 support only)", required=True)
 parser.add_argument('-k', '--key', help="MAAS api key", required=True)
 parser.add_argument('-t', '--tags', help="primary tag to match")
+parser.add_argument('--output', help="show machine id after displaying count", action="store_true")
+parser.add_argument('--status', help="system status to match")
 parser.add_argument('-s', '--system_id', help="system id")
 parser.add_argument('-o', '--owner', help="owner name", required=True)
 parser.add_argument('-r', '--release', help="release this machine", action="store_true")
@@ -75,7 +77,10 @@ APIKEY=args.key
 MAAS_URL="http://" + args.maashost + "/MAAS/api/2.0"
 ADD_TAGS=args.additional
 SYSTEM_ID=args.system_id
-STATUS="not ready"
+if args.status == "":
+    STATUS="not ready"
+else:
+    STATUS = args.status
 
 #print ("Trying to find machines which match the following:\ntags: {}, arch: {}, owner: {}, maas url: {}\n".format(TAGS,ARCH,OWNER,MAAS_URL))
 
@@ -102,7 +107,7 @@ def getSysIds(tags=TAGS,owner=OWNER,arch=ARCH,additional=ADD_TAGS,status=STATUS)
                     id.append(item["system_id"])
     return id
 
-def CountAvailable(tags=TAGS,arch=ARCH):
+def CountAvailable(tags=TAGS,arch=ARCH,output=False):
     id = []
     result = client.get(u"tags/" +TAGS + "/", "machines")
     data = str(result.read(), "utf8")
@@ -160,6 +165,8 @@ if args.count:
         print ("0")
     else:
         print (len(found))
+        if args.output:
+            print('\n'.join(found))
 
 if args.list:
     found = getSysIds()
