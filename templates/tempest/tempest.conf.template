@@ -27,6 +27,7 @@ console_output=false
 resize=true
 live_migration=true
 block_migration_for_live_migration=true
+attach_encrypted_volume=false
 [dashboard]
 dashboard_url=http://__DASHBOARD__/horizon
 login_url=http://__DASHBOARD__/horizon/auth/login/
@@ -92,3 +93,6 @@ catalog_type = volumev2
 [volume-feature-enabled]
 backup=false
 api_v1=false
+[validation]
+run_validation=true
+image_ssh_user=cirros

@@ -28,6 +28,32 @@ function upload_image {
     }
 }
 
+function upload_image_minimal {
+    src=$1
+    image_name=$2
+    image_file=$3
+    image_format=${4:-"qcow2"}
+    image_arch=${5:-"x86_64"}
+
+    case "$src" in
+        swift) http_root="http://$SWIFT_IP:80/swift/v1/images";;
+        cloudimages) http_root="http://cloud-images.ubuntu.com/${image_name}/current";;
+    esac
+
+    mkdir -vp ~/images
+
+    [ -f ~/images/$image_file ] || {
+        wget -O ~/images/$image_file ${http_root}/${image_file}
+    }
+
+    openstack image show $image_name || {
+        openstack image create --public \
+            --container-format=bare --disk-format=$image_format \
+            --file=${HOME}/images/$image_file  $image_name \
+            --property architecture=$image_arch
+    }
+}
+
 function install_packages {
     # Install dependencies and CLI tools
     # See also requirements.txt in tempest (probably need to sudo pip install -r requirements.txt)
@@ -54,8 +80,8 @@ function create_tempest_users {
 
 function create_tempest_flavors {
     openstack flavor show m1.cirros || openstack flavor create  --id 6 --ram 64  --disk 1 --vcpus 1 m1.cirros
-    openstack flavor show m1.tempest || openstack flavor create --id 7 --ram 256 --disk 5 --vcpus 1 m1.tempest
-    openstack flavor show m2.tempest || openstack flavor create --id 8 --ram 512 --disk 5 --vcpus 1 m2.tempest
+    openstack flavor show m1.tempest || openstack flavor create --id 7 --ram 256 --disk 0 --vcpus 1 m1.tempest
+    openstack flavor show m2.tempest || openstack flavor create --id 8 --ram 512 --disk 0 --vcpus 1 m2.tempest
 }
 
 function create_default_flavors {

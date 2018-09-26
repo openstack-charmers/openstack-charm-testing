@@ -17,6 +17,7 @@ console_output=false
 resize=true
 live_migration=true
 block_migration_for_live_migration=true
+attach_encrypted_volume=false
 [identity]
 uri_v3=__PROTO__://__KEYSTONE__:5000/v3
 auth_version=v3
@@ -69,3 +70,6 @@ backup=false
 api_v1=false
 api_v2=false
 api_v3=true
+[validation]
+run_validation=true
+image_ssh_user=cirros
