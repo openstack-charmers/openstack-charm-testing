@@ -38,10 +38,11 @@ parser.add_argument('--list', help="just list machines", action="store_true")
 parser.add_argument('-i', '--interfaces', help="insterfaces=machine_id - get machine detail")
 parser.add_argument('-f', '--force', help="release and unlock this machine regardless of lock status", action="store_true")
 parser.add_argument('--additional', help="one additional tag")
+parser.add_argument('--deploy', help="deploy to --system_id id", action="store_true")
 args = parser.parse_args()
 
 # Check that an action has been specified
-if not args.release and not args.lock and not args.unlock and not args.list and not args.interfaces and not args.count:
+if not args.deploy and not args.release and not args.lock and not args.unlock and not args.list and not args.interfaces and not args.count:
     print("At least one of: -r, -l, -u, --list, --count are required")
     sys.exit(100)
 
@@ -69,7 +70,6 @@ if args.list or args.count:
 
 # Machines with tag "locked" will not be released unless --force is specified
 # Set this manually via the MAAS web UI or with an admin API key
-
 TAGS=args.tags
 ARCH=args.arch
 OWNER=args.owner
@@ -126,6 +126,9 @@ def getInterfaces(id=args.interfaces):
             if "subnet" in iface:
                 print(item["name"])
 
+def Deploy(system_id):
+    result = client.post(u"machines/" + system_id + "/", "deploy")
+
 def Release(**system_id):
     if system_id['system_id'] == None:
         found = getSysIds()
@@ -176,3 +179,8 @@ if args.list:
         print ("Found these unlocked systems:")
         for system in found:
             print (system)
+
+if args.deploy:
+    Deploy(args.system_id)
+
+
