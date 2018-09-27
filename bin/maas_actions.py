@@ -30,19 +30,20 @@ parser.add_argument('-t', '--tags', help="primary tag to match")
 parser.add_argument('--output', help="show machine id after displaying count", action="store_true")
 parser.add_argument('--status', help="system status to match")
 parser.add_argument('-s', '--system_id', help="system id")
+parser.add_argument('--getips', help="show ip addresses after interface id", action="store_true")
 parser.add_argument('-o', '--owner', help="owner name", required=True)
 parser.add_argument('-r', '--release', help="release this machine", action="store_true")
 parser.add_argument('-l', '--lock', help="lock this machine (add locked tag)", action="store_true")
 parser.add_argument('-u', '--unlock', help="unlock this machine (remove locked tag)", action="store_true")
 parser.add_argument('--list', help="just list machines", action="store_true")
-parser.add_argument('-i', '--interfaces', help="insterfaces=machine_id - get machine detail")
+parser.add_argument('-i', '--interfaces', help="interfaces=machine_id - get machine detail")
 parser.add_argument('-f', '--force', help="release and unlock this machine regardless of lock status", action="store_true")
 parser.add_argument('--additional', help="one additional tag")
 parser.add_argument('--deploy', help="deploy to --system_id id", action="store_true")
 args = parser.parse_args()
 
 # Check that an action has been specified
-if not args.deploy and not args.release and not args.lock and not args.unlock and not args.list and not args.interfaces and not args.count:
+if not args.getips and not args.deploy and not args.release and not args.lock and not args.unlock and not args.list and not args.interfaces and not args.count:
     print("At least one of: -r, -l, -u, --list, --count are required")
     sys.exit(100)
 
@@ -121,10 +122,27 @@ def getInterfaces(id=args.interfaces):
     result = client.get(u"nodes/" + id + "/interfaces/")
     data = str(result.read(), "utf8")
     jdata = json.loads(data)
+    interfaces = []
     for item in jdata:
         for iface in item["links"]:
             if "subnet" in iface:
-                print(item["name"])
+                if not args.getips:
+                    print(item["name"])
+                else:
+                    try:
+                        print("{}, {}".format(item["name"],item["links"][0]["ip_address"]))
+                    except KeyError as e:
+                        print("{}, No_IP_Assigned".format(item["name"]))
+
+def getIPs():
+    interfaces=getInterfaces(id=args.system_id)
+
+#    for interface in interfaces:
+#        print("Interface: {}".format(interface))
+#        print("SysID: {}".format(args.system_id))
+#        result = client.get(u"nodes/" + args.system_id + "/interfaces/" + str(interface))
+#        print(result)
+#        sys.exit()
 
 def Deploy(system_id):
     result = client.post(u"machines/" + system_id + "/", "deploy")
