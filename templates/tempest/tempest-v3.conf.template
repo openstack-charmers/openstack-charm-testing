@@ -92,6 +92,7 @@ storage_protocol = ceph
 
 [volume-feature-enabled]
 backup = false
+# NOTE(jamespage): These are release specific
 api_v1 = false
 api_v2 = true
 api_v3 = true
