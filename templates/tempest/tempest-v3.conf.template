@@ -16,7 +16,6 @@ image_ref = __IMAGE_ID__
 image_ref_alt = __IMAGE_ALT_ID__
 flavor_ref = 7
 flavor_ref_alt = 8
-region = RegionOne
 min_compute_nodes = 3
 
 # TODO: review this as its release specific
@@ -44,8 +43,6 @@ api_v2 = false
 api_v3 = true
 
 [image]
-catalog_type = image
-region = RegionOne
 http_image = http://__SWIFT__:80/swift/v1/images/cirros-0.3.4-x86_64-uec.tar.gz
 
 [network]
@@ -91,7 +88,6 @@ trove = false
 zaqar = false
 
 [volume]
-catalog_type = volumev3
 backend_names = cinder-ceph
 storage_protocol = ceph
 
