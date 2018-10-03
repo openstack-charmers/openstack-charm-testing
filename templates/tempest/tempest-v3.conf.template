@@ -64,7 +64,6 @@ lock_path = /tmp
 
 [scenario]
 img_dir = /home/ubuntu/images
-ssh_user = cirros
 img_file = cirros-0.3.4-x86_64-disk.img
 img_container_format = bare
 img_disk_format = qcow2
