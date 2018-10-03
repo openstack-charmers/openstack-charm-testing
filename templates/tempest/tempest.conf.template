@@ -19,9 +19,9 @@ flavor_ref_alt = 8
 region = RegionOne
 min_compute_nodes = 3
 
-# TODO: review this
-min_microversion = 2.2
-max_microversion = latest
+# TODO: review this as its release specific
+# min_microversion = 2.2
+# max_microversion = latest
 
 [compute-feature-enabled]
 console_output = true
@@ -33,11 +33,9 @@ attach_encrypted_volume = false
 [identity]
 uri = __PROTO__://__KEYSTONE__:5000/v2.0
 uri_v3 = __PROTO__://__KEYSTONE__:5000/v3
-auth_version = v2.0
+auth_version = v2
 admin_role = Admin
 region = RegionOne
-default_domain_id = __DEFAULT_DOMAIN_ID__
-admin_domain_scope = true
 
 [identity-feature-enabled]
 api_v2 = true

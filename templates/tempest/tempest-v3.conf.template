@@ -19,9 +19,9 @@ flavor_ref_alt = 8
 region = RegionOne
 min_compute_nodes = 3
 
-# TODO: review this
-min_microversion = 2.2
-max_microversion = latest
+# TODO: review this as its release specific
+# min_microversion = 2.2
+# max_microversion = latest
 
 [compute-feature-enabled]
 console_output = true
