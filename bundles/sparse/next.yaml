@@ -51,6 +51,9 @@ base-services:
       constraints: mem=1G
       options:
         neutron-security-groups: True
+        enable-ml2-port-security: True
+        enable-qos: True
+        enable-vlan-trunking: True
         flat-network-providers: physnet1
     neutron-openvswitch:
       charm: cs:~openstack-charmers-next/neutron-openvswitch
