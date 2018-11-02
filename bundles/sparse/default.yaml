@@ -137,7 +137,8 @@ base-services:
     - [ swift-proxy, swift-storage-z3 ]
     - - ceilometer
       - keystone:identity-service
-    - [ ceilometer, rabbitmq-server ]
+    - - ceilometer:amqp
+      - rabbitmq-server:amqp
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
     - [ heat, mysql ]
