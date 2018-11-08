@@ -387,13 +387,8 @@ xenial-queens-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/queens
     source: ppa:openstack-ubuntu-testing/queens
 bionic-queens:
-  inherits: openstack-services-xenial-ocata
+  inherits: openstack-services-queens
   series: bionic
-  relations:
-    - - ceilometer
-      - keystone:identity-credentials
-    - - designate:dnsaas
-      - neutron-api:external-dns
 bionic-queens-proposed:
   inherits: bionic-queens
   overrides:
@@ -427,13 +422,8 @@ bionic-rocky-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/rocky
     source: ppa:openstack-ubuntu-testing/rocky
 cosmic-rocky:
-  inherits: openstack-services-bionic-ocata
+  inherits: openstack-services-queens
   series: cosmic
-  relations:
-    - - ceilometer
-      - keystone:identity-credentials
-    - - designate:dnsaas
-      - neutron-api:external-dns
 cosmic-rocky-proposed:
   inherits: cosmic-rocky
   overrides:
