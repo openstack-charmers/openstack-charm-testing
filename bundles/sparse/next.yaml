@@ -198,14 +198,6 @@ openstack-services-trusty-mitaka:
     - [ designate, memcached ]
 openstack-services-xenial:
   inherits: openstack-services-trusty-mitaka
-  services:
-    barbican:
-      charm: cs:~openstack-charmers-next/barbican
-      constraints: mem=1G
-  relations:
-    - [ barbican, rabbitmq-server ]
-    - [ barbican, mysql ]
-    - [ barbican, keystone ]
 openstack-services-xenial-ocata:
   inherits: openstack-services-xenial
   services:
@@ -228,6 +220,16 @@ openstack-services-queens:
       - keystone:identity-credentials
     - - designate:dnsaas
       - neutron-api:external-dns
+openstack-services-rocky:
+  inherits: openstack-services-queens
+  services:
+    barbican:
+      charm: cs:~openstack-charmers-next/barbican
+      constraints: mem=1G
+  relations:
+    - [ barbican, rabbitmq-server ]
+    - [ barbican, mysql ]
+    - [ barbican, keystone ]
 # icehouse
 trusty-icehouse:
   inherits: openstack-services
@@ -401,7 +403,7 @@ bionic-queens-branch:
     source: ppa:openstack-ubuntu-testing/queens
 # rocky
 bionic-rocky:
-  inherits: openstack-services-queens
+  inherits: openstack-services-rocky
   series: bionic
   overrides:
     openstack-origin: cloud:bionic-rocky
@@ -422,7 +424,7 @@ bionic-rocky-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/rocky
     source: ppa:openstack-ubuntu-testing/rocky
 cosmic-rocky:
-  inherits: openstack-services-queens
+  inherits: openstack-services-rocky
   series: cosmic
 cosmic-rocky-proposed:
   inherits: cosmic-rocky
