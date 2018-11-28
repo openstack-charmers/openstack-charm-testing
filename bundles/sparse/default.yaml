@@ -108,8 +108,10 @@ base-services:
       charm: cs:heat
   relations:
     - [ keystone, mysql ]
-    - [ nova-cloud-controller, mysql ]
-    - [ nova-cloud-controller, rabbitmq-server ]
+    - - nova-cloud-controller:shared-db
+      - mysql:shared-db
+    - - nova-cloud-controller:amqp
+      - rabbitmq-server:amqp
     - [ nova-cloud-controller, glance ]
     - [ nova-cloud-controller, keystone ]
     - [ nova-compute, nova-cloud-controller ]
@@ -196,14 +198,6 @@ openstack-services-trusty-mitaka:
     - [ designate, memcached ]
 openstack-services-xenial:
   inherits: openstack-services-trusty-mitaka
-  services:
-    barbican:
-      charm: cs:~openstack-charmers/barbican
-      constraints: mem=1G
-  relations:
-    - [ barbican, rabbitmq-server ]
-    - [ barbican, mysql ]
-    - [ barbican, keystone ]
 openstack-services-xenial-ocata:
   inherits: openstack-services-xenial
   services:
@@ -226,6 +220,16 @@ openstack-services-queens:
       - keystone:identity-credentials
     - - designate:dnsaas
       - neutron-api:external-dns
+openstack-services-rocky:
+  inherits: openstack-services-queens
+  services:
+    barbican:
+      charm: cs:~openstack-charmers-next/barbican
+      constraints: mem=1G
+  relations:
+    - [ barbican, rabbitmq-server ]
+    - [ barbican, mysql ]
+    - [ barbican, keystone ]
 # icehouse
 trusty-icehouse:
   inherits: openstack-services
@@ -364,16 +368,11 @@ artful-pike-branch:
     source: ppa:openstack-ubuntu-testing/pike
 # queens
 xenial-queens:
-  inherits: openstack-services-xenial-ocata
+  inherits: openstack-services-queens
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-queens
     source: cloud:xenial-queens
-  relations:
-    - - ceilometer
-      - keystone:identity-credentials
-    - - designate:dnsaas
-      - neutron-api:external-dns
 xenial-queens-proposed:
   inherits: xenial-queens
   overrides:
@@ -390,13 +389,8 @@ xenial-queens-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/queens
     source: ppa:openstack-ubuntu-testing/queens
 bionic-queens:
-  inherits: openstack-services-xenial-ocata
+  inherits: openstack-services-queens
   series: bionic
-  relations:
-    - - ceilometer
-      - keystone:identity-credentials
-    - - designate:dnsaas
-      - neutron-api:external-dns
 bionic-queens-proposed:
   inherits: bionic-queens
   overrides:
@@ -409,7 +403,7 @@ bionic-queens-branch:
     source: ppa:openstack-ubuntu-testing/queens
 # rocky
 bionic-rocky:
-  inherits: openstack-services-queens
+  inherits: openstack-services-rocky
   series: bionic
   overrides:
     openstack-origin: cloud:bionic-rocky
@@ -426,6 +420,19 @@ bionic-rocky-staging:
     source: ppa:ubuntu-cloud-archive/rocky-staging
 bionic-rocky-branch:
   inherits: bionic-rocky
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/rocky
+    source: ppa:openstack-ubuntu-testing/rocky
+cosmic-rocky:
+  inherits: openstack-services-rocky
+  series: cosmic
+cosmic-rocky-proposed:
+  inherits: cosmic-rocky
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+cosmic-rocky-branch:
+  inherits: cosmic-rocky
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/rocky
     source: ppa:openstack-ubuntu-testing/rocky
