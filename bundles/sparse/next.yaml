@@ -436,3 +436,38 @@ cosmic-rocky-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/rocky
     source: ppa:openstack-ubuntu-testing/rocky
+# stein
+bionic-stein:
+  inherits: openstack-services-rocky
+  series: bionic
+  overrides:
+    openstack-origin: cloud:bionic-stein
+    source: cloud:bionic-stein
+bionic-stein-proposed:
+  inherits: bionic-stein
+  overrides:
+    openstack-origin: cloud:bionic-stein/proposed
+    source: cloud:bionic-stein/proposed
+bionic-stein-staging:
+  inherits: bionic-stein
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/stein-staging
+    source: ppa:ubuntu-cloud-archive/stein-staging
+bionic-stein-branch:
+  inherits: bionic-stein
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/stein
+    source: ppa:openstack-ubuntu-testing/stein
+disco-stein:
+  inherits: openstack-services-rocky
+  series: disco
+disco-stein-proposed:
+  inherits: disco-stein
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+disco-stein-branch:
+  inherits: disco-stein
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/stein
+    source: ppa:openstack-ubuntu-testing/stein
