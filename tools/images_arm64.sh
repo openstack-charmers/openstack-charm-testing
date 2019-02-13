@@ -20,3 +20,12 @@ openstack image show xenial-uefi ||\
 
 openstack image show xenial-cirros ||\
   openstack image create --public --container-format bare --disk-format qcow2 --property hw_firmware_type=uefi --file ~/images/cirros_test.img xenial-cirros
+
+openstack image show bionic || \
+([ -f ~/images/bionic-server-cloudimg-arm64-disk1.img ] || {
+    export http_proxy=http://squid.internal:3128
+    wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-arm64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-arm64.img
+    export http_proxy=''
+}
+openstack image create --public --container-format bare --disk-format qcow2 --property hw_firmware_type=uefi --file ~/images/bionic-server-cloudimg-arm64.img bionic
+)

@@ -66,9 +66,12 @@ tools/quota_million.sh
 echo "Tempest"
 router=$(neutron --os-project-name admin router-list | grep provider-router | awk '{ print $2}')
 # Gather vars for tempest template
-keystone=$(juju run --unit keystone/0 'unit-get private-address')
-dashboard=$(juju run --unit openstack-dashboard/0 'unit-get private-address')
-ncc=$(juju run --unit nova-cloud-controller/0 'unit-get private-address')
+keystone_unit=$(juju status keystone|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+dashboard_unit=$(juju status openstack-dashboard|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+ncc_unit=$(juju status nova-cloud-controller|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+keystone=$(juju run --unit ${keystone_unit} "unit-get private-address")
+dashboard=$(juju run --unit ${dashboard_unit} "unit-get private-address")
+ncc=$(juju run --unit ${ncc_unit} "unit-get private-address")
 http=${OS_AUTH_PROTOCOL:-http}
 default_domain_id=$(openstack domain list | awk '/default/ {print $2}')
 

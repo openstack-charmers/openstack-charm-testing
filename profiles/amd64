@@ -7,12 +7,13 @@ set -ex
 install_packages
 
 # Set serverstack defaults, if not already set.
-[[ -z "$GATEWAY" ]] && export GATEWAY="10.5.0.1"
-[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.5.0.0/16"
-[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.5.150.0:10.5.200.254"
+[[ -z "$GATEWAY" ]] && export GATEWAY="10.245.168.1"
+[[ -z "$CIDR_EXT" ]] && export CIDR_EXT="10.245.168.0/21"
+[[ -z "$FIP_RANGE" ]] && export FIP_RANGE="10.245.171.0:10.245.171.255"
 [[ -z "$NAMESERVER" ]] && export NAMESERVER="10.245.168.6"
-[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="192.168.21.0/24"
+[[ -z "$CIDR_PRIV" ]] && export CIDR_PRIV="172.16.0.0/22"
 [[ -z "$SWIFT_IP" ]] && export SWIFT_IP="10.245.161.162"
+
 
 # Accept network type as first parameter, assume gre if unspecified
 net_type=${1:-"gre"}
@@ -47,9 +48,12 @@ tools/quota_million.sh
 # Gather vars for tempest template
 ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
 router=$(neutron router-list | grep provider-router | awk '{ print $2}')
-keystone=$(juju-deployer -f keystone)
-dashboard=$(juju-deployer -f openstack-dashboard)
-ncc=$(juju-deployer -f nova-cloud-controller)
+keystone_unit=$(juju status keystone|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+dashboard_unit=$(juju status openstack-dashboard|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+ncc_unit=$(juju status nova-cloud-controller|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+keystone=$(juju run --unit ${keystone_unit} "unit-get private-address")
+dashboard=$(juju run --unit ${dashboard_unit} "unit-get private-address")
+ncc=$(juju run --unit ${ncc_unit} "unit-get private-address")
 http=${OS_AUTH_PROTOCOL:-http}
 
 # Insert vars into tempest conf
