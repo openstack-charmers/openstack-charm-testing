@@ -3,7 +3,7 @@ test_accounts_file=accounts.yaml
 default_credentials_domain_name=default
 admin_username=admin
 admin_project_name=admin
-admin_password=openstack
+admin_password=__ADMIN_PASSWORD__
 admin_domain_name=admin_domain
 [compute]
 image_ref=__IMAGE_ID__
@@ -51,13 +51,13 @@ ssh_user=cirros
 ceilometer = true
 cinder = true
 glance = true
-heat = true
+heat = __HEAT_ENABLED__
 horizon = true
 ironic = false
 neutron = true
 nova = true
 sahara = false
-swift = true
+swift = __SWIFT_ENABLED__
 trove = false
 zaqar = false
 [volume]
@@ -69,3 +69,7 @@ backup=false
 api_v1=false
 api_v2=false
 api_v3=true
+[validation]
+run_validation = true
+image_ssh_user = cirros
+
