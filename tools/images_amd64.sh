@@ -34,6 +34,16 @@ openstack image show bionic || \
 openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64.img bionic
 )
 
+
+openstack image show bionic-lxd || \
+([ -f ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz ] || {
+    export http_proxy=http://squid.internal:3128
+    wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-lxd.tar.xz
+    export http_proxy=''
+}
+openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz bionic
+)
+
 openstack image show cirros || \
 ([ -f ~/images/cirros-0.3.4-x86_64-disk.img ] || {
     export http_proxy=http://squid.internal:3128
