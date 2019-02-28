@@ -14,7 +14,7 @@ export http_proxy=http://squid.internal:3128
     wget ${WGET_MODE} -O ~/images/cirros_test.img $CIRROS_IMAGE_URL_XENIAL
 export http_proxy=''
 
-if juju status|grep nova-lxd ; then
+if juju status nova-compute|grep lxd ; then
         openstack image show bionic-lxd || \
         ([ -f ~/images/bionic-server-cloudimg-arm64-lxd.tar.xz ] || {
             export http_proxy=http://squid.internal:3128
