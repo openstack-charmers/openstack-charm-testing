@@ -16,6 +16,27 @@ if [ ! -d ~/images ] ; then
         mkdir -vp ~/images
 fi
 
+
+if juju status|grep nova-lxd ; then
+        openstack image show bionic || \
+        ([ -f ~/images/bionic-server-cloudimg-amd64-disk1.img ] || {
+            export http_proxy=http://squid.internal:3128
+            wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+            export http_proxy=''
+        }
+        openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64.img bionic
+        )
+else
+        openstack image show bionic-lxd || \
+        ([ -f ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz ] || {
+            export http_proxy=http://squid.internal:3128
+            wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-lxd.tar.xz
+            export http_proxy=''
+        }
+        openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz bionic
+        )
+fi
+
 openstack image show xenial || \
 ([ -f ~/images/xenial-server-cloudimg-amd64-disk1.img ] || {
     export http_proxy=http://squid.internal:3128
@@ -23,25 +44,6 @@ openstack image show xenial || \
     export http_proxy=''
 }
 openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/xenial-server-cloudimg-amd64-disk1.img xenial
-)
-
-openstack image show bionic || \
-([ -f ~/images/bionic-server-cloudimg-amd64-disk1.img ] || {
-    export http_proxy=http://squid.internal:3128
-    wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
-    export http_proxy=''
-}
-openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64.img bionic
-)
-
-
-openstack image show bionic-lxd || \
-([ -f ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz ] || {
-    export http_proxy=http://squid.internal:3128
-    wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-lxd.tar.xz
-    export http_proxy=''
-}
-openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz bionic
 )
 
 openstack image show cirros || \
