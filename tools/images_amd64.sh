@@ -24,7 +24,7 @@ if  juju status nova-compute|grep lxd ; then
             wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-lxd.tar.xz
             export http_proxy=''
         }
-        openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz bionic-amd64
+        openstack image create --public --container-format bare --disk-format raw --property architecture=x86_64 --property hypervisor_type=lxc --file ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz bionic-amd64
         )
 else
        openstack image show bionic-amd64 || \
