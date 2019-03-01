@@ -2,6 +2,13 @@
 
 SWIFT_IP="10.245.161.162"
 
+ksv=$(source rcs/openrc)
+if [[ $ksv == *"3"* ]] ; then
+	template="tempest-v3.conf.template"
+else
+	template="tempest.conf.template"
+fi
+
 source rcs/openrc
 
 image_id=$(openstack image list | awk '/cirros\s/ {print $2}')
@@ -50,8 +57,7 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     -e "s/__HEAT_ENABLED__/${enable_heat}/g" \
     -e "s/__SWIFT_ENABLED__/${enable_swift}/g" \
     -e "s/__ADMIN_PASSWORD__/${admin_password}/g" \
-    templates/tempest/tempest-v3.conf.template > tempest.conf
+    $template > tempest.conf
 
 cp tempest.conf tempest/etc
 cp templates/tempest/accounts.yaml tempest/etc
-
