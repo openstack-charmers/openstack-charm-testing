@@ -15,7 +15,7 @@ export http_proxy=http://squid.internal:3128
 export http_proxy=''
 
 if juju status nova-compute|grep lxd ; then
-        openstack image show bionic-lxd || \
+        openstack image show bionic-arm64 || \
         ([ -f ~/images/bionic-server-cloudimg-arm64-lxd.tar.xz ] || {
             export http_proxy=http://squid.internal:3128
             wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-arm64-lxd.tar.xz http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-arm64-lxd.tar.xz
@@ -24,7 +24,7 @@ if juju status nova-compute|grep lxd ; then
         openstack image create --public --container-format bare --disk-format qcow2 --property hw_firmware_type=uefi --file ~/images/bionic-server-cloudimg-arm64-lxd.tar.xz bionic-arm64
         )
 else
-        openstack image show bionic || \
+        openstack image show bionic-arm64 || \
         ([ -f ~/images/bionic-server-cloudimg-arm64.img ] || {
             export http_proxy=http://squid.internal:3128
             wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-arm64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-arm64.img
