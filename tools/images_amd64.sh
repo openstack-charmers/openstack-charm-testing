@@ -18,13 +18,13 @@ fi
 
 
 if juju status nova-compute|grep lxd ; then
-        openstack image show bionic || \
+        openstack image show bionic-amd64 || \
         ([ -f ~/images/bionic-server-cloudimg-amd64-disk1.img ] || {
             export http_proxy=http://squid.internal:3128
             wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
             export http_proxy=''
         }
-        openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64.img bionic
+        openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64.img bionic-amd64
         )
 else
         openstack image show bionic-lxd || \
@@ -33,7 +33,7 @@ else
             wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-lxd.tar.xz
             export http_proxy=''
         }
-        openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz bionic
+        openstack image create --public --container-format bare --disk-format qcow2 --property architecture=x86_64 --file ~/images/bionic-server-cloudimg-amd64-lxd.tar.xz bionic-amd64
         )
 fi
 
