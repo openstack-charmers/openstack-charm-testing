@@ -3,6 +3,7 @@
 SWIFT_IP="10.245.161.162"
 
 ksv=$(source rcs/openrc)
+echo "ksv is: ${ksv}"
 if [[ $ksv == *"3"* ]] ; then
 	template="tempest-v3.conf.template"
 else
@@ -57,7 +58,7 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     -e "s/__HEAT_ENABLED__/${enable_heat}/g" \
     -e "s/__SWIFT_ENABLED__/${enable_swift}/g" \
     -e "s/__ADMIN_PASSWORD__/${admin_password}/g" \
-    $template > tempest.conf
+    templates/tempest/${template} > tempest.conf
 
 cp tempest.conf tempest/etc
 cp templates/tempest/accounts.yaml tempest/etc
