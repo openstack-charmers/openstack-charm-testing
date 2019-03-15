@@ -92,7 +92,8 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
 
 # Git tempest, place the rendered tempest template
 [ -d tempest ] || git clone https://github.com/openstack/tempest
-git --git-dir=tempest/.git --work-tree=tempest checkout master
+#git --git-dir=tempest/.git --work-tree=tempest checkout master
+git --git-dir=tempest/.git --work-tree=tempest checkout 6ffd90691b3fc1c63dfd2ea10a27a54cf57e64fd
 git --git-dir=tempest/.git --work-tree=tempest pull
 cp tempest.conf tempest/etc
 cp templates/tempest/accounts.yaml tempest/etc

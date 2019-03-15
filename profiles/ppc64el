@@ -51,3 +51,44 @@ openstack flavor show m2.tempest || openstack flavor create --id 8 --ram 512 --d
 create_default_flavors
 
 tools/quota_million.sh
+
+# Gather vars for tempest template
+ext_net=$(neutron net-list | grep ext_net | awk '{ print $2 }')
+router=$(neutron router-list | grep provider-router | awk '{ print $2}')
+keystone_unit=$(juju status keystone|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+dashboard_unit=$(juju status openstack-dashboard|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+ncc_unit=$(juju status nova-cloud-controller|grep -i workload -A1|tail -n1|awk '{print $1}'|tr -d '*')
+keystone=$(juju run --unit ${keystone_unit} "unit-get private-address")
+dashboard=$(juju run --unit ${dashboard_unit} "unit-get private-address")
+ncc=$(juju run --unit ${ncc_unit} "unit-get private-address")
+http=${OS_AUTH_PROTOCOL:-http}
+
+# Insert vars into tempest conf
+sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
+    -e "s/__DASHBOARD__/$dashboard/g" -e "s/__KEYSTONE__/$keystone/g" \
+    -e "s/__EXT_NET__/$ext_net/g" -e "s/__PROTO__/$http/g" \
+    -e "s/__SWIFT__/$SWIFT_IP/g" \
+    -e "s/__NAMESERVER__/$NAMESERVER/g" \
+    -e "s/__CIDR_PRIV__/${CIDR_PRIV////\\/}/g" \
+    -e "s/__NCC__/$ncc/g" -e "s/__SECRET__/$secret/g" -e "s/__ACCESS__/$access/g" \
+    templates/tempest/tempest.conf.template > tempest.conf
+
+sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
+    -e "s/__DASHBOARD__/$dashboard/g" -e "s/__KEYSTONE__/$keystone/g" \
+    -e "s/__EXT_NET__/$ext_net/g" -e "s/__PROTO__/$http/g" \
+    -e "s/__SWIFT__/$SWIFT_IP/g" \
+    -e "s/__NAMESERVER__/$NAMESERVER/g" \
+    -e "s/__CIDR_PRIV__/${CIDR_PRIV////\\/}/g" \
+    -e "s/__NCC__/$ncc/g" -e "s/__SECRET__/$secret/g" -e "s/__ACCESS__/$access/g" \
+    templates/tempest/tempest.refstack.template.conf > tempest_refstack.conf
+
+# Git tempest, place the rendered tempest template
+[ -d tempest ] || git clone https://github.com/openstack/tempest
+# Checkout latest commit that included run_tempest.sh. This is a stop-gap until
+# OSCI uses tempest charm or switches to new style of executing tempest tests.
+git --git-dir=tempest/.git --work-tree=tempest checkout 6ffd90691b3fc1c63dfd2ea10a27a54cf57e64fd
+#git --git-dir=tempest/.git --work-tree=tempest checkout master
+git --git-dir=tempest/.git --work-tree=tempest pull
+cp tempest.conf tempest/etc
+cp templates/tempest/accounts.yaml tempest/etc
+
