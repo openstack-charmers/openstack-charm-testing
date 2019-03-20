@@ -140,6 +140,7 @@ base-services:
       - rabbitmq-server:amqp
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
+    - [ ceilometer-agent, rabbitmq-server ]
     - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
