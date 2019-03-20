@@ -73,7 +73,7 @@ keystone=$(juju run --unit ${keystone_unit} "unit-get private-address")
 dashboard=$(juju run --unit ${dashboard_unit} "unit-get private-address")
 ncc=$(juju run --unit ${ncc_unit} "unit-get private-address")
 http=${OS_AUTH_PROTOCOL:-http}
-default_domain_id=$(openstack domain list | awk '/default/ {print $2}')
+default_domain_id=$(openstack domain list | awk '/admin_domain/ {print $2}')
 
 # Insert vars into tempest conf
 sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
