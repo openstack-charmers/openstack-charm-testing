@@ -148,8 +148,8 @@ function create_tempest_users_v3 {
 
 function create_tempest_flavors {
     openstack flavor show m1.cirros || openstack flavor create  --id 6 --ram 64  --disk 1 --vcpus 1 m1.cirros
-    openstack flavor show m1.tempest || openstack flavor create --id 7 --ram 256 --disk 0 --vcpus 1 m1.tempest
-    openstack flavor show m2.tempest || openstack flavor create --id 8 --ram 512 --disk 0 --vcpus 1 m2.tempest
+    openstack flavor show m1.tempest || openstack flavor create --id 7 --ram 256 --disk 1 --vcpus 1 m1.tempest
+    openstack flavor show m2.tempest || openstack flavor create --id 8 --ram 512 --disk 1 --vcpus 1 m2.tempest
 }
 
 function create_default_flavors {
