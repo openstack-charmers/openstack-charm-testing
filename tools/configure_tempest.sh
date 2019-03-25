@@ -29,7 +29,7 @@ dashboard=$(juju run --unit ${dashboard_unit} "unit-get private-address")
 ncc=$(juju run --unit ${ncc_unit} "unit-get private-address")
 http=${OS_AUTH_PROTOCOL:-http}
 admin_password=${OS_PASSWORD:-openstack}
-default_domain_id=$(openstack domain list | awk '/default/ {print $2}')
+default_domain_id=$(openstack domain list | awk '/admin_domain/ {print $2}')
 CIDR_PRIV=$(openstack subnet show $(openstack network list -f value|awk /private/'{print $3}') -f shell -c cidr|awk -F\" '{print $2}')
 
 if [ "$(juju status swift 2>&1|grep Nothing)"  ] ;
