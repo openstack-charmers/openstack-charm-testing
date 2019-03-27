@@ -15,8 +15,8 @@ fi
 
 source rcs/openrc
 
-image_id=$(openstack image list | awk '/cirros/ {print $2}')
-image_alt_id=$(openstack image list | awk '/cirros2/ {print $2}')
+image_id=$(openstack image list | awk '/bionic/ {print $2}')
+image_alt_id=$(openstack image list | awk '/xenial/ {print $2}')
 
 access=$(openstack --os-username demo --os-password pass --os-tenant-name demo ec2 credentials create | grep access | awk '{ print $4 }')
 secret=$(openstack ec2 credentials show $access | grep secret | awk '{ print $4 }')
@@ -61,6 +61,7 @@ sed -e "s/__IMAGE_ID__/$image_id/g" -e "s/__IMAGE_ALT_ID__/$image_alt_id/g" \
     -e "s/__HEAT_ENABLED__/${enable_heat}/g" \
     -e "s/__SWIFT_ENABLED__/${enable_swift}/g" \
     -e "s/__ADMIN_PASSWORD__/${admin_password}/g" \
+    -e "s/flavor_ref=7/flavor_ref=2/g" \
     templates/tempest/${template} > tempest.conf
 
 cp tempest.conf tempest/etc
