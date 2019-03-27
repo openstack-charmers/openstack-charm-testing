@@ -119,6 +119,7 @@ def CountAvailable(tags=TAGS,arch=ARCH,output=False):
     return id
 
 def getInterfaces(id=args.interfaces):
+    idname = client.get(u"machines/", "hostname" + system_id)
     result = client.get(u"nodes/" + id + "/interfaces/")
     data = str(result.read(), "utf8")
     jdata = json.loads(data)

@@ -30,8 +30,8 @@ fi
 ./bin/neutron-tenant-net --network-type $net_type -t admin -r provider-router -N $NAMESERVER private $CIDR_PRIV
 
 tools/images_amd64.sh
-image_id=$(openstack image list | awk '/cirros\s/ {print $2}')
-image_alt_id=$(openstack image list | awk '/cirros2\s/ {print $2}')
+image_id=$(openstack image list | awk '/cirros/ {print $2}')
+image_alt_id=$(openstack image list | awk '/cirros2/ {print $2}')
 
 create_tempest_users
 

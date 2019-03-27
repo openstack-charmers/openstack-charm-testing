@@ -15,8 +15,8 @@ fi
 
 source rcs/openrc
 
-image_id=$(openstack image list | awk '/cirros\s/ {print $2}')
-image_alt_id=$(openstack image list | awk '/cirros2\s/ {print $2}')
+image_id=$(openstack image list | awk '/cirros/ {print $2}')
+image_alt_id=$(openstack image list | awk '/cirros2/ {print $2}')
 
 access=$(openstack --os-username demo --os-password pass --os-tenant-name demo ec2 credentials create | grep access | awk '{ print $4 }')
 secret=$(openstack ec2 credentials show $access | grep secret | awk '{ print $4 }')
