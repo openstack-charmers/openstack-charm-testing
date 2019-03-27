@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -x
+set +e
+
 SWIFT_IP="10.245.161.162"
 
 ksv=$(source rcs/openrc)
