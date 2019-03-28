@@ -38,8 +38,8 @@ fi
 openstack image show xenial-uefi ||\
   openstack image create --public --container-format bare --disk-format qcow2 --property hw_firmware_type=uefi --file ~/images/xenial-server-cloudimg-arm64-uefi1.img xenial-uefi
 
-openstack image show xenial-cirros ||\
-  openstack image create --public --container-format bare --disk-format qcow2 --property hw_firmware_type=uefi --file ~/images/cirros_test.img xenial-cirros
+openstack image show cirros ||\
+  openstack image create --public --container-format bare --disk-format qcow2 --property hw_firmware_type=uefi --file ~/images/cirros_test.img cirros
 
 
 
