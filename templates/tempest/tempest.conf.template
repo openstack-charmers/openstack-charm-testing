@@ -13,7 +13,7 @@ cli_dir=/usr/local/bin
 [compute]
 flavor_ref=7
 flavor_ref_alt=8
-image_ssh_user=cirros
+image_ssh_user=ubuntu
 image_alt_ssh_user=ubuntu
 image_ref=__IMAGE_ID__
 image_ref_alt=__IMAGE_ALT_ID__
@@ -68,7 +68,7 @@ keypair_name = testkey
 stack_owner_role = Admin
 [scenario]
 img_dir=/home/ubuntu/images
-ssh_user=cirros
+ssh_user=ubuntu
 [service_available]
 ceilometer = true
 cinder = true
@@ -92,3 +92,6 @@ catalog_type = volumev2
 [volume-feature-enabled]
 backup=false
 api_v1=false
+[validation]
+run_validation = true
+image_ssh_user = ubuntu
