@@ -73,13 +73,13 @@ ssh_user=ubuntu
 ceilometer = true
 cinder = true
 glance = true
-heat = true
 horizon = true
 ironic = false
 neutron = true
 nova = true
 sahara = false
-swift = true
+heat = __HEAT_ENABLED__
+swift = __SWIFT_ENABLED__
 trove = false
 zaqar = false
 [stress]
