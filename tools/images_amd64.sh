@@ -17,7 +17,7 @@ if [ ! -d ~/images ] ; then
 fi
 
 
-if  juju status nova-compute|grep lxd ; then
+if  juju status nova-compute|grep "lxd/"; then
         openstack image show bionic-amd64 || \
         ([ -f ~/images/bionic-server-cloudimg-amd64-root.tar.xz ] || {
             export http_proxy=http://squid.internal:3128
