@@ -89,7 +89,6 @@ zaqar = false
 [volume]
 backend_names = cinder-ceph
 storage_protocol = ceph
-volume_size = 5
 
 [volume-feature-enabled]
 backup = false
