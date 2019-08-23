@@ -469,3 +469,38 @@ disco-stein-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/stein
     source: ppa:openstack-ubuntu-testing/stein
+# train
+bionic-train:
+  inherits: openstack-services-rocky
+  series: bionic
+  overrides:
+    openstack-origin: cloud:bionic-train
+    source: cloud:bionic-train
+bionic-train-proposed:
+  inherits: bionic-train
+  overrides:
+    openstack-origin: cloud:bionic-train/proposed
+    source: cloud:bionic-train/proposed
+bionic-train-staging:
+  inherits: bionic-train
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/train-staging
+    source: ppa:ubuntu-cloud-archive/train-staging
+bionic-train-branch:
+  inherits: bionic-train
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/train
+    source: ppa:openstack-ubuntu-testing/train
+eoan-train:
+  inherits: openstack-services-rocky
+  series: eoan
+eoan-train-proposed:
+  inherits: eoan-train
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+eoan-train-branch:
+  inherits: eoan-train
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/train
+    source: ppa:openstack-ubuntu-testing/train
