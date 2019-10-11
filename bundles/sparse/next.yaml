@@ -228,6 +228,16 @@ openstack-services-rocky:
     - [ barbican, rabbitmq-server ]
     - [ barbican, mysql ]
     - [ barbican, keystone ]
+openstack-services-train:
+  inherits: openstack-services-rocky
+  services:
+    placement:
+      charm: cs:~openstack-charmers-next/placement
+      constraints: mem=1G
+  relations:
+    - [ placement, mysql ]
+    - [ placement, keystone ]
+    - [ placement, nova-cloud-controller ]
 # icehouse
 trusty-icehouse:
   inherits: openstack-services
@@ -471,7 +481,7 @@ disco-stein-branch:
     source: ppa:openstack-ubuntu-testing/stein
 # train
 bionic-train:
-  inherits: openstack-services-rocky
+  inherits: openstack-services-train
   series: bionic
   overrides:
     openstack-origin: cloud:bionic-train
