@@ -502,7 +502,7 @@ bionic-train-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/train
     source: ppa:openstack-ubuntu-testing/train
 eoan-train:
-  inherits: openstack-services-rocky
+  inherits: openstack-services-train
   series: eoan
 eoan-train-proposed:
   inherits: eoan-train
