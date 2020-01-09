@@ -156,15 +156,6 @@ base-services:
     - [ ceph-osd, ceph-mon ]
 openstack-services:
   inherits: base-services
-  services:
-    mysql:
-      charm: cs:percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
 openstack-services-trusty-mitaka:
   inherits: openstack-services
   services:
@@ -246,6 +237,14 @@ trusty-icehouse:
     mongodb:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
   relations:
     - [ ceilometer, mongodb ]
 trusty-icehouse-proposed:
@@ -273,6 +272,14 @@ trusty-mitaka:
     mongodb:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
   relations:
     - [ ceilometer, mongodb ]
 trusty-mitaka-proposed:
@@ -292,6 +299,14 @@ xenial-mitaka:
     mongodb:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
   relations:
     - [ ceilometer, mongodb ]
 xenial-mitaka-proposed:
@@ -310,6 +325,14 @@ xenial-ocata:
     mongodb:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
   relations:
     - [ ceilometer, mongodb ]
 xenial-ocata-proposed:
@@ -338,6 +361,14 @@ xenial-pike:
     mongodb:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
   relations:
     - [ ceilometer, mongodb ]
 xenial-pike-proposed:
@@ -355,25 +386,6 @@ xenial-pike-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/pike
     source: ppa:openstack-ubuntu-testing/pike
-artful-pike:
-  inherits: openstack-services-xenial-ocata
-  series: artful
-  services:
-    mongodb:
-      branch: https://git.launchpad.net/mongodb-charm
-      constraints: mem=1G
-  relations:
-    - [ ceilometer, mongodb ]
-artful-pike-proposed:
-  inherits: artful-pike
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-artful-pike-branch:
-  inherits: artful-pike
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/pike
-    source: ppa:openstack-ubuntu-testing/pike
 # queens
 xenial-queens:
   inherits: openstack-services-queens
@@ -381,6 +393,15 @@ xenial-queens:
   overrides:
     openstack-origin: cloud:xenial-queens
     source: cloud:xenial-queens
+  services:
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 xenial-queens-proposed:
   inherits: xenial-queens
   overrides:
@@ -399,6 +420,15 @@ xenial-queens-branch:
 bionic-queens:
   inherits: openstack-services-queens
   series: bionic
+  services:
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 bionic-queens-proposed:
   inherits: bionic-queens
   overrides:
@@ -416,6 +446,15 @@ bionic-rocky:
   overrides:
     openstack-origin: cloud:bionic-rocky
     source: cloud:bionic-rocky
+  services:
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 bionic-rocky-proposed:
   inherits: bionic-rocky
   overrides:
@@ -431,19 +470,6 @@ bionic-rocky-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/rocky
     source: ppa:openstack-ubuntu-testing/rocky
-cosmic-rocky:
-  inherits: openstack-services-rocky
-  series: cosmic
-cosmic-rocky-proposed:
-  inherits: cosmic-rocky
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-cosmic-rocky-branch:
-  inherits: cosmic-rocky
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/rocky
-    source: ppa:openstack-ubuntu-testing/rocky
 # stein
 bionic-stein:
   inherits: openstack-services-rocky
@@ -451,6 +477,15 @@ bionic-stein:
   overrides:
     openstack-origin: cloud:bionic-stein
     source: cloud:bionic-stein
+  services:
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 bionic-stein-proposed:
   inherits: bionic-stein
   overrides:
@@ -466,19 +501,6 @@ bionic-stein-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/stein
     source: ppa:openstack-ubuntu-testing/stein
-disco-stein:
-  inherits: openstack-services-rocky
-  series: disco
-disco-stein-proposed:
-  inherits: disco-stein
-  overrides:
-    source: proposed
-    openstack-origin: distro-proposed
-disco-stein-branch:
-  inherits: disco-stein
-  overrides:
-    openstack-origin: ppa:openstack-ubuntu-testing/stein
-    source: ppa:openstack-ubuntu-testing/stein
 # train
 bionic-train:
   inherits: openstack-services-train
@@ -486,6 +508,15 @@ bionic-train:
   overrides:
     openstack-origin: cloud:bionic-train
     source: cloud:bionic-train
+  services:
+    mysql:
+      charm: cs:percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
 bionic-train-proposed:
   inherits: bionic-train
   overrides:
@@ -504,6 +535,16 @@ bionic-train-branch:
 eoan-train:
   inherits: openstack-services-train
   series: eoan
+  services:
+    mysql-cluster:
+      charm: cs:~openstack-charmers/mysql-innodb-cluster
+      constraints: mem=4G
+      num_units: 3
+    mysql:
+      charm: cs:~openstack-charmers/mysql-router
+  relations:
+    - - mysql-cluster:db-router
+      - mysql:db-router
 eoan-train-proposed:
   inherits: eoan-train
   overrides:
@@ -513,3 +554,4 @@ eoan-train-branch:
   inherits: eoan-train
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/train
+    source: ppa:openstack-ubuntu-testing/train
