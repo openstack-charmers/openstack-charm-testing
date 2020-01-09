@@ -536,14 +536,14 @@ eoan-train:
   inherits: openstack-services-train
   series: eoan
   services:
-    mysql:
+    mysql-cluster:
       charm: cs:~openstack-charmers-next/mysql-innodb-cluster
       constraints: mem=4G
       num_units: 3
-    mysql-router:
+    mysql:
       charm: cs:~openstack-charmers-next/mysql-router
   relations:
-    - - mysql-router:db-router
+    - - mysql-cluster:db-router
       - mysql:db-router
 eoan-train-proposed:
   inherits: eoan-train
