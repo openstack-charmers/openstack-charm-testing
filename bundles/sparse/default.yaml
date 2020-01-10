@@ -238,7 +238,7 @@ trusty-icehouse:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
     mysql:
-      charm: cs:percona-cluster
+      charm: cs:trusty/percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
@@ -273,7 +273,7 @@ trusty-mitaka:
       branch: https://git.launchpad.net/mongodb-charm
       constraints: mem=1G
     mysql:
-      charm: cs:percona-cluster
+      charm: cs:trusty/percona-cluster
       constraints: mem=4G
       options:
         dataset-size: 50%
