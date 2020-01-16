@@ -1,7 +1,7 @@
 # vim: set ts=2 et:
 # deployer bundle for development ('next') charms
 # UOSCI relies on this for OS-on-OS deployment testing
-base-services:
+openstack-services:
   services:
     rabbitmq-server:
       charm: cs:~openstack-charmers-next/rabbitmq-server
@@ -104,9 +104,6 @@ base-services:
     heat:
       charm: cs:~openstack-charmers-next/heat
   relations:
-    - [ keystone, mysql ]
-    - - nova-cloud-controller:shared-db
-      - mysql:shared-db
     - - nova-cloud-controller:amqp
       - rabbitmq-server:amqp
     - [ nova-cloud-controller, glance ]
@@ -116,12 +113,10 @@ base-services:
       - rabbitmq-server:amqp
     - [ nova-compute, glance ]
     - [ nova-compute, ceph-mon ]
-    - [ glance, mysql ]
     - [ glance, keystone ]
     - [ glance, ceph-mon ]
     - [ glance, "cinder:image-service" ]
     - [ glance, rabbitmq-server ]
-    - [ cinder, mysql ]
     - [ cinder, rabbitmq-server ]
     - [ cinder, nova-cloud-controller ]
     - [ cinder, keystone ]
@@ -141,11 +136,9 @@ base-services:
     - [ ceilometer-agent, nova-compute ]
     - [ ceilometer-agent, ceilometer ]
     - [ ceilometer-agent, rabbitmq-server ]
-    - [ heat, mysql ]
     - [ heat, keystone ]
     - [ heat, rabbitmq-server ]
     - [ "neutron-gateway:amqp", rabbitmq-server ]
-    - [ neutron-api, mysql ]
     - [ neutron-api, rabbitmq-server ]
     - [ neutron-api, nova-cloud-controller ]
     - [ neutron-api, neutron-openvswitch ]
@@ -154,9 +147,38 @@ base-services:
     - [ neutron-openvswitch, nova-compute ]
     - [ neutron-openvswitch, rabbitmq-server ]
     - [ ceph-osd, ceph-mon ]
-openstack-services:
-  inherits: base-services
-openstack-services-trusty-mitaka:
+percona-base:
+  relations:
+    - [ keystone, mysql ]
+    - - nova-cloud-controller:shared-db
+      - mysql:shared-db
+    - [ glance, mysql ]
+    - [ cinder, mysql ]
+    - [ heat, mysql ]
+    - [ neutron-api, mysql ]
+mongodb:
+  services:
+    mongodb:
+      branch: https://git.launchpad.net/mongodb-charm
+      constraints: mem=1G
+  relations:
+    - [ ceilometer, mongodb ]
+# trusty-icehouse/trusty-mitaka services
+openstack-services-trusty:
+  inherits: openstack-services
+percona-trusty:
+  inherits: percona-base
+  services:
+    mysql:
+      charm: cs:~openstack-charmers-next/trusty/percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
+# xenial-mitaka services
+openstack-services-xenial:
   inherits: openstack-services
   services:
     aodh:
@@ -178,16 +200,27 @@ openstack-services-trusty-mitaka:
       charm: cs:~openstack-charmers-next/designate-bind
   relations:
     - [ aodh, rabbitmq-server ]
-    - [ aodh, mysql ]
     - [ aodh, keystone ]
     - [ designate, keystone ]
-    - [ designate, mysql ]
     - [ designate, rabbitmq-server ]
     - [ designate, designate-bind ]
     - [ designate, memcached ]
-openstack-services-xenial:
-  inherits: openstack-services-trusty-mitaka
-openstack-services-xenial-ocata:
+percona-xenial:
+  inherits: percona-base
+  services:
+    mysql:
+      charm: cs:~openstack-charmers-next/percona-cluster
+      constraints: mem=4G
+      options:
+        dataset-size: 50%
+        max-connections: 20000
+        root-password: ChangeMe123
+        sst-password: ChangeMe123
+  relations:
+    - [ aodh, mysql ]
+    - [ designate, mysql ]
+# ocata services
+openstack-services-ocata:
   inherits: openstack-services-xenial
   services:
     gnocchi:
@@ -196,19 +229,26 @@ openstack-services-xenial-ocata:
       charm: cs:memcached
   relations:
     - [ gnocchi, ceph-mon ]
-    - [ gnocchi, mysql ]
     - [ gnocchi, rabbitmq-server ]
     - [ gnocchi, memcached ]
     - [ gnocchi, ceilometer ]
     - [ gnocchi, keystone ]
     - [ cinder-ceph, nova-compute ]
+percona-ocata:
+  inherits: percona-xenial
+  relations:
+    - [ gnocchi, mysql ]
+# queens services
 openstack-services-queens:
-  inherits: openstack-services-xenial-ocata
+  inherits: openstack-services-ocata
   relations:
     - - ceilometer
       - keystone:identity-credentials
     - - designate:dnsaas
       - neutron-api:external-dns
+percona-queens:
+  inherits: percona-ocata
+# rocky services
 openstack-services-rocky:
   inherits: openstack-services-queens
   services:
@@ -217,8 +257,12 @@ openstack-services-rocky:
       constraints: mem=1G
   relations:
     - [ barbican, rabbitmq-server ]
-    - [ barbican, mysql ]
     - [ barbican, keystone ]
+percona-rocky:
+  inherits: percona-queens
+  relations:
+    - [ barbican, mysql ]
+# train services
 openstack-services-train:
   inherits: openstack-services-rocky
   services:
@@ -226,27 +270,89 @@ openstack-services-train:
       charm: cs:~openstack-charmers-next/placement
       constraints: mem=1G
   relations:
-    - [ placement, mysql ]
     - [ placement, keystone ]
     - [ placement, nova-cloud-controller ]
-# icehouse
-trusty-icehouse:
-  inherits: openstack-services
-  series: trusty
-  services:
-    mongodb:
-      branch: https://git.launchpad.net/mongodb-charm
-      constraints: mem=1G
-    mysql:
-      charm: cs:~openstack-charmers-next/trusty/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
+percona-train:
+  inherits: percona-rocky
   relations:
-    - [ ceilometer, mongodb ]
+    - [ placement, mysql ]
+mysql8-train:
+  services:
+    mysql-innodb-cluster:
+      charm: cs:~openstack-charmers-next/mysql-innodb-cluster
+      constraints: mem=4G
+      num_units: 3
+    keystone-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    nova-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    glance-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    cinder-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    heat-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    neutron-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    aodh-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    designate-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    gnocchi-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    barbican-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+    placement-mysql-router:
+      charm: cs:~openstack-charmers-next/mysql-router
+  relations:
+    - - keystone-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - nova-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - glance-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - cinder-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - heat-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - neutron-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - aodh-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - designate-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - gnocchi-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - barbican-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - placement-mysql-router:db-router
+      - mysql-innodb-cluster:db-router
+    - - keystone:shared-db
+      - keystone-mysql-router:shared-db
+    - - nova-cloud-controller:shared-db
+      - nova-mysql-router:shared-db
+    - - glance:shared-db
+      - glance-mysql-router:shared-db
+    - - cinder:shared-db
+      - cinder-mysql-router:shared-db
+    - - heat:shared-db
+      - heat-mysql-router:shared-db
+    - - neutron-api:shared-db
+      - neutron-mysql-router:shared-db
+    - - aodh:shared-db
+      - aodh-mysql-router:shared-db
+    - - designate:shared-db
+      - designate-mysql-router:shared-db
+    - - gnocchi:shared-db
+      - gnocchi-mysql-router:shared-db
+    - - barbican:shared-db
+      - barbican-mysql-router:shared-db
+    - - placement:shared-db
+      - placement-mysql-router:shared-db
+# icehouse release combinations
+trusty-icehouse:
+  inherits: [openstack-services-trusty, percona-trusty, mongodb]
+  series: trusty
 trusty-icehouse-proposed:
   inherits: trusty-icehouse
   overrides:
@@ -258,30 +364,13 @@ trusty-icehouse-trunk:
     openstack-origin: ppa:openstack-ubuntu-testing/icehouse
     source: ppa:openstack-ubuntu-testing/icehouse
     offline-compression: "no"
-# mitaka
+# mitaka release combinations
 trusty-mitaka:
-  #NOTE(coreycb): Temporarily disable reactive charms until
-  #               https://bugs.launchpad.net/bugs/1643027 is resolved.
-  #inherits: openstack-services-trusty-mitaka
-  inherits: openstack-services
+  inherits: [openstack-services-trusty, percona-trusty, mongodb]
   series: trusty
   overrides:
     openstack-origin: cloud:trusty-mitaka
     source: cloud:trusty-mitaka
-  services:
-    mongodb:
-      branch: https://git.launchpad.net/mongodb-charm
-      constraints: mem=1G
-    mysql:
-      charm: cs:~openstack-charmers-next/trusty/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
-  relations:
-    - [ ceilometer, mongodb ]
 trusty-mitaka-proposed:
   inherits: trusty-mitaka
   overrides:
@@ -293,48 +382,20 @@ trusty-mitaka-staging:
     openstack-origin: ppa:ubuntu-cloud-archive/mitaka-staging
     source: ppa:ubuntu-cloud-archive/mitaka-staging
 xenial-mitaka:
-  inherits: openstack-services-xenial
+  inherits: [openstack-services-xenial, percona-xenial, mongodb]
   series: xenial
-  services:
-    mongodb:
-      branch: https://git.launchpad.net/mongodb-charm
-      constraints: mem=1G
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
-  relations:
-    - [ ceilometer, mongodb ]
 xenial-mitaka-proposed:
   inherits: xenial-mitaka
   overrides:
     source: proposed
     openstack-origin: distro-proposed
-# ocata
+# ocata release combinations
 xenial-ocata:
-  inherits: openstack-services-xenial-ocata
+  inherits: [openstack-services-ocata, percona-ocata, mongodb]
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-ocata
     source: cloud:xenial-ocata
-  services:
-    mongodb:
-      branch: https://git.launchpad.net/mongodb-charm
-      constraints: mem=1G
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
-  relations:
-    - [ ceilometer, mongodb ]
 xenial-ocata-proposed:
   inherits: xenial-ocata
   overrides:
@@ -350,27 +411,13 @@ xenial-ocata-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/ocata
     source: ppa:openstack-ubuntu-testing/ocata
-# pike
+# pike release combinations
 xenial-pike:
-  inherits: openstack-services-xenial-ocata
+  inherits: [openstack-services-ocata, percona-ocata, mongodb]
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-pike
     source: cloud:xenial-pike
-  services:
-    mongodb:
-      branch: https://git.launchpad.net/mongodb-charm
-      constraints: mem=1G
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
-  relations:
-    - [ ceilometer, mongodb ]
 xenial-pike-proposed:
   inherits: xenial-pike
   overrides:
@@ -386,22 +433,13 @@ xenial-pike-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/pike
     source: ppa:openstack-ubuntu-testing/pike
-# queens
+# queens release combinations
 xenial-queens:
-  inherits: openstack-services-queens
+  inherits: [openstack-services-queens, percona-queens]
   series: xenial
   overrides:
     openstack-origin: cloud:xenial-queens
     source: cloud:xenial-queens
-  services:
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
 xenial-queens-proposed:
   inherits: xenial-queens
   overrides:
@@ -418,17 +456,8 @@ xenial-queens-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/queens
     source: ppa:openstack-ubuntu-testing/queens
 bionic-queens:
-  inherits: openstack-services-queens
+  inherits: [openstack-services-queens, percona-queens]
   series: bionic
-  services:
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
 bionic-queens-proposed:
   inherits: bionic-queens
   overrides:
@@ -439,22 +468,13 @@ bionic-queens-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/queens
     source: ppa:openstack-ubuntu-testing/queens
-# rocky
+# rocky release combinations
 bionic-rocky:
-  inherits: openstack-services-rocky
+  inherits: [openstack-services-rocky, percona-rocky]
   series: bionic
   overrides:
     openstack-origin: cloud:bionic-rocky
     source: cloud:bionic-rocky
-  services:
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
 bionic-rocky-proposed:
   inherits: bionic-rocky
   overrides:
@@ -470,22 +490,13 @@ bionic-rocky-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/rocky
     source: ppa:openstack-ubuntu-testing/rocky
-# stein
+# stein release combinations
 bionic-stein:
-  inherits: openstack-services-rocky
+  inherits: [openstack-services-rocky, percona-rocky]
   series: bionic
   overrides:
     openstack-origin: cloud:bionic-stein
     source: cloud:bionic-stein
-  services:
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
 bionic-stein-proposed:
   inherits: bionic-stein
   overrides:
@@ -501,22 +512,13 @@ bionic-stein-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/stein
     source: ppa:openstack-ubuntu-testing/stein
-# train
+# train release combinations
 bionic-train:
-  inherits: openstack-services-train
+  inherits: [openstack-services-train, percona-train]
   series: bionic
   overrides:
     openstack-origin: cloud:bionic-train
     source: cloud:bionic-train
-  services:
-    mysql:
-      charm: cs:~openstack-charmers-next/percona-cluster
-      constraints: mem=4G
-      options:
-        dataset-size: 50%
-        max-connections: 20000
-        root-password: ChangeMe123
-        sst-password: ChangeMe123
 bionic-train-proposed:
   inherits: bionic-train
   overrides:
@@ -533,18 +535,8 @@ bionic-train-branch:
     openstack-origin: ppa:openstack-ubuntu-testing/train
     source: ppa:openstack-ubuntu-testing/train
 eoan-train:
-  inherits: openstack-services-train
+  inherits: [openstack-services-train, mysql8-train]
   series: eoan
-  services:
-    mysql-cluster:
-      charm: cs:~openstack-charmers-next/mysql-innodb-cluster
-      constraints: mem=4G
-      num_units: 3
-    mysql:
-      charm: cs:~openstack-charmers-next/mysql-router
-  relations:
-    - - mysql-cluster:db-router
-      - mysql:db-router
 eoan-train-proposed:
   inherits: eoan-train
   overrides:
@@ -555,3 +547,38 @@ eoan-train-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/train
     source: ppa:openstack-ubuntu-testing/train
+# ussuri release combinations
+bionic-ussuri:
+  inherits: [openstack-services-train, percona-train]
+  series: bionic
+  overrides:
+    openstack-origin: cloud:bionic-ussuri
+    source: cloud:bionic-ussuri
+bionic-ussuri-proposed:
+  inherits: bionic-ussuri
+  overrides:
+    openstack-origin: cloud:bionic-ussuri/proposed
+    source: cloud:bionic-ussuri/proposed
+bionic-ussuri-staging:
+  inherits: bionic-ussuri
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/ussuri-staging
+    source: ppa:ubuntu-cloud-archive/ussuri-staging
+bionic-ussuri-branch:
+  inherits: bionic-ussuri
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ussuri
+    source: ppa:openstack-ubuntu-testing/ussuri
+focal-ussuri:
+  inherits: [openstack-services-train, mysql8-train]
+  series: focal
+focal-ussuri-proposed:
+  inherits: focal-ussuri
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+focal-ussuri-branch:
+  inherits: focal-ussuri
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/ussuri
+    source: ppa:openstack-ubuntu-testing/ussuri
