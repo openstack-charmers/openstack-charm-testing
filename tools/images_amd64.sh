@@ -28,7 +28,7 @@ if  juju status nova-compute|grep "lxd/"; then
         )
 else
        openstack image show bionic-amd64 || \
-        ([ -f ~/images/bionic-server-cloudimg-amd64-disk1.img ] || {
+        ([ -f ~/images/bionic-server-cloudimg-amd64.img ] || {
             export http_proxy=http://squid.internal:3128
             wget ${WGET_MODE} -O ~/images/bionic-server-cloudimg-amd64.img http://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
             export http_proxy=''

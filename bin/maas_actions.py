@@ -75,7 +75,7 @@ TAGS=args.tags
 ARCH=args.arch
 OWNER=args.owner
 APIKEY=args.key
-MAAS_URL="http://" + args.maashost + "/MAAS/api/2.0"
+MAAS_URL="http://" + args.maashost + ":5240/MAAS/api/2.0"
 ADD_TAGS=args.additional
 SYSTEM_ID=args.system_id
 if args.status == "":
