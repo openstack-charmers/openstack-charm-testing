@@ -23,7 +23,6 @@ openstack-services:
       constraints: mem=1G
       options:
         admin-password: openstack
-        admin-token: ubuntutesting
     openstack-dashboard:
       charm: cs:~openstack-charmers-next/openstack-dashboard
       constraints: mem=1G
@@ -50,6 +49,8 @@ openstack-services:
       charm: cs:~openstack-charmers-next/neutron-api
       constraints: mem=1G
       options:
+        manage-neutron-plugin-legacy-mode: True
+        neutron-plugin: ovs
         neutron-security-groups: True
         enable-ml2-port-security: True
         enable-qos: True
