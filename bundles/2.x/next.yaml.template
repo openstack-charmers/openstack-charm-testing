@@ -141,7 +141,7 @@ services:
     series: trusty
     charm: cs:mongodb
     constraints: mem=1G
-#__MONGODB__ this can be removed once the mongodb charm supports >= X
+# this can be removed once the mongodb charm supports >= X
 #__MONGODB__    options:
 #__MONGODB__      source: cloud:__SERIES__-__RELEASE____POCKET__
   mysql:
