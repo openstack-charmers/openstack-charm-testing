@@ -1,0 +1,13 @@
+tests:
+  - zaza.charm_tests.noop.tests.NoopTest
+configure:
+  - tls:
+    - zaza.openstack.charm_tests.vault.setup.auto_initialize_no_validation
+target_deploy_status:
+  vault:
+    workload-status: blocked
+    workload-status-message: Vault needs to be initialized
+gate_bundles:
+  - tls: bundle
+smoke_bundles:
+  - bundle
