@@ -18,6 +18,7 @@ resize=true
 live_migration=true
 block_migration_for_live_migration=true
 [identity]
+disable_ssl_certificate_validation = true
 uri_v3=__PROTO__://__KEYSTONE__:5000/v3
 auth_version=v3
 admin_role=Admin
