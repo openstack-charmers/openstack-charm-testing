@@ -3,6 +3,8 @@
 set -x
 set +e
 
+[ -d tempest ] || git clone https://github.com/openstack/tempest
+
 SWIFT_IP="10.245.161.162"
 
 ksv=$(source rcs/openrc)
