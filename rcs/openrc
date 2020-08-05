@@ -1,3 +1,4 @@
+set +e
 if [ ! -z $JUJU_MODEL ]; then
   _juju_model_arg="-m $JUJU_MODEL"
 fi
@@ -16,3 +17,4 @@ else
     echo Using Keystone v2.0 API
     . $(dirname ${BASH_SOURCE[0]})/openrcv2
 fi
+set -e
