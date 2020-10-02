@@ -1,9 +1,77 @@
+---
 sudo: false
 language: python
-python:
-    - "3.5"
-    - "3.6"
-    - "3.7"
-    - "3.8"
 install: pip install tox-travis
-script: tox -e lint
+matrix:
+  include:
+    - python: 3.5
+      env: ENV=lint
+    - python: 3.6
+      env: ENV=lint
+    - python: 3.7
+      env: ENV=lint
+    - python: 3.8
+      env: ENV=lint
+    - name: pip-clients-openrc-with-tls
+      env: ENV=func
+      sudo: required
+      dist: focal
+      addons:
+        snaps:
+          - name: juju
+            confinement: classic
+      install:
+        - pip install tox-travis openstackclient
+    - name: pip-clients-openrc-no-tls
+      env: ENV=func-smoke
+      sudo: required
+      dist: focal
+      addons:
+        snaps:
+          - name: juju
+            confinement: classic
+      install:
+        - pip install tox-travis openstackclient
+    - name: snap-clients-openrc-with-tls
+      env: ENV=func
+      sudo: required
+      dist: focal
+      addons:
+        snaps:
+          - name: juju
+            confinement: classic
+          - name: openstackclients
+            channel: edge
+    - name: snap-clients-openrc-no-tls
+      env: ENV=func-smoke
+      sudo: required
+      dist: focal
+      addons:
+        snaps:
+          - name: juju
+            confinement: classic
+          - name: openstackclients
+            channel: edge
+comment: |
+  install dependencies in script phase saving time on simpler test environments
+  change permissions on lxd socket to allow travis user access
+  (^^ this is a throw-away CI environment, do not do this at home)
+script:
+  - if [ $ENV = 'func' -o $ENV = 'func-smoke' ]; then
+      sudo lxd init --auto;
+      sudo chmod 666 /var/snap/lxd/common/lxd/unix.socket;
+      echo "Bootstrapping Juju controller...";
+      travis_wait juju bootstrap --no-gui localhost;
+      echo "Deploying test bundle...";
+      travis_wait tox -c rcs/tox.ini -e $ENV;
+      juju switch $(juju models --format yaml|grep "^- name:.*zaza"|cut -f2 -d/);
+      juju status;
+      set -x;
+      source rcs/openrc;
+      set +x;
+      env | grep OS_;
+      openstack token issue;
+      openstack catalog list;
+    else
+      tox -e $ENV;
+    fi
