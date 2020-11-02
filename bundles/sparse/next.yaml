@@ -585,7 +585,7 @@ focal-ussuri-branch:
     source: ppa:openstack-ubuntu-testing/ussuri
 # victoria release combinations
 focal-victoria:
-  inherits: [openstack-services-train, percona-train]
+  inherits: [openstack-services-train, mysql8-train]
   series: focal
   overrides:
     openstack-origin: cloud:focal-victoria
