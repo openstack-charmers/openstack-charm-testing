@@ -583,3 +583,38 @@ focal-ussuri-branch:
   overrides:
     openstack-origin: ppa:openstack-ubuntu-testing/ussuri
     source: ppa:openstack-ubuntu-testing/ussuri
+# victoria release combinations
+focal-victoria:
+  inherits: [openstack-services-train, percona-train]
+  series: focal
+  overrides:
+    openstack-origin: cloud:focal-victoria
+    source: cloud:focal-victoria
+focal-victoria-proposed:
+  inherits: focal-victoria
+  overrides:
+    openstack-origin: cloud:focal-victoria/proposed
+    source: cloud:focal-victoria/proposed
+focal-victoria-staging:
+  inherits: focal-victoria
+  overrides:
+    openstack-origin: ppa:ubuntu-cloud-archive/victoria-staging
+    source: ppa:ubuntu-cloud-archive/victoria-staging
+focal-victoria-branch:
+  inherits: focal-victoria
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/victoria
+    source: ppa:openstack-ubuntu-testing/victoria
+groovy-victoria:
+  inherits: [openstack-services-train, mysql8-train]
+  series: groovy
+groovy-victoria-proposed:
+  inherits: groovy-victoria
+  overrides:
+    source: proposed
+    openstack-origin: distro-proposed
+groovy-victoria-branch:
+  inherits: groovy-victoria
+  overrides:
+    openstack-origin: ppa:openstack-ubuntu-testing/victoria
+    source: ppa:openstack-ubuntu-testing/victoria
