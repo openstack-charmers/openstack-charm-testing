@@ -15,20 +15,41 @@ import keystoneauth1.identity.v3 as keystoneauth1_v3
 import keystoneauth1.session as keystoneauth1_session
 
 
-def get_data_port_config(juju_version, service):
+def get_port_config(juju_version, service):
+    keyname = 'data-port'
+    if service == 'ovn-chassis':
+        keyname = 'bridge-interface-mappings'
+
     data_ports = ''
     if juju_version == 1:
         config = yaml.load(
             subprocess.check_output(['juju', 'get', service])
         )
-        data_port_settings = config['settings']['data-port']
+        data_port_settings = config['settings'][keyname]
         if 'value' in data_port_settings:
             data_ports = data_port_settings['value']
     else:
         data_ports = subprocess.check_output(
-            ['juju', 'config', service, 'data-port']).decode('UTF-8')
+            ['juju', 'config', service, keyname]).decode('UTF-8')
 
     return data_ports.split(' ')
+
+
+def get_unit_values(service_config, service):
+    apps = 'applications'
+    if 'services' in service_config:
+        apps = 'services'
+
+    service_obj = service_config[apps][service]
+
+    if 'subordinate-to' in service_obj:
+        values = []
+        for app in service_obj['subordinate-to']:
+            values.extend(get_unit_values(service_config, app))
+        return values
+
+    if 'units' in service_obj:
+        return service_obj['units'].values()
 
 
 if __name__ == '__main__':
@@ -98,17 +119,14 @@ if __name__ == '__main__':
         uuids.append(service_config['machines'][machine]['instance-id'])
 
     unit_addresses = []
-    applications = 'applications'
-    if 'services' in service_config:
-        applications = 'services'
-    for unit in service_config[applications][service]['units'].values():
+    for unit in get_unit_values(service_config, service):
         if unit['public-address']:
             unit_addresses.append(unit['public-address'])
 
     ext_port = []
     if len(sys.argv) >= 3:
         ext_port = [sys.argv[2]]
-    config_ports = get_data_port_config(juju_version, service)
+    config_ports = get_port_config(juju_version, service)
 
     for uuid in uuids:
         print("Configuring interface for instance {}".format(uuid))
@@ -162,6 +180,9 @@ if __name__ == '__main__':
         config_cmd = 'config'
 
     ports = " ".join(ext_port)
-    print("Setting data-port configuration on {} to {}".format(service, ports))
+    keyname = "data-port"
+    if service == "ovn-chassis":
+        keyname = "bridge-interface-mappings"
+    print("Setting {} configuration on {} to {}".format(keyname, service, ports))
     subprocess.check_call(['juju', config_cmd, service,
-                          'data-port={}'.format(ports)])
+                          '{}={}'.format(keyname, ports)])

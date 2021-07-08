@@ -18,7 +18,14 @@ net_type=${1:-"gre"}
 # If not on bare metal, add extra port to overcloud neutron-gateway and configure charm to use it
 if [[ "${BARE_METAL^^}" != "TRUE" ]]; then
     source ~/novarc
-    ./bin/post-deploy-config neutron-gateway
+    for unit in neutron-gateway ovn-chassis;do
+      notfound=0
+      juju config ${unit} &>/dev/null || notfound=1
+      if [ ${notfound} -eq 0 ];then
+        ./bin/post-deploy-config ${unit}
+        break
+      fi
+    done
 fi
 
 # Configure neutron networking on overcloud
